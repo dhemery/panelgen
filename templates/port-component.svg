@@ -1,0 +1,5 @@
+<svg width="8.4mm" height="8.4mm" viewBox="-4.2 -4.2 8.4 8.4" >
+    <circle r="4.2" fill="blue"/>
+    <circle r="3.4" fill="blue" stroke="yellow"/>
+    <circle r="2.1" fill="blue" stroke="yellow"/>
+</svg>
