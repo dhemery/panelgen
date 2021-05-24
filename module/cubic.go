@@ -1,6 +1,7 @@
 package module
 
 import (
+	"dhemery.com/panelgen/control"
 	"dhemery.com/panelgen/shape"
 )
 
@@ -10,21 +11,15 @@ func newCubic() *Module {
 		width = hp * 5.08
 		left  = width/4 + 1/3
 	)
+	var (
+		bg = shape.HSL{H: 180, S: 1, L: .97}
+		fg = shape.HSL{H: 180, S: 1, L: .3}
+	)
 
-	var faceplate shape.SVG
-	var overlay shape.SVG
-	m := &Module{
-		slug:      "cubic",
-		faceplate: &faceplate,
-		overlay:   &overlay,
-	}
-
-	overlay.Content = append(overlay.Content, shape.Circle{
-		CX: 22.3984,
-		Fill:   &shape.HSL{H: 180, S: 1, L: .97},
-		Stroke: &shape.HSL{H: 180, S: 1, L: .3},
-	})
-	return m
+	port := control.Port{MetalColor: bg, ShadowColor: fg}
+	m := Module{slug: "cubic"}
+	port.AddTo(&m, 12, 22)
+	return &m
 }
 
 func init() {

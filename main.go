@@ -20,9 +20,9 @@ func main() {
 		if err := write(imagePath, m.Image()); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
-		for _, c := range m.Controls() {
-			cPath := filepath.Join("out", m.Slug(), c.Slug()+".svg")
-			if err := write(cPath, c); err != nil {
+		for path, svg := range m.Controls() {
+			cPath := filepath.Join("out", m.Slug(), path+".svg")
+			if err := write(cPath, svg); err != nil {
 				_, _ = fmt.Fprintln(os.Stderr, err)
 			}
 		}
