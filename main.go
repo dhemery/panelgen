@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/xml"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -9,17 +10,26 @@ import (
 )
 
 func main() {
-	for _, m := range module.Modules {
-		_ = write(m.Faceplate())
-		_ = write(m.Image())
+	for _, m := range module.All {
+		fmt.Println("Rendering", m.Slug())
+		fpPath := filepath.Join("out", m.Slug(), m.Slug()+".svg")
+		if err := write(fpPath, m.Faceplate()); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+		}
+		imagePath := filepath.Join("out", "image", m.Slug()+".svg")
+		if err := write(imagePath, m.Image()); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+		}
 		for _, c := range m.Controls() {
-			_ = write(c)
+			cPath := filepath.Join("out", m.Slug(), c.Slug()+".svg")
+			if err := write(cPath, c); err != nil {
+				_, _ = fmt.Fprintln(os.Stderr, err)
+			}
 		}
 	}
 }
 
-func write(s module.Slugger) error {
-	path := filepath.Join("out", s.Slug()+".svg")
+func write(path string, data interface{}) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return err
 	}
@@ -29,5 +39,6 @@ func write(s module.Slugger) error {
 	}
 	defer func() { _ = w.Close }()
 	e := xml.NewEncoder(w)
-	return e.Encode(s)
+	e.Indent("", "   ")
+	return e.Encode(data)
 }

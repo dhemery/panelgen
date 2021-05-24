@@ -1,13 +1,31 @@
 package module
 
-type Slugger interface {
-	Slug() string
+import (
+	"dhemery.com/panelgen/control"
+	"dhemery.com/panelgen/shape"
+)
+
+var All []*Module
+
+type Module struct {
+	slug      string
+	faceplate *shape.SVG
+	overlay   *shape.SVG
+	controls  []control.Frame
 }
 
-type Module interface {
-	Faceplate() Slugger
-	Image() Slugger
-	Controls() []Slugger
+func (m Module) Slug() string {
+	return m.slug
 }
 
-var Modules []Module
+func (m Module) Faceplate() *shape.SVG {
+	return m.faceplate
+}
+
+func (m Module) Image() *shape.SVG {
+	return m.overlay
+}
+
+func (m Module) Controls() []control.Frame {
+	return m.controls
+}

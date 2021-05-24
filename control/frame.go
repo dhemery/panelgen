@@ -1,12 +1,12 @@
 package control
 
-type Shape interface{}
+import "dhemery.com/panelgen/shape"
 
 type Frame struct {
-	slug   string
-	shapes []Shape
+	shape.SVG
+	Name string `xml:"-"`
 }
 
-func (s *Frame) Add(a []Shape) {
-	s.shapes = append(s.shapes, a...)
+func (f Frame) Slug() string {
+	return f.Name
 }

@@ -8,6 +8,5 @@ const (
 
 type Knob struct {
 	Size  float32
-	Label shape.Label
+	Label shape.Text
 }
-
