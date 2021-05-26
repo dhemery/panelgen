@@ -2,17 +2,7 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
-type mod interface {
-	AddFaceplate(s []shape.Bounded)
-	AddOverlay(s []shape.Bounded)
-	AddControl(path string, svg shape.SVG)
-}
-
-type Port struct {
-	Color shape.HSL
-}
-
-func (p Port) AddTo(m mod, x, y float32) {
+func Port(color shape.HSL) *Control {
 	const (
 		nutRadius       = 4
 		barrelRadius    = 3
@@ -21,23 +11,22 @@ func (p Port) AddTo(m mod, x, y float32) {
 	)
 	nut := shape.Circle{
 		R:           nutRadius - shadowThickness/2,
-		Stroke:      &p.Color,
+		Stroke:      &color,
 		StrokeWidth: shadowThickness,
 	}
 	barrel := shape.Circle{
 		R:           barrelRadius - shadowThickness/2,
-		Stroke:      &p.Color,
+		Stroke:      &color,
 		StrokeWidth: shadowThickness,
 	}
 	hole := shape.Circle{
 		R:    holeRadius,
-		Fill: &p.Color,
+		Fill: &color,
 	}
-	shapes := []shape.Bounded{nut, barrel, hole}
-
+	c := NewControl()
+	c.Overlay.Add(nut, barrel, hole)
 	var svg shape.SVG
-	svg.Add(shapes...)
-
-	m.AddOverlay(shapes)
-	m.AddControl("port", svg)
+	svg.Add(nut, barrel, hole)
+	c.Frames["port"] = svg
+	return c
 }

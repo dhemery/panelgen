@@ -1,6 +1,5 @@
 package shape
 
-
 type dominantBaseline int
 
 const (

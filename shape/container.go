@@ -16,11 +16,11 @@ type Bounded interface {
 
 type container struct {
 	t, r, b, l float32
-	Content    []Bounded
+	content    []Bounded
 }
 
 func (c *container) Add(shapes ...Bounded) {
-	c.Content = append(c.Content, shapes...)
+	c.content = append(c.content, shapes...)
 	for _, s := range shapes {
 		if s.Top() < c.t {
 			c.t = s.Top()
@@ -62,18 +62,8 @@ func (c container) Height() float32 {
 }
 
 type SVG struct {
-	XMLName string `xml:"svg"`
 	container
 }
-
-// language=xml
-const examplePort = `
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.400mm" height="8.400mm" viewBox="-4.200 -4.200 8.400 8.400">
-  <circle cx="0" cy="0" r="4.200" fill="#009999" stroke="none" stroke-width="0"/>
-  <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f0ffff" stroke-width="0.950"/>
-  <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f0ffff" stroke-width="0.950"/>
-</svg>
-`
 
 func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	version := xml.Attr{Name: xml.Name{Local: "version"}, Value: "1.1"}
@@ -88,7 +78,8 @@ func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name = xml.Name{Local: "svg"}
 	start.Attr = append(start.Attr, version, xmlns, width, height, viewBox)
 
-	return e.EncodeElement(s.container, start)
+	fmt.Printf("Marshaling container %+v\n\n", s.container)
+	return e.EncodeElement(s.container.content, start)
 }
 
 type G struct {

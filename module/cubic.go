@@ -16,10 +16,10 @@ func newCubic() *Module {
 		fg = shape.HSL{H: 180, S: 1, L: .3}
 	)
 
-	port := control.Port{Color: fg}
-	m := Module{slug: "cubic"}
-	port.AddTo(&m, 12, 22)
-	return &m
+	m := NewModule("cubic")
+
+	m.AddControl(control.Port(fg))
+	return m
 }
 
 func init() {
