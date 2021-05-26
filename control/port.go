@@ -2,7 +2,7 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
-func Port(color shape.HSL) *Control {
+func Port(color shape.HSL) Control {
 	const (
 		nutRadius       = 4
 		barrelRadius    = 3
@@ -23,10 +23,12 @@ func Port(color shape.HSL) *Control {
 		R:    holeRadius,
 		Fill: &color,
 	}
-	c := NewControl()
-	c.Overlay.Add(nut, barrel, hole)
-	var svg shape.SVG
-	svg.Add(nut, barrel, hole)
-	c.Frames["port"] = svg
+	shapes := []shape.Bounded{nut, barrel, hole}
+	c := Control{
+		Overlay: shape.G{Content: shapes},
+		Frames: map[string]shape.SVG{
+			"port": {Content: shapes},
+		},
+	}
 	return c
 }

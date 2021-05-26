@@ -5,7 +5,7 @@ import (
 	"dhemery.com/panelgen/shape"
 )
 
-func newCubic() *Module {
+func Cubic() Module {
 	const (
 		hp    = 5
 		width = hp * 5.08
@@ -16,12 +16,15 @@ func newCubic() *Module {
 		fg = shape.HSL{H: 180, S: 1, L: .3}
 	)
 
-	m := NewModule("cubic")
+	m := Module{
+		Slug:   "cubic",
+		Frames: make(map[string]shape.SVG),
+	}
 
 	m.AddControl(control.Port(fg))
 	return m
 }
 
 func init() {
-	All = append(All, newCubic())
+	All = append(All, Cubic())
 }

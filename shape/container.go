@@ -14,79 +14,121 @@ type Bounded interface {
 	Height() float32
 }
 
-type container struct {
-	t, r, b, l float32
-	content    []Bounded
+type bounds struct {
+	Top, Right, Bottom, Left float32
 }
 
-func (c *container) Add(shapes ...Bounded) {
-	c.content = append(c.content, shapes...)
-	for _, s := range shapes {
-		if s.Top() < c.t {
-			c.t = s.Top()
+func (b bounds) Width() float32 {
+	return b.Right - b.Left
+}
+
+func (b bounds) Height() float32 {
+	return b.Bottom - b.Top
+}
+
+func boundsOf(shapes []Bounded) bounds {
+	var b bounds
+	if len(shapes) < 1 {
+		return b
+	}
+	first := shapes[0]
+	b.Top = first.Top()
+	b.Right = first.Right()
+	b.Bottom = first.Bottom()
+	b.Left = first.Left()
+	for _, s := range shapes[1:] {
+		if v := s.Top(); v < b.Top {
+			b.Top = v
 		}
-		if s.Right() > c.r {
-			c.r = s.Right()
+		if v := s.Right(); v > b.Right {
+			b.Right = v
 		}
-		if s.Bottom() > c.b {
-			c.b = s.Bottom()
+		if v := s.Bottom(); v > b.Bottom {
+			b.Bottom = v
 		}
-		if s.Left() < c.l {
-			c.l = s.Left()
+		if v := s.Left(); v < b.Left {
+			b.Left = v
 		}
 	}
-}
-
-func (c container) Top() float32 {
-	return c.t
-}
-
-func (c container) Right() float32 {
-	return c.r
-}
-
-func (c container) Bottom() float32 {
-	return c.b
-}
-
-func (c container) Left() float32 {
-	return c.l
-}
-
-func (c container) Width() float32 {
-	return c.r - c.l
-}
-
-func (c container) Height() float32 {
-	return c.b - c.t
+	return b
 }
 
 type SVG struct {
-	container
+	Content []Bounded
 }
 
 func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	b := boundsOf(s.Content)
 	version := xml.Attr{Name: xml.Name{Local: "version"}, Value: "1.1"}
 	xmlns := xml.Attr{Name: xml.Name{Local: "xmlns"}, Value: "http://www.w3.org/2000/svg"}
-	widthMM := fmt.Sprintf("%fmm", s.Width())
+	widthMM := fmt.Sprintf("%fmm", b.Width())
 	width := xml.Attr{Name: xml.Name{Local: "width"}, Value: widthMM}
-	heightMM := fmt.Sprintf("%fmm", s.Height())
+	heightMM := fmt.Sprintf("%fmm", b.Height())
 	height := xml.Attr{Name: xml.Name{Local: "height"}, Value: heightMM}
-	vb := fmt.Sprintf("%f %f %f %f", s.Left(), s.Top(), s.Width(), s.Height())
+	vb := fmt.Sprintf("%f %f %f %f", b.Left, b.Top, b.Width(), b.Height())
 	viewBox := xml.Attr{Name: xml.Name{Local: "viewBox"}, Value: vb}
 
-	start.Name = xml.Name{Local: "svg"}
 	start.Attr = append(start.Attr, version, xmlns, width, height, viewBox)
+	start.Name = xml.Name{Local: "svg"}
 
-	fmt.Printf("Marshaling container %+v\n\n", s.container)
-	return e.EncodeElement(s.container.content, start)
+	if err := e.EncodeToken(start); err != nil {
+		return err
+	}
+	if err := e.Encode(s.Content); err != nil {
+		return err
+	}
+	return e.EncodeToken(start.End())
 }
 
 type G struct {
-	XMLName string `xml:"g"`
-	container
+	XMLName xml.Name `xml:"g"`
+	Content []Bounded
 }
 
-func (g G) Translate(x, y float32) G {
-	return g
+func (g G) Top() float32 {
+	var v float32
+	for _, c := range g.Content {
+		if c.Top() < v {
+			v = c.Top()
+		}
+	}
+	return v
+}
+
+func (g G) Right() float32 {
+	var v float32
+	for _, c := range g.Content {
+		if c.Right() > v {
+			v = c.Right()
+		}
+	}
+	return v
+}
+
+func (g G) Bottom() float32 {
+	var v float32
+	for _, c := range g.Content {
+		if c.Bottom() > v {
+			v = c.Bottom()
+		}
+	}
+	return v
+}
+
+func (g G) Left() float32 {
+	var v float32
+	for _, c := range g.Content {
+		if c.Left() < v {
+			v = c.Left()
+		}
+	}
+	return v
+}
+
+func (g G) Width() float32 {
+	return g.Right() - g.Left()
+}
+
+func (g G) Height() float32 {
+	return g.Bottom() - g.Top()
 }
