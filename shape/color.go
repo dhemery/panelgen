@@ -12,7 +12,10 @@ type HSL struct {
 	L float64
 }
 
-func (hsl HSL) RGBString() string {
+func (hsl *HSL) RGBString() string {
+	if hsl == nil {
+		return "none"
+	}
 	twoL := 2 * hsl.L
 	chroma := (1 - math.Abs(twoL-1)) * hsl.S
 	hp := hsl.H / 60
@@ -41,7 +44,7 @@ func (hsl HSL) RGBString() string {
 	return fmt.Sprintf("#%02x%02x%02x", uint8((rp+m)*255+0.5), uint8((gp+m)*255+0.5), uint8((bp+m)*255+0.5))
 }
 
-func (hsl HSL) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (hsl *HSL) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return xml.Attr{
 		Name:  name,
 		Value: hsl.RGBString(),

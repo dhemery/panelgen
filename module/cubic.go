@@ -12,11 +12,11 @@ func newCubic() *Module {
 		left  = width/4 + 1/3
 	)
 	var (
-		bg = shape.HSL{H: 180, S: 1, L: .97}
+		// bg = shape.HSL{H: 180, S: 1, L: .97}
 		fg = shape.HSL{H: 180, S: 1, L: .3}
 	)
 
-	port := control.Port{MetalColor: bg, ShadowColor: fg}
+	port := control.Port{Color: fg}
 	m := Module{slug: "cubic"}
 	port.AddTo(&m, 12, 22)
 	return &m

@@ -9,40 +9,34 @@ type mod interface {
 }
 
 type Port struct {
-	MetalColor  shape.HSL
-	ShadowColor shape.HSL
+	Color shape.HSL
 }
 
 func (p Port) AddTo(m mod, x, y float32) {
 	const (
-		nutRadius    = 4
-		barrelRadius = 3
-		holeRadius   = 1.8
-		strokeWidth  = .5
+		nutRadius       = 4
+		barrelRadius    = 3
+		holeRadius      = 1.8
+		shadowThickness = .2
 	)
 	nut := shape.Circle{
-		R:           nutRadius + strokeWidth/2,
-		Stroke:      &p.ShadowColor,
-		StrokeWidth: strokeWidth,
-		Fill:        &p.MetalColor,
+		R:           nutRadius - shadowThickness/2,
+		Stroke:      &p.Color,
+		StrokeWidth: shadowThickness,
 	}
 	barrel := shape.Circle{
-		R:           barrelRadius + strokeWidth/2,
-		Stroke:      &p.ShadowColor,
-		StrokeWidth: strokeWidth,
+		R:           barrelRadius - shadowThickness/2,
+		Stroke:      &p.Color,
+		StrokeWidth: shadowThickness,
 	}
 	hole := shape.Circle{
-		R:           holeRadius + strokeWidth/2,
-		Stroke:      &p.ShadowColor,
-		StrokeWidth: strokeWidth,
-		Fill:        &p.ShadowColor,
+		R:    holeRadius,
+		Fill: &p.Color,
 	}
 	shapes := []shape.Bounded{nut, barrel, hole}
 
-	var g shape.G
-	g.Add(shapes...)
 	var svg shape.SVG
-	svg.Add(g)
+	svg.Add(shapes...)
 
 	m.AddOverlay(shapes)
 	m.AddControl("port", svg)
