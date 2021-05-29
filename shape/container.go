@@ -82,47 +82,70 @@ func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 type G struct {
 	XMLName xml.Name `xml:"g"`
+	dx, dy  float32
 	Content []Bounded
 }
 
+func (g G) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if g.dx != 0 || g.dy != 0 {
+		tx := xml.Attr{Name: xml.Name{Local: "transform"}, Value: fmt.Sprintf("translate(%f %f)", g.dx, g.dy)}
+		start.Attr = append(start.Attr, tx)
+	}
+	start.Name = xml.Name{Local: "g"}
+
+	if err := e.EncodeToken(start); err != nil {
+		return err
+	}
+	if err := e.Encode(g.Content); err != nil {
+		return err
+	}
+	return e.EncodeToken(start.End())
+}
+
+func (g G) Translate(dx, dy float32) G {
+	g.dx = dx
+	g.dy = dy
+	return g
+}
+
 func (g G) Top() float32 {
-	var v float32
+	top := g.dy
 	for _, c := range g.Content {
-		if c.Top() < v {
-			v = c.Top()
+		if ct := c.Top() + g.dy; ct < top {
+			top = ct
 		}
 	}
-	return v
+	return top
 }
 
 func (g G) Right() float32 {
-	var v float32
+	right := g.dx
 	for _, c := range g.Content {
-		if c.Right() > v {
-			v = c.Right()
+		if cr := c.Right() + g.dx; cr > right {
+			right = cr
 		}
 	}
-	return v
+	return right
 }
 
 func (g G) Bottom() float32 {
-	var v float32
+	bottom := g.dy
 	for _, c := range g.Content {
-		if c.Bottom() > v {
-			v = c.Bottom()
+		if cb := c.Bottom() + g.dy; cb > bottom {
+			bottom = cb
 		}
 	}
-	return v
+	return bottom
 }
 
 func (g G) Left() float32 {
-	var v float32
+	left := g.dx
 	for _, c := range g.Content {
-		if c.Left() < v {
-			v = c.Left()
+		if cl := c.Left() + g.dx; cl < left {
+			left = cl
 		}
 	}
-	return v
+	return left
 }
 
 func (g G) Width() float32 {

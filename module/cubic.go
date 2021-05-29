@@ -21,7 +21,8 @@ func Cubic() Module {
 		Frames: make(map[string]shape.SVG),
 	}
 
-	m.AddControl(control.Port(fg))
+	m.AddControl(control.Port(fg), 0, 0)
+	m.AddControl(control.Port(fg), 100, 100)
 	return m
 }
 
