@@ -5,24 +5,35 @@ import (
 	"dhemery.com/panelgen/shape"
 )
 
-func Cubic() Module {
+func Cubic() *Module {
 	const (
+		hue   = 180
 		hp    = 5
-		width = hp * 5.08
-		left  = width/4 + 1/3
+		width = hp * mmPerHp
 	)
+
+	const (
+		left   = width/4 + 1/3
+		right  = width - left
+		top    = 20
+		deltaY = 15
+	)
+
 	var (
-		// bg = shape.HSL{H: 180, S: 1, L: .97}
-		fg = shape.HSL{H: 180, S: 1, L: .3}
+		bg = shape.HSL{H: hue, S: 1, L: .97}
+		fg = shape.HSL{H: hue, S: 1, L: .3}
 	)
 
-	m := Module{
-		Slug:   "cubic",
-		Frames: make(map[string]shape.SVG),
-	}
+	m := NewModule("cubic", hp, fg, bg)
 
-	m.AddControl(control.Port(fg), 0, 0)
-	m.AddControl(control.Port(fg), 100, 100)
+	y := float32(82)
+	m.AddControl(control.Port(fg), left, y)
+	m.AddControl(control.Port(fg), right, y)
+
+	y = y + deltaY
+	m.AddControl(control.Port(fg), left, y)
+	m.AddControl(control.Port(fg), right, y)
+
 	return m
 }
 
