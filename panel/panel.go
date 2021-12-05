@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	Height           = 127.5
-	MillimetersPerHp = 5.08
+	Height      = 127.5
+	nameLabelY  = 9
+	brandLabelY = Height - nameLabelY
 )
 
 type installedControl struct {
@@ -15,18 +16,24 @@ type installedControl struct {
 	Control  control.Control
 }
 
-func New(slug, name string, hp int, fg, bg shape.HSL) *Panel {
+func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	faceplateRect := shape.Rect{
-		W:           float32(hp) * MillimetersPerHp,
+		W:           width,
 		H:           Height,
 		Fill:        &bg,
 		Stroke:      &fg,
-		StrokeWidth: 1.0,
+		StrokeWidth: shape.StrokeWidth,
 	}
-	// TODO: Add brand and module labels
+	center := width / 2
+	brandLabel := shape.Label("DHE", shape.TitleFont, fg, shape.LabelBelow)
+	brandG := shape.G{Content: []shape.Bounded{brandLabel}}.Translate(center, brandLabelY)
+	nameLabel := shape.Label(name, shape.TitleFont, fg, shape.LabelAbove)
+	nameG := shape.G{Content: []shape.Bounded{nameLabel}}.Translate(center, nameLabelY)
+
 	p := &Panel{
-		Slug:       "cubic",
-		Engravings: []shape.Bounded{faceplateRect},
+		Slug: "cubic",
+		Engravings: []shape.Bounded{
+			faceplateRect, brandG, nameG},
 	}
 	return p
 }

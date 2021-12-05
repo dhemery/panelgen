@@ -10,7 +10,7 @@ func Panel() *panel.Panel {
 	const (
 		hue   = 180
 		hp    = 5
-		width = hp * panel.MillimetersPerHp
+		width = hp * shape.MillimetersPerHp
 	)
 
 	const (
@@ -25,7 +25,7 @@ func Panel() *panel.Panel {
 		fg = shape.HSL{H: hue, S: 1, L: .3}
 	)
 
-	p := panel.New("cubic", "CUBIC", hp, fg, bg)
+	p := panel.New("cubic", "CUBIC", width, fg, bg)
 
 	y := float32(82)
 	p.Install(control.Port(fg), left, y)
