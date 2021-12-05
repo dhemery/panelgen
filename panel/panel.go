@@ -75,5 +75,12 @@ func (p *Panel) Image() shape.SVG {
 }
 
 func (p *Panel) Frames() map[string]shape.SVG {
-	return nil
+	frames := map[string]shape.SVG{}
+	for _, installation := range p.Controls {
+		for slug, content := range installation.Control.Frames {
+			svg := shape.SVG{Content: []shape.Bounded{content}}
+			frames[slug] = svg
+		}
+	}
+	return frames
 }
