@@ -23,9 +23,7 @@ func Port(color shape.HSL) Control {
 		R:    holeRadius,
 		Fill: &color,
 	}
-	frame := shape.G{
-		Content: []shape.Bounded{nut, barrel, hole},
-	}
+	frame := shape.NewG(nut, barrel, hole)
 	c := Control{
 		Frames:    map[string]shape.Bounded{"port": frame},
 		Selection: "port",

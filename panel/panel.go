@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	Height      = 127.5
+	Height      = 128.5
 	nameLabelY  = 9
 	brandLabelY = Height - nameLabelY
 )
@@ -25,16 +25,16 @@ func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 		StrokeWidth: shape.StrokeWidth,
 	}
 	center := width / 2
-	brandLabel := shape.Label("DHE", shape.TitleFont, fg, shape.LabelBelow)
-	brandG := shape.G{Content: []shape.Bounded{brandLabel}}.Translate(center, brandLabelY)
-	nameLabel := shape.Label(name, shape.TitleFont, fg, shape.LabelAbove)
-	nameG := shape.G{Content: []shape.Bounded{nameLabel}}.Translate(center, nameLabelY)
 
 	p := &Panel{
-		Slug: "cubic",
-		Engravings: []shape.Bounded{
-			faceplateRect, brandG, nameG},
+		Slug:       "cubic",
+		Engravings: []shape.Bounded{faceplateRect},
 	}
+
+	brandLabel := shape.LabelBelow("DHE", shape.TitleFont, fg)
+	p.Engrave(brandLabel, center, brandLabelY)
+	nameLabel := shape.LabelAbove(name, shape.TitleFont, fg)
+	p.Engrave(nameLabel, center, nameLabelY)
 	return p
 }
 
@@ -44,19 +44,23 @@ type Panel struct {
 	Controls   []installedControl
 }
 
-func (p *Panel) Install(c control.Control, x, y float32) {
+// Install installs the control at the specified position.
+// The panel image will show the control's selected frame at that position.
+// The module's svg directory will include an svg file for each frame of the control.
+func (p *Panel) Install(c control.Control, x, y float32) shape.G {
 	ic := installedControl{
 		Location: shape.Location{X: x, Y: y},
 		Control:  c,
 	}
 	p.Controls = append(p.Controls, ic)
+	return shape.NewGAt(x, y, c.SelectedFrame())
 }
 
-func (p *Panel) Engrave(s shape.Bounded, x, y float32) {
-	g := shape.G{
-		Content: []shape.Bounded{s},
-	}
-	p.Engravings = append(p.Engravings, g.Translate(x, y))
+// Engrave engraves the shape into the faceplate at the specified position.
+func (p *Panel) Engrave(s shape.Bounded, x, y float32) shape.G {
+	g := shape.NewGAt(x, y, s)
+	p.Engravings = append(p.Engravings, g)
+	return g
 }
 
 func (p *Panel) Faceplate() shape.SVG {
@@ -66,10 +70,8 @@ func (p *Panel) Faceplate() shape.SVG {
 func (p *Panel) Image() shape.SVG {
 	svg := p.Faceplate()
 	for _, c := range p.Controls {
-		g := shape.G{
-			Content: []shape.Bounded{c.Control.SelectedFrame()},
-		}
-		svg.Content = append(svg.Content, g.Translate(c.Location.X, c.Location.Y))
+		g := shape.NewGAt(c.Location.X, c.Location.Y, c.Control.SelectedFrame())
+		svg.Content = append(svg.Content, g)
 	}
 	return svg
 }

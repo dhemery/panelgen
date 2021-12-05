@@ -32,15 +32,16 @@ func (b bounds) Height() float32 {
 }
 
 func boundsOf(shapes []Bounded) bounds {
-	var b bounds
 	if len(shapes) < 1 {
-		return b
+		return bounds{}
 	}
 	first := shapes[0]
-	b.Top = first.Top()
-	b.Right = first.Right()
-	b.Bottom = first.Bottom()
-	b.Left = first.Left()
+	b := bounds{
+		Top:    first.Top(),
+		Right:  first.Right(),
+		Bottom: first.Bottom(),
+		Left:   first.Left(),
+	}
 	for _, s := range shapes[1:] {
 		if v := s.Top(); v < b.Top {
 			b.Top = v
@@ -87,13 +88,21 @@ func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 type G struct {
 	XMLName xml.Name `xml:"g"`
-	dx, dy  float32
+	Location
 	Content []Bounded
 }
 
+func NewG(content ...Bounded) G {
+	return G{Content: content}
+}
+
+func NewGAt(x, y float32, content ...Bounded) G {
+	return G{Content: content, Location: Location{x, y}}
+}
+
 func (g G) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	if g.dx != 0 || g.dy != 0 {
-		tx := xml.Attr{Name: xml.Name{Local: "transform"}, Value: fmt.Sprintf("translate(%f %f)", g.dx, g.dy)}
+	if g.X != 0 || g.Y != 0 {
+		tx := xml.Attr{Name: xml.Name{Local: "transform"}, Value: fmt.Sprintf("translate(%f %f)", g.X, g.Y)}
 		start.Attr = append(start.Attr, tx)
 	}
 	start.Name = xml.Name{Local: "g"}
@@ -108,15 +117,15 @@ func (g G) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 func (g G) Translate(x, y float32) G {
-	g.dx = x
-	g.dy = y
+	g.X = x
+	g.Y = y
 	return g
 }
 
 func (g G) Top() float32 {
-	top := g.dy
+	top := g.Y
 	for _, c := range g.Content {
-		if ct := c.Top() + g.dy; ct < top {
+		if ct := c.Top() + g.Y; ct < top {
 			top = ct
 		}
 	}
@@ -124,9 +133,9 @@ func (g G) Top() float32 {
 }
 
 func (g G) Right() float32 {
-	right := g.dx
+	right := g.X
 	for _, c := range g.Content {
-		if cr := c.Right() + g.dx; cr > right {
+		if cr := c.Right() + g.Y; cr > right {
 			right = cr
 		}
 	}
@@ -134,9 +143,9 @@ func (g G) Right() float32 {
 }
 
 func (g G) Bottom() float32 {
-	bottom := g.dy
+	bottom := g.Y
 	for _, c := range g.Content {
-		if cb := c.Bottom() + g.dy; cb > bottom {
+		if cb := c.Bottom() + g.Y; cb > bottom {
 			bottom = cb
 		}
 	}
@@ -144,9 +153,9 @@ func (g G) Bottom() float32 {
 }
 
 func (g G) Left() float32 {
-	left := g.dx
+	left := g.X
 	for _, c := range g.Content {
-		if cl := c.Left() + g.dx; cl < left {
+		if cl := c.Left() + g.X; cl < left {
 			left = cl
 		}
 	}
