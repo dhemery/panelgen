@@ -23,12 +23,12 @@ func Port(color shape.HSL) Control {
 		R:    holeRadius,
 		Fill: &color,
 	}
-	shapes := []shape.Bounded{nut, barrel, hole}
+	frame := shape.G{
+		Content: []shape.Bounded{nut, barrel, hole},
+	}
 	c := Control{
-		Overlay: shape.G{Content: shapes},
-		Frames: map[string]shape.SVG{
-			"port": {Content: shapes},
-		},
+		Frames:    map[string]shape.Bounded{"port": frame},
+		Selection: "port",
 	}
 	return c
 }

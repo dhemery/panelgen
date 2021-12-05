@@ -1,15 +1,16 @@
-package module
+package cubic
 
 import (
 	"dhemery.com/panelgen/control"
+	"dhemery.com/panelgen/panel"
 	"dhemery.com/panelgen/shape"
 )
 
-func Cubic() *Module {
+func Panel() *panel.Panel {
 	const (
 		hue   = 180
 		hp    = 5
-		width = hp * mmPerHp
+		width = hp * panel.MillimetersPerHp
 	)
 
 	const (
@@ -24,19 +25,15 @@ func Cubic() *Module {
 		fg = shape.HSL{H: hue, S: 1, L: .3}
 	)
 
-	m := NewModule("cubic", hp, fg, bg)
+	p := panel.New("cubic", "CUBIC", hp, fg, bg)
 
 	y := float32(82)
-	m.AddControl(control.Port(fg), left, y)
-	m.AddControl(control.Port(fg), right, y)
+	p.Install(control.Port(fg), left, y)
+	p.Install(control.Port(fg), right, y)
 
 	y = y + deltaY
-	m.AddControl(control.Port(fg), left, y)
-	m.AddControl(control.Port(fg), right, y)
+	p.Install(control.Port(fg), left, y)
+	p.Install(control.Port(fg), right, y)
 
-	return m
-}
-
-func init() {
-	All = append(All, Cubic())
+	return p
 }

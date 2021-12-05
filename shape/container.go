@@ -5,6 +5,11 @@ import (
 	"fmt"
 )
 
+type Location struct {
+	X float32
+	Y float32
+}
+
 type Bounded interface {
 	Top() float32
 	Right() float32
@@ -102,9 +107,9 @@ func (g G) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(start.End())
 }
 
-func (g G) Translate(dx, dy float32) G {
-	g.dx = dx
-	g.dy = dy
+func (g G) Translate(x, y float32) G {
+	g.dx = x
+	g.dy = y
 	return g
 }
 

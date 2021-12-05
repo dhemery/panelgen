@@ -6,21 +6,26 @@ import (
 	"os"
 	"path/filepath"
 
-	"dhemery.com/panelgen/module"
+	"dhemery.com/panelgen/module/cubic"
+	"dhemery.com/panelgen/panel"
 )
 
 func main() {
-	for _, m := range module.All {
-		path := filepath.Join("out", m.Slug, m.Slug+".svg")
-		if err := write(path, m.Faceplate); err != nil {
+	panels := []*panel.Panel{
+		cubic.Panel(),
+	}
+
+	for _, p := range panels {
+		path := filepath.Join("out", p.Slug, p.Slug+".svg")
+		if err := write(path, p.Faceplate()); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
-		path = filepath.Join("out", "image", m.Slug+".svg")
-		if err := write(path, m.Overlay); err != nil {
+		path = filepath.Join("out", "image", p.Slug+".svg")
+		if err := write(path, p.Image()); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
-		for slug, svg := range m.Frames {
-			path = filepath.Join("out", m.Slug, slug+".svg")
+		for slug, svg := range p.Frames() {
+			path = filepath.Join("out", p.Slug, slug+".svg")
 			if err := write(path, svg); err != nil {
 				_, _ = fmt.Fprintln(os.Stderr, err)
 			}

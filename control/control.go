@@ -3,7 +3,10 @@ package control
 import "dhemery.com/panelgen/shape"
 
 type Control struct {
-	Faceplate shape.G
-	Overlay   shape.G
-	Frames    map[string]shape.SVG
+	Frames    map[string]shape.Bounded
+	Selection string
+}
+
+func (c Control) SelectedFrame() shape.Bounded {
+	return c.Frames[c.Selection]
 }
