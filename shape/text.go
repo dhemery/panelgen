@@ -7,12 +7,12 @@ type Font struct {
 }
 
 type TextAlignment struct {
-	DominantBaseline string `xml:"dominant-baseline,attr"`
-	TextAnchor       string `xml:"text-anchor,attr"`
-	PortionBelow     float32
-	PortionRight     float32
-	BaselineShift    float32
-	AscentRatio      float32
+	DominantBaseline string  `xml:"dominant-baseline,attr"`
+	TextAnchor       string  `xml:"text-anchor,attr"`
+	PortionBelow     float32 `xml:"-"`
+	PortionRight     float32 `xml:"-"`
+	BaselineShift    float32 `xml:"-"`
+	AscentRatio      float32 `xml:"-"`
 }
 
 type Text struct {

@@ -7,7 +7,8 @@ import (
 
 type Group struct {
 	XMLName xml.Name `xml:"g"`
-	Vector
+	X       float32
+	Y       float32
 	Content []Bounded
 }
 
@@ -16,7 +17,7 @@ func NewGroup(content ...Bounded) Group {
 }
 
 func NewGroupAt(x, y float32, content ...Bounded) Group {
-	return Group{Content: content, Vector: Vector{x, y}}
+	return Group{Content: content, X: x, Y: y}
 }
 
 func (g Group) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -35,8 +36,7 @@ func (g Group) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(start.End())
 }
 
-// TODO: Translate(Vector)
-func (g Group) Translate(x, y float32) Group {
+func (g Group) At(x, y float32) Group {
 	g.X += x
 	g.Y += y
 	return g

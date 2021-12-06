@@ -11,11 +11,6 @@ const (
 	brandLabelY = Height - nameLabelY
 )
 
-type installedControl struct {
-	Location shape.Vector
-	Control  control.Control
-}
-
 func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	faceplateRect := shape.Rect{
 		X:           shape.StrokeWidth / 2,
@@ -43,19 +38,16 @@ func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 type Panel struct {
 	Slug       string
 	Engravings []shape.Bounded
-	Controls   []installedControl
+	Controls   []control.Control
 }
 
 // Install installs the control at the specified position.
 // The panel image will show the control's selected frame at that position.
 // The module's svg directory will include an svg file for each frame of the control.
-func (p *Panel) Install(c control.Control, x, y float32) shape.Group {
-	ic := installedControl{
-		Location: shape.Vector{X: x, Y: y},
-		Control:  c,
-	}
-	p.Controls = append(p.Controls, ic)
-	return shape.NewGroupAt(x, y, c.SelectedFrame())
+func (p *Panel) Install(c control.Control, x, y float32) control.Frame {
+	installed := c.At(x, y)
+	p.Controls = append(p.Controls, installed)
+	return installed.SelectedFrame()
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
@@ -72,17 +64,16 @@ func (p *Panel) Faceplate() shape.SVG {
 func (p *Panel) Image() shape.SVG {
 	svg := p.Faceplate()
 	for _, c := range p.Controls {
-		g := shape.NewGroupAt(c.Location.X, c.Location.Y, c.Control.SelectedFrame())
-		svg.Content = append(svg.Content, g)
+		svg.Content = append(svg.Content, c.SelectedFrame())
 	}
 	return svg
 }
 
 func (p *Panel) Frames() map[string]shape.SVG {
 	frames := map[string]shape.SVG{}
-	for _, installation := range p.Controls {
-		for slug, content := range installation.Control.Frames {
-			svg := shape.SVG{Content: []shape.Bounded{content}}
+	for _, control := range p.Controls {
+		for slug, frame := range control.Frames {
+			svg := shape.SVG{Content: []shape.Bounded{frame}}
 			frames[slug] = svg
 		}
 	}

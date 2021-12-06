@@ -36,11 +36,11 @@ func Panel() *panel.Panel {
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float32(row)
 		port := p.Install(portControl, left, y)
-		p.Engrave(cvLabel, port.X, port.Top()-shape.Padding)
+		p.Engrave(cvLabel, left, port.Top()-shape.Padding)
 		knob := p.Install(knobControl, right, y)
 		knobLabelText := fmt.Sprintf(`X<tspan baseline-shift="super">%d</tspan>`, 3-row)
 		knobLabel := panel.LabelAbove(knobLabelText, panel.SmallFont, fg)
-		p.Engrave(knobLabel, knob.X, knob.Top()-shape.Padding)
+		p.Engrave(knobLabel, right, knob.Top()-shape.Padding)
 	}
 
 	y := float32(82)

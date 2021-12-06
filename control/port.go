@@ -4,6 +4,7 @@ import "dhemery.com/panelgen/shape"
 
 func Port(color shape.HSL) Control {
 	const (
+		slug            = "port"
 		nutRadius       = 4
 		barrelRadius    = 3
 		holeRadius      = 1.8
@@ -23,10 +24,9 @@ func Port(color shape.HSL) Control {
 		R:    holeRadius,
 		Fill: &color,
 	}
-	frame := shape.NewGroup(nut, barrel, hole)
-	c := Control{
-		Selection: "port",
-		Frames:    map[string]shape.Bounded{"port": frame},
+	frame := newGroupFrame(nut, barrel, hole)
+	return Control{
+		Frames:        map[string]Frame{slug: frame},
+		selectedFrame: frame,
 	}
-	return c
 }
