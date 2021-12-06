@@ -17,14 +17,14 @@ func main() {
 
 	for _, p := range panels {
 		path := filepath.Join("out", p.Slug, p.Slug+".svg")
-		if err := write(path, p.Faceplate()); err != nil {
+		if err := write(path, p.FaceplateSvg()); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
 		path = filepath.Join("out", "image", p.Slug+".svg")
-		if err := write(path, p.Image()); err != nil {
+		if err := write(path, p.ImageSvg()); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
-		for slug, svg := range p.Frames() {
+		for slug, svg := range p.FrameSvgs() {
 			path = filepath.Join("out", p.Slug, slug+".svg")
 			if err := write(path, svg); err != nil {
 				_, _ = fmt.Fprintln(os.Stderr, err)

@@ -47,7 +47,7 @@ type Panel struct {
 func (p *Panel) Install(c control.Control, x, y float32) control.Frame {
 	installed := c.At(x, y)
 	p.Controls = append(p.Controls, installed)
-	return installed.SelectedFrame()
+	return installed.DefaultFrame()
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
@@ -57,24 +57,23 @@ func (p *Panel) Engrave(s shape.Bounded, x, y float32) shape.Group {
 	return g
 }
 
-func (p *Panel) Faceplate() shape.SVG {
-	return shape.SVG{Content: p.Engravings}
+func (p *Panel) FaceplateSvg() shape.Svg {
+	return shape.Svg{Content: p.Engravings}
 }
 
-func (p *Panel) Image() shape.SVG {
-	svg := p.Faceplate()
+func (p *Panel) ImageSvg() shape.Svg {
+	svg := p.FaceplateSvg()
 	for _, c := range p.Controls {
-		svg.Content = append(svg.Content, c.SelectedFrame())
+		svg.Content = append(svg.Content, c.DefaultFrame())
 	}
 	return svg
 }
 
-func (p *Panel) Frames() map[string]shape.SVG {
-	frames := map[string]shape.SVG{}
+func (p *Panel) FrameSvgs() map[string]shape.Svg {
+	frames := map[string]shape.Svg{}
 	for _, control := range p.Controls {
 		for slug, frame := range control.Frames {
-			svg := shape.SVG{Content: []shape.Bounded{frame}}
-			frames[slug] = svg
+			frames[slug] = frame.Svg()
 		}
 	}
 	return frames

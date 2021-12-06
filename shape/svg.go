@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-type SVG struct {
+type Svg struct {
 	Content []Bounded
 }
 
-func (s SVG) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s Svg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	b := boundsOf(s.Content)
 	version := xml.Attr{Name: xml.Name{Local: "version"}, Value: "1.1"}
 	xmlns := xml.Attr{Name: xml.Name{Local: "xmlns"}, Value: "http://www.w3.org/2000/svg"}

@@ -43,7 +43,7 @@ func knob(slug string, diameter float32, knobColor, pointerColor shape.HSL) Cont
 	}
 	frame := newGroupFrame(knob, pointer)
 	return Control{
-		Frames:        map[string]Frame{slug: frame},
-		selectedFrame: frame,
+		Frames:       map[string]Frame{slug: frame},
+		defaultFrame: frame,
 	}
 }

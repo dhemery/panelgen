@@ -6,12 +6,14 @@ type Frame interface {
 	shape.Bounded
 	// At returns a copy of the frame positioned at x, y
 	At(x, y float32) Frame
+	// Svg returns a shape.Svg with the same bounds and content as the frame
+	Svg() shape.Svg
 }
 
 type Control struct {
-	X, Y          float32
-	Frames        map[string]Frame
-	selectedFrame Frame
+	X, Y         float32
+	Frames       map[string]Frame
+	defaultFrame Frame
 }
 
 // At returns a copy of c positioned at x, y
@@ -21,9 +23,8 @@ func (c Control) At(x, y float32) Control {
 	return c
 }
 
-// SelectedFrame returns the control's selected frame at the control's position
-func (c Control) SelectedFrame() Frame {
-	return c.selectedFrame.At(c.X, c.Y)
+func (c Control) DefaultFrame() Frame {
+	return c.defaultFrame.At(c.X, c.Y)
 }
 
 type groupFrame struct {
@@ -38,4 +39,8 @@ func (f groupFrame) At(x, y float32) Frame {
 	f.X = x
 	f.Y = y
 	return f
+}
+
+func (f groupFrame) Svg() shape.Svg {
+	return shape.Svg{Content: []shape.Bounded{f.Group}}
 }
