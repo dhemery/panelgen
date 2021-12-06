@@ -27,42 +27,42 @@ func Panel() *panel.Panel {
 		fg = shape.HSL{H: hue, S: 1, L: .3}
 	)
 
-	panel := panel.New("cubic", "CUBIC", width, fg, bg)
-	cvLabel := shape.LabelAbove("CV", shape.SmallFont, fg)
+	p := panel.New("cubic", "CUBIC", width, fg, bg)
+	cvLabel := panel.LabelAbove("CV", panel.SmallFont, fg)
 
 	portControl := control.Port(fg)
 	knobControl := control.SmallKnob(fg, bg)
 
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float32(row)
-		port := panel.Install(portControl, left, y)
-		panel.Engrave(cvLabel, port.X, port.Top()-shape.Padding)
-		knob := panel.Install(knobControl, right, y)
+		port := p.Install(portControl, left, y)
+		p.Engrave(cvLabel, port.X, port.Top()-shape.Padding)
+		knob := p.Install(knobControl, right, y)
 		knobLabelText := fmt.Sprintf(`X<tspan baseline-shift="super">%d</tspan>`, 3-row)
-		knobLabel := shape.LabelAbove(knobLabelText, shape.SmallFont, fg)
-		panel.Engrave(knobLabel, knob.X, knob.Top()-shape.Padding)
+		knobLabel := panel.LabelAbove(knobLabelText, panel.SmallFont, fg)
+		p.Engrave(knobLabel, knob.X, knob.Top()-shape.Padding)
 	}
 
 	y := float32(82)
-	inGainKnob := panel.Install(knobControl, left, y)
-	inLabel := shape.LabelAbove("IN", shape.SmallFont, fg)
-	panel.Engrave(inLabel, left, inGainKnob.Top()-shape.Padding)
-	outGainKnob := panel.Install(knobControl, right, y)
-	outLabel := shape.LabelAbove("OUT", shape.SmallFont, fg)
-	panel.Engrave(outLabel, right, outGainKnob.Top()-shape.Padding)
+	inGainKnob := p.Install(knobControl, left, y)
+	inLabel := panel.LabelAbove("IN", panel.SmallFont, fg)
+	p.Engrave(inLabel, left, inGainKnob.Top()-shape.Padding)
+	outGainKnob := p.Install(knobControl, right, y)
+	outLabel := panel.LabelAbove("OUT", panel.SmallFont, fg)
+	p.Engrave(outLabel, right, outGainKnob.Top()-shape.Padding)
 
 	y = y + deltaY
-	inCvPort := panel.Install(portControl, left, y)
-	panel.Engrave(cvLabel, left, inCvPort.Top()-shape.Padding)
-	outCvPort := panel.Install(portControl, right, y)
-	panel.Engrave(cvLabel, right, outCvPort.Top()-shape.Padding)
+	inCvPort := p.Install(portControl, left, y)
+	p.Engrave(cvLabel, left, inCvPort.Top()-shape.Padding)
+	outCvPort := p.Install(portControl, right, y)
+	p.Engrave(cvLabel, right, outCvPort.Top()-shape.Padding)
 
 	y = y + deltaY
-	inPort := panel.Install(portControl, left, y)
-	panel.Engrave(inLabel, left, inPort.Top()-shape.Padding)
+	inPort := p.Install(portControl, left, y)
+	p.Engrave(inLabel, left, inPort.Top()-shape.Padding)
 
-	outPort := panel.Install(portControl, right, y)
-	panel.Engrave(outLabel, right, outPort.Top()-shape.Padding)
+	outPort := p.Install(portControl, right, y)
+	p.Engrave(outLabel, right, outPort.Top()-shape.Padding)
 
-	return panel
+	return p
 }

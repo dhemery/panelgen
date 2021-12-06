@@ -2,6 +2,8 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
+type Frame struct{}
+
 type Control struct {
 	Frames    map[string]shape.Bounded
 	Selection string

@@ -25,7 +25,7 @@ func knob(slug string, diameter float32, knobColor, pointerColor shape.HSL) Cont
 		Y2:          -pointerLength,
 		Cap:         "round",
 	}
-	frame := shape.NewG(knob, pointer)
+	frame := shape.NewGroup(knob, pointer)
 	c := Control{
 		Frames:    map[string]shape.Bounded{slug: frame},
 		Selection: slug,
