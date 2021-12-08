@@ -42,35 +42,35 @@ func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	return p
 }
 
-func (p *Panel) LabelAbove(x, y float32, label string, font shape.Font) {
-	p.Engrave(x, y, LabelAbove(label, font, p.fg))
+func (p *Panel) LabelAbove(x, y float32, text string, font shape.Font) {
+	p.Engrave(x, y, LabelAbove(text, font, p.fg))
 }
 
-func (p *Panel) LabelBelow(x, y float32, label string, font shape.Font) {
-	p.Engrave(x, y, LabelBelow(label, font, p.fg))
+func (p *Panel) LabelBelow(x, y float32, text string, font shape.Font) {
+	p.Engrave(x, y, LabelBelow(text, font, p.fg))
 }
 
-func (p *Panel) Port(x, y float32, label string, labelColor shape.HSL) {
-	port := p.Install(x, y, control.Port(p.fg))
-	p.LabelAbove(x, port.Top()-shape.Padding, label, SmallFont)
+func (p *Panel) Port(x, y float32, name string, labelColor shape.HSL) {
+	port := p.Install(x, y, control.Port(p.fg, p.bg))
+	p.LabelAbove(x, port.Top()-shape.Padding, name, SmallFont)
 }
 
 func (p *Panel) CvPort(x, y float32) {
 	p.Port(x, y, "CV", p.fg)
 }
 
-func (p *Panel) InPort(x, y float32, label string) {
-	p.Port(x, y, label, p.fg)
+func (p *Panel) InPort(x, y float32, name string) {
+	p.boxedPort(x, y, name, p.bg, p.fg)
 }
 
-func (p *Panel) OutPort(x, y float32, label string) {
-	p.Port(x, y, label, p.fg)
+func (p *Panel) OutPort(x, y float32, name string) {
+	p.boxedPort(x, y, name, p.fg, p.bg)
 }
 
-func (p *Panel) SmallKnob(x, y float32, label string) {
+func (p *Panel) SmallKnob(x, y float32, name string) {
 	knob := p.Install(x, y, control.SmallKnob(p.fg, p.bg))
 	labelY := knob.Top() - shape.Padding
-	p.LabelAbove(x, labelY, label, SmallFont)
+	p.LabelAbove(x, labelY, name, SmallFont)
 }
 
 // Install installs the control at the specified position.
@@ -109,4 +109,27 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 		}
 	}
 	return frames
+}
+
+func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
+	barePort := control.Port(p.fg, p.bg)
+	bareLabel := LabelAbove(name, SmallFont, labelColor)
+
+	port := p.Install(x, y, barePort)
+	labelY := port.Top() - shape.Padding
+
+	box := shape.Rect{
+		H:           port.Height() + bareLabel.Height() + 3*shape.Padding,
+		W:           port.Width() + 2*shape.Padding,
+		Fill:        &fill,
+		Stroke:      &p.fg,
+		StrokeWidth: shape.StrokeWidth,
+		RX:          0.5,
+		RY:          0.5,
+	}
+
+	boxTop := labelY - bareLabel.Height() - shape.Padding
+	boxLeft := port.Left() - shape.Padding
+	p.Engrave(boxLeft, boxTop, box)
+	p.Engrave(x, labelY, bareLabel)
 }

@@ -2,7 +2,7 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
-func Port(color shape.HSL) Control {
+func Port(stroke, fill shape.HSL) Control {
 	const (
 		slug            = "port"
 		nutRadius       = 4
@@ -12,17 +12,18 @@ func Port(color shape.HSL) Control {
 	)
 	nut := shape.Circle{
 		R:           nutRadius - shadowThickness/2,
-		Stroke:      &color,
+		Stroke:      &stroke,
+		Fill:        &fill,
 		StrokeWidth: shadowThickness,
 	}
 	barrel := shape.Circle{
 		R:           barrelRadius - shadowThickness/2,
-		Stroke:      &color,
+		Stroke:      &stroke,
 		StrokeWidth: shadowThickness,
 	}
 	hole := shape.Circle{
 		R:    holeRadius,
-		Fill: &color,
+		Fill: &stroke,
 	}
 	frame := newGroupFrame(nut, barrel, hole)
 	return Control{

@@ -12,19 +12,19 @@ type Circle struct {
 }
 
 func (c Circle) Top() float32 {
-	return c.CY - c.R - c.StrokeWidth
+	return c.CY - c.R - c.StrokeWidth/2
 }
 
 func (c Circle) Right() float32 {
-	return c.CX + c.R + c.StrokeWidth
+	return c.CX + c.R + c.StrokeWidth/2
 }
 
 func (c Circle) Bottom() float32 {
-	return c.CY + c.R + c.StrokeWidth
+	return c.CY + c.R + c.StrokeWidth/2
 }
 
 func (c Circle) Left() float32 {
-	return c.CX - c.R - c.StrokeWidth
+	return c.CX - c.R - c.StrokeWidth/2
 }
 
 func (c Circle) Width() float32 {

@@ -43,43 +43,43 @@ func (g Group) At(x, y float32) Group {
 }
 
 func (g Group) Top() float32 {
-	top := g.Y
+	top := float32(20000)
 	for _, c := range g.Content {
-		if ct := c.Top() + g.Y; ct < top {
+		if ct := c.Top(); ct < top {
 			top = ct
 		}
 	}
-	return top
+	return top + g.Y
 }
 
 func (g Group) Right() float32 {
-	right := g.X
+	right := float32(-20000)
 	for _, c := range g.Content {
-		if cr := c.Right() + g.Y; cr > right {
+		if cr := c.Right(); cr > right {
 			right = cr
 		}
 	}
-	return right
+	return right + g.X
 }
 
 func (g Group) Bottom() float32 {
-	bottom := g.Y
+	bottom := float32(-20000)
 	for _, c := range g.Content {
-		if cb := c.Bottom() + g.Y; cb > bottom {
+		if cb := c.Bottom(); cb > bottom {
 			bottom = cb
 		}
 	}
-	return bottom
+	return bottom + g.Y
 }
 
 func (g Group) Left() float32 {
-	left := g.X
+	left := float32(20000)
 	for _, c := range g.Content {
-		if cl := c.Left() + g.X; cl < left {
+		if cl := c.Left(); cl < left {
 			left = cl
 		}
 	}
-	return left
+	return left + g.X
 }
 
 func (g Group) Width() float32 {

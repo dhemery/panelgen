@@ -1,9 +1,10 @@
 package shape
 
 type Font struct {
-	FontFamily string  `xml:"font-family,attr"`
-	FontWeight string  `xml:"font-weight,attr"`
-	FontSize   float32 `xml:"font-size,attr"`
+	FontFamily  string  `xml:"font-family,attr"`
+	FontWeight  string  `xml:"font-weight,attr"`
+	FontSize    float32 `xml:"font-size,attr"`
+	AscentRatio float32 `xml:"-"`
 }
 
 type TextAlignment struct {
@@ -12,7 +13,6 @@ type TextAlignment struct {
 	PortionBelow     float32 `xml:"-"`
 	PortionRight     float32 `xml:"-"`
 	BaselineShift    float32 `xml:"-"`
-	AscentRatio      float32 `xml:"-"`
 }
 
 type Text struct {

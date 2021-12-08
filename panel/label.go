@@ -12,19 +12,22 @@ func LabelBelow(text string, font shape.Font, color shape.HSL) shape.Bounded {
 
 var (
 	TitleFont = shape.Font{
-		FontFamily: "Proxima Nova",
-		FontWeight: "bold",
-		FontSize:   titleFontSize,
+		FontFamily:  "Proxima Nova",
+		FontWeight:  "bold",
+		FontSize:    titleFontSize,
+		AscentRatio: proximaNovaAscentRatio,
 	}
 	LargeFont = shape.Font{
-		FontFamily: "Proxima Nova",
-		FontWeight: "bold",
-		FontSize:   largeFontSize,
+		FontFamily:  "Proxima Nova",
+		FontWeight:  "bold",
+		FontSize:    largeFontSize,
+		AscentRatio: proximaNovaAscentRatio,
 	}
 	SmallFont = shape.Font{
-		FontFamily: "Proxima Nova",
-		FontWeight: "bold",
-		FontSize:   smallFontSize,
+		FontFamily:  "Proxima Nova",
+		FontWeight:  "bold",
+		FontSize:    smallFontSize,
+		AscentRatio: proximaNovaAscentRatio,
 	}
 )
 
@@ -38,10 +41,10 @@ func label(text string, font shape.Font, fill shape.HSL, alignment shape.TextAli
 }
 
 const (
-	titleFontSize = 12 / shape.PixelsPerMillimeter
-	largeFontSize = 9 / shape.PixelsPerMillimeter
-	smallFontSize = 7 / shape.PixelsPerMillimeter
-	ascentRatio   = 2 / 3 // Correct for Proxima Nova font
+	titleFontSize          = 12 / shape.PixelsPerMillimeter
+	largeFontSize          = 9 / shape.PixelsPerMillimeter
+	smallFontSize          = 7 / shape.PixelsPerMillimeter
+	proximaNovaAscentRatio = float32(2) / 3
 )
 
 var (
