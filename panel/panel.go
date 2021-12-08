@@ -11,6 +11,13 @@ const (
 	brandLabelY = Height - nameLabelY
 )
 
+type Panel struct {
+	Slug       string
+	Engravings []shape.Bounded
+	Controls   []control.Control
+	fg, bg     shape.HSL
+}
+
 func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	faceplateRect := shape.Rect{
 		X:           shape.StrokeWidth / 2,
@@ -26,19 +33,44 @@ func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	p := &Panel{
 		Slug:       "cubic",
 		Engravings: []shape.Bounded{faceplateRect},
+		fg:         fg,
+		bg:         bg,
 	}
 
-	brandLabel := LabelBelow("DHE", TitleFont, fg)
-	p.Engrave(center, brandLabelY, brandLabel)
-	nameLabel := LabelAbove(name, TitleFont, fg)
-	p.Engrave(center, nameLabelY, nameLabel)
+	p.LabelBelow(center, brandLabelY, "DHE", TitleFont)
+	p.LabelAbove(center, nameLabelY, name, TitleFont)
 	return p
 }
 
-type Panel struct {
-	Slug       string
-	Engravings []shape.Bounded
-	Controls   []control.Control
+func (p *Panel) LabelAbove(x, y float32, label string, font shape.Font) {
+	p.Engrave(x, y, LabelAbove(label, font, p.fg))
+}
+
+func (p *Panel) LabelBelow(x, y float32, label string, font shape.Font) {
+	p.Engrave(x, y, LabelBelow(label, font, p.fg))
+}
+
+func (p *Panel) Port(x, y float32, label string, labelColor shape.HSL) {
+	port := p.Install(x, y, control.Port(p.fg))
+	p.LabelAbove(x, port.Top()-shape.Padding, label, SmallFont)
+}
+
+func (p *Panel) CvPort(x, y float32) {
+	p.Port(x, y, "CV", p.fg)
+}
+
+func (p *Panel) InPort(x, y float32, label string) {
+	p.Port(x, y, label, p.fg)
+}
+
+func (p *Panel) OutPort(x, y float32, label string) {
+	p.Port(x, y, label, p.fg)
+}
+
+func (p *Panel) SmallKnob(x, y float32, label string) {
+	knob := p.Install(x, y, control.SmallKnob(p.fg, p.bg))
+	labelY := knob.Top() - shape.Padding
+	p.LabelAbove(x, labelY, label, SmallFont)
 }
 
 // Install installs the control at the specified position.
