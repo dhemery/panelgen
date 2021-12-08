@@ -35,34 +35,34 @@ func Panel() *panel.Panel {
 
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float32(row)
-		port := p.Install(portControl, left, y)
-		p.Engrave(cvLabel, left, port.Top()-shape.Padding)
-		knob := p.Install(knobControl, right, y)
+		port := p.Install(left, y, portControl)
+		p.Engrave(left, port.Top()-shape.Padding, cvLabel)
+		knob := p.Install(right, y, knobControl)
 		knobLabelText := fmt.Sprintf(`X<tspan baseline-shift="super">%d</tspan>`, 3-row)
 		knobLabel := panel.LabelAbove(knobLabelText, panel.SmallFont, fg)
-		p.Engrave(knobLabel, right, knob.Top()-shape.Padding)
+		p.Engrave(right, knob.Top()-shape.Padding, knobLabel)
 	}
 
 	y := float32(82)
-	inGainKnob := p.Install(knobControl, left, y)
+	inGainKnob := p.Install(left, y, knobControl)
 	inLabel := panel.LabelAbove("IN", panel.SmallFont, fg)
-	p.Engrave(inLabel, left, inGainKnob.Top()-shape.Padding)
-	outGainKnob := p.Install(knobControl, right, y)
+	p.Engrave(left, inGainKnob.Top()-shape.Padding, inLabel)
+	outGainKnob := p.Install(right, y, knobControl)
 	outLabel := panel.LabelAbove("OUT", panel.SmallFont, fg)
-	p.Engrave(outLabel, right, outGainKnob.Top()-shape.Padding)
+	p.Engrave(right, outGainKnob.Top()-shape.Padding, outLabel)
 
 	y = y + deltaY
-	inCvPort := p.Install(portControl, left, y)
-	p.Engrave(cvLabel, left, inCvPort.Top()-shape.Padding)
-	outCvPort := p.Install(portControl, right, y)
-	p.Engrave(cvLabel, right, outCvPort.Top()-shape.Padding)
+	inCvPort := p.Install(left, y, portControl)
+	p.Engrave(left, inCvPort.Top()-shape.Padding, cvLabel)
+	outCvPort := p.Install(right, y, portControl)
+	p.Engrave(right, outCvPort.Top()-shape.Padding, cvLabel)
 
 	y = y + deltaY
-	inPort := p.Install(portControl, left, y)
-	p.Engrave(inLabel, left, inPort.Top()-shape.Padding)
+	inPort := p.Install(left, y, portControl)
+	p.Engrave(left, inPort.Top()-shape.Padding, inLabel)
 
-	outPort := p.Install(portControl, right, y)
-	p.Engrave(outLabel, right, outPort.Top()-shape.Padding)
+	outPort := p.Install(right, y, portControl)
+	p.Engrave(right, outPort.Top()-shape.Padding, outLabel)
 
 	return p
 }

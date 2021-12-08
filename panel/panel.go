@@ -29,9 +29,9 @@ func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
 	}
 
 	brandLabel := LabelBelow("DHE", TitleFont, fg)
-	p.Engrave(brandLabel, center, brandLabelY)
+	p.Engrave(center, brandLabelY, brandLabel)
 	nameLabel := LabelAbove(name, TitleFont, fg)
-	p.Engrave(nameLabel, center, nameLabelY)
+	p.Engrave(center, nameLabelY, nameLabel)
 	return p
 }
 
@@ -44,14 +44,14 @@ type Panel struct {
 // Install installs the control at the specified position.
 // The panel image will show the control's selected frame at that position.
 // The module's svg directory will include an svg file for each frame of the control.
-func (p *Panel) Install(c control.Control, x, y float32) control.Frame {
+func (p *Panel) Install(x, y float32, c control.Control) control.Frame {
 	installed := c.At(x, y)
 	p.Controls = append(p.Controls, installed)
 	return installed.DefaultFrame()
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
-func (p *Panel) Engrave(s shape.Bounded, x, y float32) shape.Group {
+func (p *Panel) Engrave(x, y float32, s shape.Bounded) shape.Group {
 	g := shape.NewGroupAt(x, y, s)
 	p.Engravings = append(p.Engravings, g)
 	return g
