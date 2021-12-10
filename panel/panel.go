@@ -12,10 +12,11 @@ const (
 )
 
 type Panel struct {
-	Slug       string
-	Engravings []shape.Bounded
-	Controls   []control.Control
-	fg, bg     shape.HSL
+	Slug        string
+	Engravings  []shape.Bounded
+	Controls    []control.Control
+	ImageFrames []control.Frame
+	fg, bg      shape.HSL
 }
 
 func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
@@ -78,9 +79,10 @@ func (p *Panel) SmallKnob(x, y float32, name string) {
 // The panel image will show the control's selected frame at that position.
 // The module's svg directory will include an svg file for each frame of the control.
 func (p *Panel) Install(x, y float32, c control.Control) control.Frame {
-	installed := c.At(x, y)
-	p.Controls = append(p.Controls, installed)
-	return installed.DefaultFrame()
+	p.Controls = append(p.Controls, c)
+	frame := c.DefaultFrame.At(x, y)
+	p.ImageFrames = append(p.ImageFrames, frame)
+	return frame
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
@@ -96,8 +98,8 @@ func (p *Panel) FaceplateSvg() shape.Svg {
 
 func (p *Panel) ImageSvg() shape.Svg {
 	content := p.Engravings
-	for _, c := range p.Controls {
-		content = append(content, c.DefaultFrame())
+	for _, f := range p.ImageFrames {
+		content = append(content, f)
 	}
 	return shape.NewSvg(content)
 }

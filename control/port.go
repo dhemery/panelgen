@@ -28,6 +28,6 @@ func Port(stroke, fill shape.HSL) Control {
 	frame := newGroupFrame(nut, barrel, hole)
 	return Control{
 		Frames:       map[string]Frame{slug: frame},
-		defaultFrame: frame,
+		DefaultFrame: frame,
 	}
 }

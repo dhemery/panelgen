@@ -11,20 +11,8 @@ type Frame interface {
 }
 
 type Control struct {
-	X, Y         float32
 	Frames       map[string]Frame
-	defaultFrame Frame
-}
-
-// At returns a copy of c positioned at x, y
-func (c Control) At(x, y float32) Control {
-	c.X = x
-	c.Y = y
-	return c
-}
-
-func (c Control) DefaultFrame() Frame {
-	return c.defaultFrame.At(c.X, c.Y)
+	DefaultFrame Frame
 }
 
 type groupFrame struct {
