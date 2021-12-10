@@ -6,71 +6,80 @@ import (
 )
 
 const (
-	Height      = 128.5
-	nameLabelY  = 9
-	brandLabelY = Height - nameLabelY
+	Height           = 128.5
+	MillimetersPerHp = 5.08
+	nameLabelY       = 9
+	brandLabelY      = Height - nameLabelY
 )
+
+type Hp int
 
 type Panel struct {
 	Slug        string
 	Engravings  []shape.Bounded
+	ImageFrames []shape.Bounded
 	Controls    []control.Control
-	ImageFrames []control.Frame
-	fg, bg      shape.HSL
+	Fg, Bg      shape.HSL
+	Hp          Hp
 }
 
-func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
+func New(slug, name string, hp Hp, fg, bg shape.HSL) *Panel {
+	p := &Panel{
+		Slug: "cubic",
+		Fg:   fg,
+		Bg:   bg,
+		Hp:   hp,
+	}
+
 	outlineThickness := float32(0.5)
 	faceplateRect := shape.Rect{
 		X:           outlineThickness / 2,
 		Y:           outlineThickness / 2,
-		W:           width - outlineThickness,
+		W:           p.Width() - outlineThickness,
 		H:           Height - outlineThickness,
 		Fill:        &bg,
 		Stroke:      &fg,
 		StrokeWidth: shape.StrokeWidth,
 	}
-	center := width / 2
-
-	p := &Panel{
-		Slug:       "cubic",
-		Engravings: []shape.Bounded{faceplateRect},
-		fg:         fg,
-		bg:         bg,
-	}
+	p.Engrave(0, 0, faceplateRect)
+	center := p.Width() / 2
 
 	p.LabelBelow(center, brandLabelY, "DHE", TitleFont)
 	p.LabelAbove(center, nameLabelY, name, TitleFont)
 	return p
 }
 
+func (p *Panel) Width() float32 {
+	return float32(p.Hp) * MillimetersPerHp
+}
+
 func (p *Panel) LabelAbove(x, y float32, text string, font shape.Font) {
-	p.Engrave(x, y, LabelAbove(text, font, p.fg))
+	p.Engrave(x, y, LabelAbove(text, font, p.Fg))
 }
 
 func (p *Panel) LabelBelow(x, y float32, text string, font shape.Font) {
-	p.Engrave(x, y, LabelBelow(text, font, p.fg))
+	p.Engrave(x, y, LabelBelow(text, font, p.Fg))
 }
 
 func (p *Panel) Port(x, y float32, name string, labelColor shape.HSL) {
-	port := p.Install(x, y, control.Port(p.fg, p.bg))
+	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	p.LabelAbove(x, port.Top()-shape.Padding, name, SmallFont)
 }
 
 func (p *Panel) CvPort(x, y float32) {
-	p.Port(x, y, "CV", p.fg)
+	p.Port(x, y, "CV", p.Fg)
 }
 
 func (p *Panel) InPort(x, y float32, name string) {
-	p.boxedPort(x, y, name, p.bg, p.fg)
+	p.boxedPort(x, y, name, p.Bg, p.Fg)
 }
 
 func (p *Panel) OutPort(x, y float32, name string) {
-	p.boxedPort(x, y, name, p.fg, p.bg)
+	p.boxedPort(x, y, name, p.Fg, p.Bg)
 }
 
 func (p *Panel) SmallKnob(x, y float32, name string) {
-	knob := p.Install(x, y, control.SmallKnob(p.fg, p.bg))
+	knob := p.Install(x, y, control.SmallKnob(p.Fg, p.Bg))
 	labelY := knob.Top() - shape.Padding
 	p.LabelAbove(x, labelY, name, SmallFont)
 }
@@ -87,21 +96,21 @@ func (p *Panel) Install(x, y float32, c control.Control) control.Frame {
 
 // Engrave engraves the shape into the faceplate at the specified position.
 func (p *Panel) Engrave(x, y float32, s shape.Bounded) shape.Group {
-	g := shape.NewGroupAt(x, y, s)
+	g := shape.NewGroup(s).Translate(x, y)
 	p.Engravings = append(p.Engravings, g)
 	return g
 }
 
 func (p *Panel) FaceplateSvg() shape.Svg {
-	return shape.NewSvg(p.Engravings)
+	return shape.NewSvg(p.Engravings...)
 }
 
 func (p *Panel) ImageSvg() shape.Svg {
-	content := p.Engravings
-	for _, f := range p.ImageFrames {
-		content = append(content, f)
-	}
-	return shape.NewSvg(content)
+	faceplate := shape.NewGroup(p.Engravings...)
+	faceplate.Id = "faceplate"
+	imageOverlay := shape.NewGroup(p.ImageFrames...)
+	imageOverlay.Id = "image"
+	return shape.NewSvg(faceplate, imageOverlay)
 }
 
 func (p *Panel) FrameSvgs() map[string]shape.Svg {
@@ -115,7 +124,7 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 }
 
 func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
-	barePort := control.Port(p.fg, p.bg)
+	barePort := control.Port(p.Fg, p.Bg)
 	bareLabel := LabelAbove(name, SmallFont, labelColor)
 
 	port := p.Install(x, y, barePort)
@@ -125,7 +134,7 @@ func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL)
 		H:           port.Height() + bareLabel.Height() + 3*shape.Padding,
 		W:           port.Width() + 2*shape.Padding,
 		Fill:        &fill,
-		Stroke:      &p.fg,
+		Stroke:      &p.Fg,
 		StrokeWidth: shape.StrokeWidth,
 		RX:          0.5,
 		RY:          0.5,

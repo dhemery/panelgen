@@ -20,15 +20,14 @@ type groupFrame struct {
 }
 
 func newGroupFrame(contents ...shape.Bounded) Frame {
-	return groupFrame{Group: shape.Group{Content: contents}}
+	return groupFrame{Group: shape.NewGroup(contents...)}
 }
 
 func (f groupFrame) At(x, y float32) Frame {
-	f.X = x
-	f.Y = y
-	return f
+	g := shape.NewGroup(f.Elements...).Translate(x, y)
+	return groupFrame{Group: g}
 }
 
 func (f groupFrame) Svg() shape.Svg {
-	return shape.NewSvg([]shape.Bounded{f.Group})
+	return shape.NewSvg(f.Group)
 }

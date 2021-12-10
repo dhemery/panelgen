@@ -14,7 +14,7 @@ type Svg struct {
 	Content   []Bounded
 }
 
-func NewSvg(content []Bounded) Svg {
+func NewSvg(content ...Bounded) Svg {
 	b := boundsOf(content)
 	s := Svg{
 		Version:   "1.1",

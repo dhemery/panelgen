@@ -1,7 +1,6 @@
 package shape
 
 const (
-	MillimetersPerHp    = 5.08
 	MillimetersPerInch  = 25.4
 	PixelsPerInch       = 75
 	PixelsPerMillimeter = PixelsPerInch / MillimetersPerInch

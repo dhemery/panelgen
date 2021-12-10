@@ -8,14 +8,11 @@ import (
 )
 
 const (
-	hue   = 180
-	hp    = 5
-	width = hp * shape.MillimetersPerHp
+	hue = 180
+	hp  = 5
 )
 
 const (
-	left   = width/4 + 4/3
-	right  = width - left
 	top    = 20
 	deltaY = 15
 )
@@ -26,7 +23,9 @@ var (
 )
 
 func Panel() *panel.Panel {
-	p := panel.New("cubic", "CUBIC", width, fg, bg)
+	p := panel.New("cubic", "CUBIC", hp, fg, bg)
+	left := p.Width()/4 + 4/3
+	right := p.Width() - left
 
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float32(row)
