@@ -42,5 +42,5 @@ func (f groupFrame) At(x, y float32) Frame {
 }
 
 func (f groupFrame) Svg() shape.Svg {
-	return shape.Svg{Content: []shape.Bounded{f.Group}}
+	return shape.NewSvg([]shape.Bounded{f.Group})
 }

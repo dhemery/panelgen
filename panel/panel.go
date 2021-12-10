@@ -19,11 +19,12 @@ type Panel struct {
 }
 
 func New(slug, name string, width float32, fg, bg shape.HSL) *Panel {
+	outlineThickness := float32(0.5)
 	faceplateRect := shape.Rect{
-		X:           shape.StrokeWidth / 2,
-		Y:           shape.StrokeWidth / 2,
-		W:           width - shape.StrokeWidth,
-		H:           Height - shape.StrokeWidth,
+		X:           outlineThickness / 2,
+		Y:           outlineThickness / 2,
+		W:           width - outlineThickness,
+		H:           Height - outlineThickness,
 		Fill:        &bg,
 		Stroke:      &fg,
 		StrokeWidth: shape.StrokeWidth,
@@ -90,15 +91,15 @@ func (p *Panel) Engrave(x, y float32, s shape.Bounded) shape.Group {
 }
 
 func (p *Panel) FaceplateSvg() shape.Svg {
-	return shape.Svg{Content: p.Engravings}
+	return shape.NewSvg(p.Engravings)
 }
 
 func (p *Panel) ImageSvg() shape.Svg {
-	svg := p.FaceplateSvg()
+	content := p.Engravings
 	for _, c := range p.Controls {
-		svg.Content = append(svg.Content, c.DefaultFrame())
+		content = append(content, c.DefaultFrame())
 	}
-	return svg
+	return shape.NewSvg(content)
 }
 
 func (p *Panel) FrameSvgs() map[string]shape.Svg {

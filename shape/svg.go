@@ -1,33 +1,28 @@
 package shape
 
 import (
-	"encoding/xml"
 	"fmt"
 )
 
 type Svg struct {
-	Content []Bounded
+	XMLName   string `xml:"svg"`
+	Version   string `xml:"version,attr,omitempty"`
+	Namespace string `xml:"xmlns,attr,omitempty"`
+	ViewBox   string `xml:"viewBox,attr,omitempty"`
+	Height    string `xml:"height,attr,omitempty"`
+	Width     string `xml:"width,attr,omitempty"`
+	Content   []Bounded
 }
 
-func (s Svg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	b := boundsOf(s.Content)
-	version := xml.Attr{Name: xml.Name{Local: "version"}, Value: "1.1"}
-	xmlns := xml.Attr{Name: xml.Name{Local: "xmlns"}, Value: "http://www.w3.org/2000/svg"}
-	widthMM := fmt.Sprintf("%fmm", b.Width())
-	width := xml.Attr{Name: xml.Name{Local: "width"}, Value: widthMM}
-	heightMM := fmt.Sprintf("%fmm", b.Height())
-	height := xml.Attr{Name: xml.Name{Local: "height"}, Value: heightMM}
-	vb := fmt.Sprintf("%f %f %f %f", b.Left, b.Top, b.Width(), b.Height())
-	viewBox := xml.Attr{Name: xml.Name{Local: "viewBox"}, Value: vb}
-
-	start.Attr = append(start.Attr, version, xmlns, width, height, viewBox)
-	start.Name = xml.Name{Local: "svg"}
-
-	if err := e.EncodeToken(start); err != nil {
-		return err
+func NewSvg(content []Bounded) Svg {
+	b := boundsOf(content)
+	s := Svg{
+		Version:   "1.1",
+		Namespace: "http://www.w3.org/2000/svg",
+		ViewBox:   fmt.Sprintf("%f %f %f %f", b.Left, b.Top, b.Width(), b.Height()),
+		Height:    fmt.Sprintf("%fmm", b.Height()),
+		Width:     fmt.Sprintf("%fmm", b.Width()),
+		Content:   content,
 	}
-	if err := e.Encode(s.Content); err != nil {
-		return err
-	}
-	return e.EncodeToken(start.End())
+	return s
 }
