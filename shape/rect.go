@@ -1,20 +1,5 @@
 package shape
 
-func RectAround(fill, stroke HSL, strokeWidth float32, padding float32, elements ...Bounded) Rect {
-	bounds := BoundsOf(elements...)
-	return Rect{
-		X:           bounds.Left - padding,
-		Y:           bounds.Top - padding,
-		H:           bounds.Height() + 2*padding,
-		W:           bounds.Width() + 2*padding,
-		Fill:        &fill,
-		Stroke:      &stroke,
-		StrokeWidth: strokeWidth,
-		RX:          0.5,
-		RY:          0.5,
-	}
-}
-
 type Rect struct {
 	XMLName     string  `xml:"rect"`
 	X           float32 `xml:"x,attr,omitempty"`

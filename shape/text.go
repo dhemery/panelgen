@@ -15,12 +15,26 @@ type TextAlignment struct {
 	BaselineShift    float32 `xml:"-"`
 }
 
-func TextAbove(x, y float32, text string, font Font, color HSL) Text {
-	return newText(x, y, text, font, color, labelAbove)
+func TextAbove(x, y float32, content string, font Font, color HSL) Text {
+	return Text{
+		X:             x,
+		Y:             y,
+		Font:          font,
+		TextAlignment: alignTextAbove,
+		Fill:          &color,
+		Content:       content,
+	}
 }
 
-func TextBelow(x, y float32, text string, font Font, color HSL) Text {
-	return newText(x, y, text, font, color, labelBelow)
+func TextBelow(x, y float32, content string, font Font, color HSL) Text {
+	return Text{
+		X:             x,
+		Y:             y,
+		Font:          font,
+		TextAlignment: alignTextBelow,
+		Fill:          &color,
+		Content:       content,
+	}
 }
 
 var (
@@ -56,42 +70,48 @@ func newText(x, y float32, content string, font Font, fill HSL, alignment TextAl
 }
 
 const (
-	titleFontSize          = 12 / PixelsPerMillimeter
-	largeFontSize          = 9 / PixelsPerMillimeter
-	smallFontSize          = 7 / PixelsPerMillimeter
-	proximaNovaAscentRatio = float32(2) / 3
+	mmPerInch = 25.4
+	pxPerInch = 75.0
+	pxPerMm   = pxPerInch / mmPerInch
+)
+
+const (
+	titleFontSize          = 12.0 / pxPerMm
+	largeFontSize          = 9.0 / pxPerMm
+	smallFontSize          = 7.0 / pxPerMm
+	proximaNovaAscentRatio = 2.0 / 3.0
 )
 
 var (
-	labelAbove = TextAlignment{
+	alignTextAbove = TextAlignment{
 		DominantBaseline: "alphabetic",
 		TextAnchor:       "middle",
 		PortionBelow:     0,
 		PortionRight:     0.5,
 		BaselineShift:    0,
 	}
-	labelCenter = TextAlignment{
+	alignTextCentered = TextAlignment{
 		DominantBaseline: "middle",
 		TextAnchor:       "middle",
 		PortionBelow:     0.5,
 		PortionRight:     0.5,
 		BaselineShift:    0.18,
 	}
-	labelLeft = TextAlignment{
+	alignTextLeft = TextAlignment{
 		DominantBaseline: "middle",
 		TextAnchor:       "end",
 		PortionBelow:     0.5,
 		PortionRight:     0,
 		BaselineShift:    0.18,
 	}
-	labelRight = TextAlignment{
+	alignTextRight = TextAlignment{
 		DominantBaseline: "middle",
 		TextAnchor:       "start",
 		PortionBelow:     0.5,
 		PortionRight:     1,
 		BaselineShift:    0.18,
 	}
-	labelBelow = TextAlignment{
+	alignTextBelow = TextAlignment{
 		DominantBaseline: "hanging",
 		TextAnchor:       "middle",
 		PortionBelow:     1,

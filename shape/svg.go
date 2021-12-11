@@ -15,11 +15,11 @@ type Svg struct {
 }
 
 func NewSvg(content ...Bounded) Svg {
-	b := BoundsOf(content...)
+	b := Bounds(content...)
 	s := Svg{
 		Version:   "1.1",
 		Namespace: "http://www.w3.org/2000/svg",
-		ViewBox:   fmt.Sprintf("%f %f %f %f", b.Left, b.Top, b.Width(), b.Height()),
+		ViewBox:   fmt.Sprintf("%f %f %f %f", b.Left(), b.Top(), b.Width(), b.Height()),
 		Height:    fmt.Sprintf("%fmm", b.Height()),
 		Width:     fmt.Sprintf("%fmm", b.Width()),
 		Content:   content,

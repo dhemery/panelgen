@@ -1,6 +1,5 @@
 package shape
 
-// TODO: Translate(Vector)
 type Circle struct {
 	XMLName     string  `xml:"circle"`
 	CX          float32 `xml:"cx,attr,omitempty"`

@@ -14,13 +14,13 @@ type Group struct {
 }
 
 func NewGroup(elements ...Bounded) Group {
-	b := BoundsOf(elements...)
+	b := Bounds(elements...)
 	return Group{
 		Elements: elements,
-		top:      b.Top,
-		right:    b.Right,
-		bottom:   b.Bottom,
-		left:     b.Left,
+		top:      b.Top(),
+		right:    b.Right(),
+		bottom:   b.Bottom(),
+		left:     b.Left(),
 	}
 }
 
