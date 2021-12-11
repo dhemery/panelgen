@@ -29,10 +29,10 @@ func (t Text) Top() float32 {
 	return t.Bottom() - t.Height()
 }
 func (t Text) Right() float32 {
-	return t.Width() * t.PortionRight
+	return t.X + t.Width()*t.PortionRight
 }
 func (t Text) Bottom() float32 {
-	return t.Height() * t.PortionBelow
+	return t.Y + t.Height()*t.PortionBelow
 }
 func (t Text) Left() float32 {
 	return t.Right() - t.Width()
@@ -43,4 +43,9 @@ func (t Text) Width() float32 {
 func (t Text) Height() float32 {
 	// The panels use only uppercase text, so the entire height of a <text> is its ascent
 	return t.FontSize * t.AscentRatio
+}
+func (t Text) Translate(x, y float32) Text {
+	t.X += x
+	t.Y += y
+	return t
 }

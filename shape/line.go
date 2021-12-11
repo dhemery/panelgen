@@ -2,7 +2,6 @@ package shape
 
 import "math"
 
-// TODO: Translate(Vector)
 type Line struct {
 	XMLName     string  `xml:"line"`
 	X1          float32 `xml:"x1,attr,omitempty"`

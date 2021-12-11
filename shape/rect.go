@@ -1,6 +1,5 @@
 package shape
 
-// TODO: Translate(Vector)
 type Rect struct {
 	XMLName     string  `xml:"rect"`
 	X           float32 `xml:"x,attr,omitempty"`

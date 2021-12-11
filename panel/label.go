@@ -2,11 +2,11 @@ package panel
 
 import "dhemery.com/panelgen/shape"
 
-func LabelAbove(text string, font shape.Font, color shape.HSL) shape.Bounded {
+func LabelAbove(text string, font shape.Font, color shape.HSL) shape.Text {
 	return label(text, font, color, labelAbove)
 }
 
-func LabelBelow(text string, font shape.Font, color shape.HSL) shape.Bounded {
+func LabelBelow(text string, font shape.Font, color shape.HSL) shape.Text {
 	return label(text, font, color, labelBelow)
 }
 
@@ -31,7 +31,7 @@ var (
 	}
 )
 
-func label(text string, font shape.Font, fill shape.HSL, alignment shape.TextAlignment) shape.Bounded {
+func label(text string, font shape.Font, fill shape.HSL, alignment shape.TextAlignment) shape.Text {
 	return shape.Text{
 		Font:          font,
 		TextAlignment: alignment,

@@ -41,7 +41,7 @@ func New(slug, name string, hp Hp, fg, bg shape.HSL) *Panel {
 		Stroke:      &fg,
 		StrokeWidth: shape.StrokeWidth,
 	}
-	p.Engrave(0, 0, faceplateRect)
+	p.Engrave(faceplateRect)
 	center := p.Width() / 2
 
 	p.LabelBelow(center, brandLabelY, "DHE", TitleFont)
@@ -54,16 +54,17 @@ func (p *Panel) Width() float32 {
 }
 
 func (p *Panel) LabelAbove(x, y float32, text string, font shape.Font) {
-	p.Engrave(x, y, LabelAbove(text, font, p.Fg))
+	p.Engrave(LabelAbove(text, font, p.Fg).Translate(x, y))
 }
 
 func (p *Panel) LabelBelow(x, y float32, text string, font shape.Font) {
-	p.Engrave(x, y, LabelBelow(text, font, p.Fg))
+	p.Engrave(LabelBelow(text, font, p.Fg).Translate(x, y))
 }
 
 func (p *Panel) Port(x, y float32, name string, labelColor shape.HSL) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
-	p.LabelAbove(x, port.Top()-shape.Padding, name, SmallFont)
+	labelY := port.Top() - shape.Padding
+	p.LabelAbove(x, labelY, name, SmallFont)
 }
 
 func (p *Panel) CvPort(x, y float32) {
@@ -105,16 +106,14 @@ func (p *Panel) LargeKnob(x, y float32, name string) {
 // The module's svg directory will include an svg file for each frame of the control.
 func (p *Panel) Install(x, y float32, c control.Control) control.Frame {
 	p.Controls = append(p.Controls, c)
-	frame := c.DefaultFrame.At(x, y)
+	frame := c.DefaultFrame.Translate(x, y)
 	p.ImageFrames = append(p.ImageFrames, frame)
 	return frame
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
-func (p *Panel) Engrave(x, y float32, s shape.Bounded) shape.Group {
-	g := shape.NewGroup(s).Translate(x, y)
-	p.Engravings = append(p.Engravings, g)
-	return g
+func (p *Panel) Engrave(s shape.Bounded) {
+	p.Engravings = append(p.Engravings, s)
 }
 
 func (p *Panel) FaceplateSvg() shape.Svg {
@@ -142,6 +141,8 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 func (p *Panel) boxAround(fill, stroke shape.HSL, elements ...shape.Bounded) {
 	bounds := shape.BoundsOf(elements...)
 	box := shape.Rect{
+		X:           bounds.Left - shape.Padding,
+		Y:           bounds.Top - shape.Padding,
 		H:           bounds.Height() + 2*shape.Padding,
 		W:           bounds.Width() + 2*shape.Padding,
 		Fill:        &fill,
@@ -150,34 +151,23 @@ func (p *Panel) boxAround(fill, stroke shape.HSL, elements ...shape.Bounded) {
 		RX:          0.5,
 		RY:          0.5,
 	}
-
-	boxTop := bounds.Top - shape.Padding
-	boxLeft := bounds.Left - shape.Padding
-	p.Engrave(boxLeft, boxTop, box)
+	p.Engrave(box)
 }
 
 func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
-	barePort := control.Port(p.Fg, p.Bg)
-	bareLabel := LabelAbove(name, SmallFont, labelColor)
-
-	port := p.Install(x, y, barePort)
-	positionedLabel := shape.NewGroup(bareLabel).Translate(x, port.Top()-shape.Padding)
+	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - shape.Padding
+	label := LabelAbove(name, SmallFont, labelColor).Translate(x, labelY)
 
-	p.boxAround(fill, labelColor, port, positionedLabel)
-	p.Engrave(x, labelY, bareLabel)
+	p.boxAround(fill, labelColor, port, label)
+	p.Engrave(label)
 }
 
 func (p *Panel) buttonPort(x, y float32, buttonOffset float32, name string, fill, labelColor shape.HSL) {
-	barePort := control.Port(p.Fg, p.Bg)
-	bareButton := control.Button(fill, labelColor)
-	bareLabel := LabelAbove(name, SmallFont, labelColor)
+	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
+	button := p.Install(x+buttonOffset, y, control.Button(fill, labelColor))
+	label := LabelAbove(name, SmallFont, labelColor).Translate(x, port.Top()-shape.Padding)
 
-	port := p.Install(x, y, barePort)
-	button := p.Install(x+buttonOffset, y, bareButton)
-	positionedLabel := shape.NewGroup(bareLabel).Translate(x, port.Top()-shape.Padding)
-	labelY := port.Top() - shape.Padding
-
-	p.boxAround(fill, labelColor, port, button, positionedLabel)
-	p.Engrave(x, labelY, bareLabel)
+	p.boxAround(fill, labelColor, port, button, label)
+	p.Engrave(label)
 }

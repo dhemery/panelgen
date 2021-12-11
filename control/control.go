@@ -4,8 +4,8 @@ import "dhemery.com/panelgen/shape"
 
 type Frame interface {
 	shape.Bounded
-	// At returns a copy of the frame positioned at x, y
-	At(x, y float32) Frame
+	// At returns a copy of the frame translated by dx, dy
+	Translate(dx, dy float32) Frame
 	// Svg returns a shape.Svg with the same bounds and content as the frame
 	Svg() shape.Svg
 }
@@ -23,7 +23,7 @@ func newGroupFrame(contents ...shape.Bounded) Frame {
 	return groupFrame{Group: shape.NewGroup(contents...)}
 }
 
-func (f groupFrame) At(x, y float32) Frame {
+func (f groupFrame) Translate(x, y float32) Frame {
 	g := shape.NewGroup(f.Elements...).Translate(x, y)
 	return groupFrame{Group: g}
 }
