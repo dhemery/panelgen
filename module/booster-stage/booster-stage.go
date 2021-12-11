@@ -1,6 +1,7 @@
 package boosterstage
 
 import (
+	"dhemery.com/panelgen/control"
 	"dhemery.com/panelgen/panel"
 	"dhemery.com/panelgen/shape"
 )
@@ -31,6 +32,7 @@ func Panel() *panel.Panel {
 	y += dy
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "CURVE")
+	p.Install(right, y, control.ThumbSwitch2(p.Fg, p.Bg, 1))
 
 	y += dy
 	p.CvPort(left, y)

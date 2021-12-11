@@ -14,19 +14,19 @@ type Line struct {
 }
 
 func (l Line) Top() float32 {
-	return float32(math.Min(float64(l.Y1), float64(l.Y2)))
+	return float32(math.Min(float64(l.Y1), float64(l.Y2))) - l.StrokeWidth
 }
 
 func (l Line) Right() float32 {
-	return float32(math.Max(float64(l.X1), float64(l.X2)))
+	return float32(math.Max(float64(l.X1), float64(l.X2))) + l.StrokeWidth
 }
 
 func (l Line) Bottom() float32 {
-	return float32(math.Max(float64(l.Y1), float64(l.Y2)))
+	return float32(math.Max(float64(l.Y1), float64(l.Y2))) + l.StrokeWidth
 }
 
 func (l Line) Left() float32 {
-	return float32(math.Min(float64(l.X1), float64(l.X2)))
+	return float32(math.Min(float64(l.X1), float64(l.X2))) - l.StrokeWidth
 }
 
 func (l Line) Width() float32 {
