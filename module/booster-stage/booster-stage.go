@@ -28,15 +28,17 @@ func Panel() *panel.Panel {
 
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "LEVEL")
+	p.Install(right, y, control.ThumbSwitch(2, 1, p.Fg, p.Bg))
 
 	y += dy
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "CURVE")
-	p.Install(right, y, control.ThumbSwitch2(p.Fg, p.Bg, 1))
+	p.Install(right, y, control.ThumbSwitch(2, 1, p.Fg, p.Bg))
 
 	y += dy
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "DURATION")
+	p.Install(right, y, control.ThumbSwitch(3, 2, p.Fg, p.Bg))
 
 	y = 82
 	dy = 15

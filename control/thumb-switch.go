@@ -1,6 +1,10 @@
 package control
 
-import "dhemery.com/panelgen/shape"
+import (
+	"fmt"
+
+	"dhemery.com/panelgen/shape"
+)
 
 func thumbSwitchKnurl(length, thickness float32, stroke shape.Color) shape.Line {
 	return shape.Line{
@@ -24,9 +28,8 @@ func thumbSwitchLever(width, knurlThickness float32, stroke, fill shape.Color) s
 	return shape.NewGroup(knurls...)
 }
 
-func ThumbSwitch2(stroke, fill shape.Color, selection int) Control {
+func ThumbSwitch(size, selection int, stroke, fill shape.Color) Control {
 	const (
-		size             = 2
 		width            = 3.0
 		housingThickness = width / 8.0
 		housingWidth     = width - housingThickness
@@ -37,7 +40,7 @@ func ThumbSwitch2(stroke, fill shape.Color, selection int) Control {
 	)
 	lever := thumbSwitchLever(knurlLength, knurlThickness, stroke, fill)
 	levers := []shape.Bounded{}
-	leverYOffset := lever.Height() / 2
+	leverYOffset := lever.Height() * float32(size-1) / 2.0
 	for i := 0; i < size; i++ {
 		leverY := leverYOffset - float32(i)*lever.Height()
 		levers = append(levers, lever.Translate(0, leverY))
@@ -53,16 +56,19 @@ func ThumbSwitch2(stroke, fill shape.Color, selection int) Control {
 		Fill:        fill,
 		RX:          cornerRadius,
 	}
-	states := []Frame{}
+	var defaultFrame Frame
+	frames := map[string]Frame{}
 	for i := 0; i < size; i++ {
-		states = append(states, newGroupFrame(housing, levers[i]))
+		slug := fmt.Sprint("thumb-switch-", size, "-", i+1)
+		frame := newGroupFrame(housing, levers[i])
+		frames[slug] = frame
+		if selection == i+1 {
+			defaultFrame = frame
+		}
 	}
 
 	return Control{
-		Frames: map[string]Frame{
-			"thumb-switch-2-1": states[0],
-			"thumb-switch-2-2": states[1],
-		},
-		DefaultFrame: states[selection-1],
+		Frames:       frames,
+		DefaultFrame: defaultFrame,
 	}
 }
