@@ -5,8 +5,8 @@ type Circle struct {
 	CX          float32 `xml:"cx,attr,omitempty"`
 	CY          float32 `xml:"cy,attr,omitempty"`
 	R           float32 `xml:"r,attr,omitempty"`
-	Fill        *Color  `xml:"fill,attr"`
-	Stroke      *Color  `xml:"stroke,attr"`
+	Fill        Color   `xml:"fill,attr"`
+	Stroke      Color   `xml:"stroke,attr"`
 	StrokeWidth float32 `xml:"stroke-width,attr,omitempty"`
 }
 

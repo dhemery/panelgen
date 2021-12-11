@@ -8,7 +8,7 @@ type Line struct {
 	Y1          float32 `xml:"y1,attr,omitempty"`
 	X2          float32 `xml:"x2,attr,omitempty"`
 	Y2          float32 `xml:"y2,attr,omitempty"`
-	Stroke      *Color  `xml:"stroke,attr"`
+	Stroke      Color   `xml:"stroke,attr"`
 	StrokeWidth float32 `xml:"stroke-width,attr,omitempty"`
 	Cap         string  `xml:"stroke-linecap,attr,omitempty"`
 }

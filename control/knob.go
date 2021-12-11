@@ -30,13 +30,13 @@ func knob(slug string, diameter float32, knobColor, pointerColor shape.Color) Co
 	radius := diameter / 2
 	knob := shape.Circle{
 		R:    radius,
-		Fill: &knobColor,
+		Fill: knobColor,
 	}
 
 	pointerWidth := radius / 8
 	pointerLength := radius - pointerWidth
 	pointer := shape.Line{
-		Stroke:      &pointerColor,
+		Stroke:      pointerColor,
 		StrokeWidth: pointerWidth,
 		Y2:          -pointerLength,
 		Cap:         "round",

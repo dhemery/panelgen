@@ -21,7 +21,7 @@ func TextAbove(x, y float32, content string, font Font, color Color) Text {
 		Y:             y,
 		Font:          font,
 		TextAlignment: alignTextAbove,
-		Fill:          &color,
+		Fill:          color,
 		Content:       content,
 	}
 }
@@ -32,7 +32,7 @@ func TextBelow(x, y float32, content string, font Font, color Color) Text {
 		Y:             y,
 		Font:          font,
 		TextAlignment: alignTextBelow,
-		Fill:          &color,
+		Fill:          color,
 		Content:       content,
 	}
 }
@@ -57,17 +57,6 @@ var (
 		AscentRatio: proximaNovaAscentRatio,
 	}
 )
-
-func newText(x, y float32, content string, font Font, fill Color, alignment TextAlignment) Text {
-	return Text{
-		X:             x,
-		Y:             y,
-		Font:          font,
-		TextAlignment: alignment,
-		Fill:          &fill,
-		Content:       content,
-	}
-}
 
 const (
 	mmPerInch = 25.4
@@ -126,7 +115,7 @@ type Text struct {
 	TextAlignment
 	X       float32 `xml:"x,attr,omitempty"`
 	Y       float32 `xml:"y,attr,omitempty"`
-	Fill    *Color  `xml:"fill,attr"`
+	Fill    Color   `xml:"fill,attr"`
 	Content string  `xml:",innerxml"`
 }
 

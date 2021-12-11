@@ -16,19 +16,19 @@ func Port(stroke, fill shape.Color) Control {
 	)
 	nut := shape.Circle{
 		R:           nutRadius - shadowThickness/2,
-		Stroke:      &stroke,
-		Fill:        &fill,
+		Stroke:      stroke,
+		Fill:        fill,
 		StrokeWidth: shadowThickness,
 	}
 	barrel := shape.Circle{
 		R:           barrelRadius - shadowThickness/2,
-		Stroke:      &stroke,
-		Fill:        &shape.NoColor,
+		Stroke:      stroke,
+		Fill:        shape.NoColor,
 		StrokeWidth: shadowThickness,
 	}
 	hole := shape.Circle{
 		R:    holeRadius,
-		Fill: &stroke,
+		Fill: stroke,
 	}
 	frame := newGroupFrame(nut, barrel, hole)
 	return Control{

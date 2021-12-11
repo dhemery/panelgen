@@ -47,8 +47,8 @@ func New(slug, name string, hp Hp, fg, bg shape.Color) *Panel {
 		Y:           outlineThickness / 2,
 		W:           p.Width() - outlineThickness,
 		H:           panelHeight - outlineThickness,
-		Fill:        &bg,
-		Stroke:      &fg,
+		Fill:        bg,
+		Stroke:      fg,
 		StrokeWidth: outlineThickness,
 	}
 	p.Engrave(faceplateRect)
@@ -165,8 +165,8 @@ func boxAround(fill, stroke shape.Color, elements ...shape.Bounded) shape.Rect {
 		Y:           bounds.Top() - padding,
 		H:           bounds.Height() + 2*padding,
 		W:           bounds.Width() + 2*padding,
-		Fill:        &fill,
-		Stroke:      &stroke,
+		Fill:        fill,
+		Stroke:      stroke,
 		StrokeWidth: strokeWidth,
 		RX:          boxRadius,
 		RY:          boxRadius,

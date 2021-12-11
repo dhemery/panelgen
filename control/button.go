@@ -14,8 +14,8 @@ func buttonState(buttonColor, ringColor shape.Color) Frame {
 	)
 	c := shape.Circle{
 		R:           radius,
-		Fill:        &buttonColor,
-		Stroke:      &ringColor,
+		Fill:        buttonColor,
+		Stroke:      ringColor,
 		StrokeWidth: thickness,
 	}
 	return newGroupFrame(c)
