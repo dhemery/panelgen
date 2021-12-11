@@ -18,8 +18,8 @@ const (
 )
 
 var (
-	bg = shape.HSL{H: hue, S: 1, L: .97}
-	fg = shape.HSL{H: hue, S: 1, L: .3}
+	bg = shape.HslColor(hue, 1, .97)
+	fg = shape.HslColor(hue, 1, .3)
 )
 
 func Panel() *panel.Panel {

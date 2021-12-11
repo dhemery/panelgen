@@ -2,19 +2,19 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
-func TinyKnob(knobColor, pointerColor shape.HSL) Control {
+func TinyKnob(knobColor, pointerColor shape.Color) Control {
 	return knob("knob-tiny", tinyKnobDiameter, knobColor, pointerColor)
 }
 
-func SmallKnob(knobColor, pointerColor shape.HSL) Control {
+func SmallKnob(knobColor, pointerColor shape.Color) Control {
 	return knob("knob-small", smallKnobDiameter, knobColor, pointerColor)
 }
 
-func MediumKnob(knobColor, pointerColor shape.HSL) Control {
+func MediumKnob(knobColor, pointerColor shape.Color) Control {
 	return knob("knob-medium", mediumKnobDiameter, knobColor, pointerColor)
 }
 
-func LargeKnob(knobColor, pointerColor shape.HSL) Control {
+func LargeKnob(knobColor, pointerColor shape.Color) Control {
 	return knob("knob-large", largeKnobDiameter, knobColor, pointerColor)
 }
 
@@ -26,7 +26,7 @@ const (
 	tinyKnobDiameter   = 7
 )
 
-func knob(slug string, diameter float32, knobColor, pointerColor shape.HSL) Control {
+func knob(slug string, diameter float32, knobColor, pointerColor shape.Color) Control {
 	radius := diameter / 2
 	knob := shape.Circle{
 		R:    radius,

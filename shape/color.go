@@ -1,24 +1,20 @@
 package shape
 
 import (
-	"encoding/xml"
 	"fmt"
 	"math"
 )
 
-type HSL struct {
-	H float64
-	S float64
-	L float64
-}
+type Color string
 
-func (hsl *HSL) RGBString() string {
-	if hsl == nil {
-		return "none"
-	}
-	twoL := 2 * hsl.L
-	chroma := (1 - math.Abs(twoL-1)) * hsl.S
-	hp := hsl.H / 60
+var (
+	NoColor = Color("none")
+)
+
+func HslColor(hue float64, saturation float64, luminance float64) Color {
+	twoL := 2 * luminance
+	chroma := (1 - math.Abs(twoL-1)) * saturation
+	hp := hue / 60
 	hpMod2 := math.Mod(hp, 2)
 	x := chroma * (1 - math.Abs(hpMod2-1))
 
@@ -38,15 +34,9 @@ func (hsl *HSL) RGBString() string {
 	case 5:
 		rp, gp, bp = chroma, 0, x
 	default:
-		panic(fmt.Sprintf("HSL %#+v out of range", hsl))
+		panic(fmt.Sprintf("HSL %f,%f,%f out of range", hue, saturation, luminance))
 	}
-	m := hsl.L - chroma/2
-	return fmt.Sprintf("#%02x%02x%02x", uint8((rp+m)*255+0.5), uint8((gp+m)*255+0.5), uint8((bp+m)*255+0.5))
-}
-
-func (hsl *HSL) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
-	return xml.Attr{
-		Name:  name,
-		Value: hsl.RGBString(),
-	}, nil
+	m := luminance - chroma/2
+	s := fmt.Sprintf("#%02x%02x%02x", uint8((rp+m)*255+0.5), uint8((gp+m)*255+0.5), uint8((bp+m)*255+0.5))
+	return Color(s)
 }

@@ -8,8 +8,8 @@ type Rect struct {
 	H           float32 `xml:"height,attr,omitempty"`
 	RX          float32 `xml:"rx,attr,omitempty"`
 	RY          float32 `xml:"ry,attr,omitempty"`
-	Fill        *HSL    `xml:"fill,attr,omitempty"`
-	Stroke      *HSL    `xml:"stroke,attr,omitempty"`
+	Fill        *Color  `xml:"fill,attr"`
+	Stroke      *Color  `xml:"stroke,attr"`
 	StrokeWidth float32 `xml:"stroke-width,attr,omitempty"`
 }
 

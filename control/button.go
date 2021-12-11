@@ -7,7 +7,7 @@ const (
 	ButtonRadius   = ButtonDiameter / 2
 )
 
-func buttonState(buttonColor, ringColor shape.HSL) Frame {
+func buttonState(buttonColor, ringColor shape.Color) Frame {
 	const (
 		thickness = ButtonDiameter / 6
 		radius    = ButtonRadius - thickness
@@ -21,7 +21,7 @@ func buttonState(buttonColor, ringColor shape.HSL) Frame {
 	return newGroupFrame(c)
 }
 
-func button(slug string, pressedColor, releasedColor shape.HSL) Control {
+func button(slug string, pressedColor, releasedColor shape.Color) Control {
 	released := buttonState(releasedColor, releasedColor)
 	pressed := buttonState(pressedColor, releasedColor)
 	return Control{
@@ -33,10 +33,10 @@ func button(slug string, pressedColor, releasedColor shape.HSL) Control {
 	}
 }
 
-func Button(pressedColor, releasedColor shape.HSL) Control {
+func Button(pressedColor, releasedColor shape.Color) Control {
 	return button("button", pressedColor, releasedColor)
 }
 
-func OutputButton(pressedColor, releasedColor shape.HSL) Control {
+func OutputButton(pressedColor, releasedColor shape.Color) Control {
 	return button("output-button", pressedColor, releasedColor)
 }

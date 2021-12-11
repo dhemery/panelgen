@@ -6,11 +6,11 @@ const (
 	PortRadius = float32(4)
 )
 
-func Port(stroke, fill shape.HSL) Control {
+func Port(stroke, fill shape.Color) Control {
 	const (
 		slug            = "port"
 		nutRadius       = PortRadius
-		barrelRadius    = float32(3)
+		barrelRadius    = 3.0
 		holeRadius      = 1.8
 		shadowThickness = .2
 	)
@@ -23,6 +23,7 @@ func Port(stroke, fill shape.HSL) Control {
 	barrel := shape.Circle{
 		R:           barrelRadius - shadowThickness/2,
 		Stroke:      &stroke,
+		Fill:        &shape.NoColor,
 		StrokeWidth: shadowThickness,
 	}
 	hole := shape.Circle{

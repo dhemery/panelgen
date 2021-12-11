@@ -15,7 +15,7 @@ type TextAlignment struct {
 	BaselineShift    float32 `xml:"-"`
 }
 
-func TextAbove(x, y float32, content string, font Font, color HSL) Text {
+func TextAbove(x, y float32, content string, font Font, color Color) Text {
 	return Text{
 		X:             x,
 		Y:             y,
@@ -26,7 +26,7 @@ func TextAbove(x, y float32, content string, font Font, color HSL) Text {
 	}
 }
 
-func TextBelow(x, y float32, content string, font Font, color HSL) Text {
+func TextBelow(x, y float32, content string, font Font, color Color) Text {
 	return Text{
 		X:             x,
 		Y:             y,
@@ -58,7 +58,7 @@ var (
 	}
 )
 
-func newText(x, y float32, content string, font Font, fill HSL, alignment TextAlignment) Text {
+func newText(x, y float32, content string, font Font, fill Color, alignment TextAlignment) Text {
 	return Text{
 		X:             x,
 		Y:             y,
@@ -126,7 +126,7 @@ type Text struct {
 	TextAlignment
 	X       float32 `xml:"x,attr,omitempty"`
 	Y       float32 `xml:"y,attr,omitempty"`
-	Fill    *HSL    `xml:"fill,attr"`
+	Fill    *Color  `xml:"fill,attr"`
 	Content string  `xml:",innerxml"`
 }
 

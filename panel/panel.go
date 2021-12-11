@@ -23,11 +23,11 @@ type Panel struct {
 	Engravings []shape.Bounded
 	Frames     []shape.Bounded
 	Controls   []control.Control
-	Fg, Bg     shape.HSL
+	Fg, Bg     shape.Color
 	Hp         Hp
 }
 
-func New(slug, name string, hp Hp, fg, bg shape.HSL) *Panel {
+func New(slug, name string, hp Hp, fg, bg shape.Color) *Panel {
 	const (
 		nameLabelY       = 9
 		outlineThickness = 0.5
@@ -63,7 +63,7 @@ func (p *Panel) Width() float32 {
 	return p.Hp.toMM()
 }
 
-func (p *Panel) Port(x, y float32, name string, labelColor shape.HSL) {
+func (p *Panel) Port(x, y float32, name string, labelColor shape.Color) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - padding
 	p.Engrave(shape.TextAbove(x, labelY, name, shape.SmallFont, p.Fg))
@@ -158,7 +158,7 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 	return frames
 }
 
-func boxAround(fill, stroke shape.HSL, elements ...shape.Bounded) shape.Rect {
+func boxAround(fill, stroke shape.Color, elements ...shape.Bounded) shape.Rect {
 	bounds := shape.Bounds(elements...)
 	return shape.Rect{
 		X:           bounds.Left() - padding,
