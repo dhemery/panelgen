@@ -23,8 +23,8 @@ func Panel() *panel.Panel {
 	right := p.Width() - left
 	center := p.Width() / 2
 
-	y := float32(25.0)
-	dy := float32(18.5)
+	y := 25.0
+	dy := 18.5
 
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "LEVEL")

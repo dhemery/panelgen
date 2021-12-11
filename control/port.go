@@ -3,7 +3,7 @@ package control
 import "dhemery.com/panelgen/shape"
 
 const (
-	PortRadius = float32(4)
+	PortRadius = 4
 )
 
 func Port(stroke, fill shape.Color) Control {

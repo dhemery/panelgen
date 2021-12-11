@@ -26,7 +26,7 @@ const (
 	tinyKnobDiameter   = 7
 )
 
-func knob(slug string, diameter float32, knobColor, pointerColor shape.Color) Control {
+func knob(slug string, diameter float64, knobColor, pointerColor shape.Color) Control {
 	radius := diameter / 2
 	knob := shape.Circle{
 		R:    radius,

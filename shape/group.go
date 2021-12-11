@@ -10,7 +10,7 @@ type Group struct {
 	Id                       string   `xml:"id,attr,omitempty"`
 	Translation              string   `xml:"transform,attr,omitempty"`
 	Elements                 []Bounded
-	top, right, bottom, left float32
+	top, right, bottom, left float64
 }
 
 func NewGroup(elements ...Bounded) Group {
@@ -24,7 +24,7 @@ func NewGroup(elements ...Bounded) Group {
 	}
 }
 
-func (g Group) Translate(x, y float32) Group {
+func (g Group) Translate(x, y float64) Group {
 	g.Translation = fmt.Sprintf("translate(%f %f)", x, y)
 	g.top += y
 	g.bottom += y
@@ -33,26 +33,26 @@ func (g Group) Translate(x, y float32) Group {
 	return g
 }
 
-func (g Group) Top() float32 {
+func (g Group) Top() float64 {
 	return g.top
 }
 
-func (g Group) Right() float32 {
+func (g Group) Right() float64 {
 	return g.right
 }
 
-func (g Group) Bottom() float32 {
+func (g Group) Bottom() float64 {
 	return g.bottom
 }
 
-func (g Group) Left() float32 {
+func (g Group) Left() float64 {
 	return g.left
 }
 
-func (g Group) Width() float32 {
+func (g Group) Width() float64 {
 	return g.Right() - g.Left()
 }
 
-func (g Group) Height() float32 {
+func (g Group) Height() float64 {
 	return g.Bottom() - g.Top()
 }

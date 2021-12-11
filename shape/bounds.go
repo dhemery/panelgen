@@ -1,34 +1,34 @@
 package shape
 
 type Bounded interface {
-	Top() float32
-	Right() float32
-	Bottom() float32
-	Left() float32
-	Width() float32
-	Height() float32
+	Top() float64
+	Right() float64
+	Bottom() float64
+	Left() float64
+	Width() float64
+	Height() float64
 }
 
 type bounds struct {
-	top, right, bottom, left float32
+	top, right, bottom, left float64
 }
 
-func (b bounds) Top() float32 {
+func (b bounds) Top() float64 {
 	return b.top
 }
-func (b bounds) Right() float32 {
+func (b bounds) Right() float64 {
 	return b.right
 }
-func (b bounds) Bottom() float32 {
+func (b bounds) Bottom() float64 {
 	return b.bottom
 }
-func (b bounds) Left() float32 {
+func (b bounds) Left() float64 {
 	return b.left
 }
-func (b bounds) Width() float32 {
+func (b bounds) Width() float64 {
 	return b.Right() - b.Left()
 }
-func (b bounds) Height() float32 {
+func (b bounds) Height() float64 {
 	return b.Bottom() - b.Top()
 }
 

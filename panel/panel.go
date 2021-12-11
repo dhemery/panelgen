@@ -13,9 +13,9 @@ const (
 
 type Hp int
 
-func (hp Hp) toMM() float32 {
+func (hp Hp) toMM() float64 {
 	const mmPerHp = 5.08
-	return float32(hp) * mmPerHp
+	return float64(hp) * mmPerHp
 }
 
 type Panel struct {
@@ -59,21 +59,21 @@ func New(slug, name string, hp Hp, fg, bg shape.Color) *Panel {
 	return p
 }
 
-func (p *Panel) Width() float32 {
+func (p *Panel) Width() float64 {
 	return p.Hp.toMM()
 }
 
-func (p *Panel) Port(x, y float32, name string, labelColor shape.Color) {
+func (p *Panel) Port(x, y float64, name string, labelColor shape.Color) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - padding
 	p.Engrave(shape.TextAbove(x, labelY, name, shape.SmallFont, p.Fg))
 }
 
-func (p *Panel) CvPort(x, y float32) {
+func (p *Panel) CvPort(x, y float64) {
 	p.Port(x, y, "CV", p.Fg)
 }
 
-func (p *Panel) InPort(x, y float32, name string) {
+func (p *Panel) InPort(x, y float64, name string) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - padding
 	label := shape.TextAbove(x, labelY, name, shape.SmallFont, p.Fg)
@@ -81,7 +81,7 @@ func (p *Panel) InPort(x, y float32, name string) {
 	p.Engrave(label)
 }
 
-func (p *Panel) InButtonPort(x, y float32, name string) {
+func (p *Panel) InButtonPort(x, y float64, name string) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	buttonX := x + control.PortRadius + control.ButtonRadius + padding
 	button := p.Install(buttonX, y, control.Button(p.Bg, p.Fg))
@@ -91,7 +91,7 @@ func (p *Panel) InButtonPort(x, y float32, name string) {
 	p.Engrave(label)
 }
 
-func (p *Panel) OutPort(x, y float32, name string) {
+func (p *Panel) OutPort(x, y float64, name string) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - padding
 	label := shape.TextAbove(x, labelY, name, shape.SmallFont, p.Bg)
@@ -99,7 +99,7 @@ func (p *Panel) OutPort(x, y float32, name string) {
 	p.Engrave(label)
 }
 
-func (p *Panel) OutButtonPort(x, y float32, name string) {
+func (p *Panel) OutButtonPort(x, y float64, name string) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	buttonX := x - control.PortRadius - control.ButtonRadius - padding
 	button := p.Install(buttonX, y, control.OutputButton(p.Fg, p.Bg))
@@ -109,13 +109,13 @@ func (p *Panel) OutButtonPort(x, y float32, name string) {
 	p.Engrave(label)
 }
 
-func (p *Panel) SmallKnob(x, y float32, name string) {
+func (p *Panel) SmallKnob(x, y float64, name string) {
 	knob := p.Install(x, y, control.SmallKnob(p.Fg, p.Bg))
 	labelY := knob.Top() - padding
 	p.Engrave(shape.TextAbove(x, labelY, name, shape.SmallFont, p.Fg))
 }
 
-func (p *Panel) LargeKnob(x, y float32, name string) {
+func (p *Panel) LargeKnob(x, y float64, name string) {
 	knob := p.Install(x, y, control.LargeKnob(p.Fg, p.Bg))
 	labelY := knob.Top() - padding
 	p.Engrave(shape.TextAbove(x, labelY, name, shape.SmallFont, p.Fg))
@@ -124,7 +124,7 @@ func (p *Panel) LargeKnob(x, y float32, name string) {
 // Install installs the control at the specified position.
 // The panel image will show the control's selected frame at that position.
 // The module's svg directory will include an svg file for each frame of the control.
-func (p *Panel) Install(x, y float32, c control.Control) control.Frame {
+func (p *Panel) Install(x, y float64, c control.Control) control.Frame {
 	p.Controls = append(p.Controls, c)
 	frame := c.DefaultFrame.Translate(x, y)
 	p.Frames = append(p.Frames, frame)

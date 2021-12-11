@@ -28,12 +28,12 @@ func Panel() *panel.Panel {
 	right := p.Width() - left
 
 	for row := 0; row < 4; row++ {
-		y := top + deltaY*float32(row)
+		y := top + deltaY*float64(row)
 		p.CvPort(left, y)
 		p.SmallKnob(right, y, coefficientKnobLabel(3-row))
 	}
 
-	y := float32(82)
+	y := 82.0
 	p.SmallKnob(left, y, "IN")
 	p.SmallKnob(right, y, "OUT")
 

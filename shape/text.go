@@ -3,19 +3,19 @@ package shape
 type Font struct {
 	FontFamily  string  `xml:"font-family,attr"`
 	FontWeight  string  `xml:"font-weight,attr"`
-	FontSize    float32 `xml:"font-size,attr"`
-	AscentRatio float32 `xml:"-"`
+	FontSize    float64 `xml:"font-size,attr"`
+	AscentRatio float64 `xml:"-"`
 }
 
 type TextAlignment struct {
 	DominantBaseline string  `xml:"dominant-baseline,attr"`
 	TextAnchor       string  `xml:"text-anchor,attr"`
-	PortionBelow     float32 `xml:"-"`
-	PortionRight     float32 `xml:"-"`
-	BaselineShift    float32 `xml:"-"`
+	PortionBelow     float64 `xml:"-"`
+	PortionRight     float64 `xml:"-"`
+	BaselineShift    float64 `xml:"-"`
 }
 
-func TextAbove(x, y float32, content string, font Font, color Color) Text {
+func TextAbove(x, y float64, content string, font Font, color Color) Text {
 	return Text{
 		X:             x,
 		Y:             y,
@@ -26,7 +26,7 @@ func TextAbove(x, y float32, content string, font Font, color Color) Text {
 	}
 }
 
-func TextBelow(x, y float32, content string, font Font, color Color) Text {
+func TextBelow(x, y float64, content string, font Font, color Color) Text {
 	return Text{
 		X:             x,
 		Y:             y,
@@ -113,28 +113,28 @@ type Text struct {
 	XMLName string `xml:"text"`
 	Font
 	TextAlignment
-	X       float32 `xml:"x,attr,omitempty"`
-	Y       float32 `xml:"y,attr,omitempty"`
+	X       float64 `xml:"x,attr,omitempty"`
+	Y       float64 `xml:"y,attr,omitempty"`
 	Fill    Color   `xml:"fill,attr"`
 	Content string  `xml:",innerxml"`
 }
 
-func (t Text) Top() float32 {
+func (t Text) Top() float64 {
 	return t.Bottom() - t.Height()
 }
-func (t Text) Right() float32 {
+func (t Text) Right() float64 {
 	return t.X + t.Width()*t.PortionRight
 }
-func (t Text) Bottom() float32 {
+func (t Text) Bottom() float64 {
 	return t.Y + t.Height()*t.PortionBelow
 }
-func (t Text) Left() float32 {
+func (t Text) Left() float64 {
 	return t.Right() - t.Width()
 }
-func (t Text) Width() float32 {
+func (t Text) Width() float64 {
 	return 0.1
 }
-func (t Text) Height() float32 {
+func (t Text) Height() float64 {
 	// The panels use only uppercase text, so the entire height of a <text> is its ascent
 	return t.FontSize * t.AscentRatio
 }
