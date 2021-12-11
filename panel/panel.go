@@ -10,6 +10,8 @@ const (
 	MillimetersPerHp = 5.08
 	nameLabelY       = 9
 	brandLabelY      = Height - nameLabelY
+	StrokeWidth      = 0.35
+	Padding          = 1
 )
 
 type Hp int
@@ -39,13 +41,13 @@ func New(slug, name string, hp Hp, fg, bg shape.HSL) *Panel {
 		H:           Height - outlineThickness,
 		Fill:        &bg,
 		Stroke:      &fg,
-		StrokeWidth: shape.StrokeWidth,
+		StrokeWidth: StrokeWidth,
 	}
 	p.Engrave(faceplateRect)
 	center := p.Width() / 2
 
-	p.LabelBelow(center, brandLabelY, "DHE", TitleFont)
-	p.LabelAbove(center, nameLabelY, name, TitleFont)
+	p.LabelBelow(center, brandLabelY, "DHE", shape.TitleFont)
+	p.LabelAbove(center, nameLabelY, name, shape.TitleFont)
 	return p
 }
 
@@ -54,17 +56,17 @@ func (p *Panel) Width() float32 {
 }
 
 func (p *Panel) LabelAbove(x, y float32, text string, font shape.Font) {
-	p.Engrave(LabelAbove(text, font, p.Fg).Translate(x, y))
+	p.Engrave(shape.TextAbove(x, y, text, font, p.Fg))
 }
 
 func (p *Panel) LabelBelow(x, y float32, text string, font shape.Font) {
-	p.Engrave(LabelBelow(text, font, p.Fg).Translate(x, y))
+	p.Engrave(shape.TextBelow(x, y, text, font, p.Fg))
 }
 
 func (p *Panel) Port(x, y float32, name string, labelColor shape.HSL) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
-	labelY := port.Top() - shape.Padding
-	p.LabelAbove(x, labelY, name, SmallFont)
+	labelY := port.Top() - Padding
+	p.LabelAbove(x, labelY, name, shape.SmallFont)
 }
 
 func (p *Panel) CvPort(x, y float32) {
@@ -76,7 +78,7 @@ func (p *Panel) InPort(x, y float32, name string) {
 }
 
 func (p *Panel) InButtonPort(x, y float32, name string) {
-	buttonOffset := control.PortRadius + control.ButtonRadius + shape.Padding
+	buttonOffset := control.PortRadius + control.ButtonRadius + Padding
 	p.buttonPort(x, y, buttonOffset, name, p.Bg, p.Fg)
 }
 
@@ -85,20 +87,20 @@ func (p *Panel) OutPort(x, y float32, name string) {
 }
 
 func (p *Panel) OutButtonPort(x, y float32, name string) {
-	buttonOffset := -control.PortRadius - control.ButtonRadius - shape.Padding
+	buttonOffset := -control.PortRadius - control.ButtonRadius - Padding
 	p.buttonPort(x, y, buttonOffset, name, p.Fg, p.Bg)
 }
 
 func (p *Panel) SmallKnob(x, y float32, name string) {
 	knob := p.Install(x, y, control.SmallKnob(p.Fg, p.Bg))
-	labelY := knob.Top() - shape.Padding
-	p.LabelAbove(x, labelY, name, SmallFont)
+	labelY := knob.Top() - Padding
+	p.LabelAbove(x, labelY, name, shape.SmallFont)
 }
 
 func (p *Panel) LargeKnob(x, y float32, name string) {
 	knob := p.Install(x, y, control.LargeKnob(p.Fg, p.Bg))
-	labelY := knob.Top() - shape.Padding
-	p.LabelAbove(x, labelY, name, SmallFont)
+	labelY := knob.Top() - Padding
+	p.LabelAbove(x, labelY, name, shape.SmallFont)
 }
 
 // Install installs the control at the specified position.
@@ -138,36 +140,22 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 	return frames
 }
 
-func (p *Panel) boxAround(fill, stroke shape.HSL, elements ...shape.Bounded) {
-	bounds := shape.BoundsOf(elements...)
-	box := shape.Rect{
-		X:           bounds.Left - shape.Padding,
-		Y:           bounds.Top - shape.Padding,
-		H:           bounds.Height() + 2*shape.Padding,
-		W:           bounds.Width() + 2*shape.Padding,
-		Fill:        &fill,
-		Stroke:      &p.Fg,
-		StrokeWidth: shape.StrokeWidth,
-		RX:          0.5,
-		RY:          0.5,
-	}
-	p.Engrave(box)
-}
-
 func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
-	labelY := port.Top() - shape.Padding
-	label := LabelAbove(name, SmallFont, labelColor).Translate(x, labelY)
+	labelY := port.Top() - Padding
+	label := shape.TextAbove(x, labelY, name, shape.SmallFont, labelColor)
 
-	p.boxAround(fill, labelColor, port, label)
+	p.Engrave(shape.RectAround(fill, labelColor, StrokeWidth, Padding, port, label))
 	p.Engrave(label)
 }
 
 func (p *Panel) buttonPort(x, y float32, buttonOffset float32, name string, fill, labelColor shape.HSL) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
-	button := p.Install(x+buttonOffset, y, control.Button(fill, labelColor))
-	label := LabelAbove(name, SmallFont, labelColor).Translate(x, port.Top()-shape.Padding)
+	buttonX := x + buttonOffset
+	button := p.Install(buttonX, y, control.Button(fill, labelColor))
+	labelY := port.Top() - Padding
+	label := shape.TextAbove(x, labelY, name, shape.SmallFont, labelColor)
 
-	p.boxAround(fill, labelColor, port, button, label)
+	p.Engrave(shape.RectAround(fill, labelColor, StrokeWidth, Padding, port, button, label))
 	p.Engrave(label)
 }

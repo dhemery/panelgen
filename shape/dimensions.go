@@ -5,8 +5,3 @@ const (
 	PixelsPerInch       = 75
 	PixelsPerMillimeter = PixelsPerInch / MillimetersPerInch
 )
-
-const (
-	StrokeWidth = 0.35
-	Padding     = 1
-)
