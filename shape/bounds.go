@@ -21,7 +21,7 @@ func (b bounds) Height() float32 {
 	return b.Bottom - b.Top
 }
 
-func boundsOf(shapes []Bounded) bounds {
+func BoundsOf(shapes ...Bounded) bounds {
 	if len(shapes) < 1 {
 		return bounds{}
 	}

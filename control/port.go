@@ -2,11 +2,15 @@ package control
 
 import "dhemery.com/panelgen/shape"
 
+const (
+	PortRadius = float32(4)
+)
+
 func Port(stroke, fill shape.HSL) Control {
 	const (
 		slug            = "port"
-		nutRadius       = 4
-		barrelRadius    = 3
+		nutRadius       = PortRadius
+		barrelRadius    = float32(3)
 		holeRadius      = 1.8
 		shadowThickness = .2
 	)

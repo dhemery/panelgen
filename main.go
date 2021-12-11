@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	boosterstage "dhemery.com/panelgen/module/booster-stage"
 	"dhemery.com/panelgen/module/cubic"
 	"dhemery.com/panelgen/panel"
 )
@@ -13,6 +14,7 @@ import (
 func main() {
 	panels := []*panel.Panel{
 		cubic.Panel(),
+		boosterstage.Panel(),
 	}
 
 	for _, p := range panels {

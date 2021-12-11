@@ -14,7 +14,7 @@ type Group struct {
 }
 
 func NewGroup(elements ...Bounded) Group {
-	b := boundsOf(elements)
+	b := BoundsOf(elements...)
 	return Group{
 		Elements: elements,
 		top:      b.Top,

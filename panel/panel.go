@@ -25,7 +25,7 @@ type Panel struct {
 
 func New(slug, name string, hp Hp, fg, bg shape.HSL) *Panel {
 	p := &Panel{
-		Slug: "cubic",
+		Slug: slug,
 		Fg:   fg,
 		Bg:   bg,
 		Hp:   hp,
@@ -74,12 +74,28 @@ func (p *Panel) InPort(x, y float32, name string) {
 	p.boxedPort(x, y, name, p.Bg, p.Fg)
 }
 
+func (p *Panel) InButtonPort(x, y float32, name string) {
+	buttonOffset := control.PortRadius + control.ButtonRadius + shape.Padding
+	p.buttonPort(x, y, buttonOffset, name, p.Bg, p.Fg)
+}
+
 func (p *Panel) OutPort(x, y float32, name string) {
 	p.boxedPort(x, y, name, p.Fg, p.Bg)
 }
 
+func (p *Panel) OutButtonPort(x, y float32, name string) {
+	buttonOffset := -control.PortRadius - control.ButtonRadius - shape.Padding
+	p.buttonPort(x, y, buttonOffset, name, p.Fg, p.Bg)
+}
+
 func (p *Panel) SmallKnob(x, y float32, name string) {
 	knob := p.Install(x, y, control.SmallKnob(p.Fg, p.Bg))
+	labelY := knob.Top() - shape.Padding
+	p.LabelAbove(x, labelY, name, SmallFont)
+}
+
+func (p *Panel) LargeKnob(x, y float32, name string) {
+	knob := p.Install(x, y, control.LargeKnob(p.Fg, p.Bg))
 	labelY := knob.Top() - shape.Padding
 	p.LabelAbove(x, labelY, name, SmallFont)
 }
@@ -123,16 +139,11 @@ func (p *Panel) FrameSvgs() map[string]shape.Svg {
 	return frames
 }
 
-func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
-	barePort := control.Port(p.Fg, p.Bg)
-	bareLabel := LabelAbove(name, SmallFont, labelColor)
-
-	port := p.Install(x, y, barePort)
-	labelY := port.Top() - shape.Padding
-
+func (p *Panel) boxAround(fill, stroke shape.HSL, elements ...shape.Bounded) {
+	bounds := shape.BoundsOf(elements...)
 	box := shape.Rect{
-		H:           port.Height() + bareLabel.Height() + 3*shape.Padding,
-		W:           port.Width() + 2*shape.Padding,
+		H:           bounds.Height() + 2*shape.Padding,
+		W:           bounds.Width() + 2*shape.Padding,
 		Fill:        &fill,
 		Stroke:      &p.Fg,
 		StrokeWidth: shape.StrokeWidth,
@@ -140,8 +151,33 @@ func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL)
 		RY:          0.5,
 	}
 
-	boxTop := labelY - bareLabel.Height() - shape.Padding
-	boxLeft := port.Left() - shape.Padding
+	boxTop := bounds.Top - shape.Padding
+	boxLeft := bounds.Left - shape.Padding
 	p.Engrave(boxLeft, boxTop, box)
+}
+
+func (p *Panel) boxedPort(x, y float32, name string, fill, labelColor shape.HSL) {
+	barePort := control.Port(p.Fg, p.Bg)
+	bareLabel := LabelAbove(name, SmallFont, labelColor)
+
+	port := p.Install(x, y, barePort)
+	positionedLabel := shape.NewGroup(bareLabel).Translate(x, port.Top()-shape.Padding)
+	labelY := port.Top() - shape.Padding
+
+	p.boxAround(fill, labelColor, port, positionedLabel)
+	p.Engrave(x, labelY, bareLabel)
+}
+
+func (p *Panel) buttonPort(x, y float32, buttonOffset float32, name string, fill, labelColor shape.HSL) {
+	barePort := control.Port(p.Fg, p.Bg)
+	bareButton := control.Button(fill, labelColor)
+	bareLabel := LabelAbove(name, SmallFont, labelColor)
+
+	port := p.Install(x, y, barePort)
+	button := p.Install(x+buttonOffset, y, bareButton)
+	positionedLabel := shape.NewGroup(bareLabel).Translate(x, port.Top()-shape.Padding)
+	labelY := port.Top() - shape.Padding
+
+	p.boxAround(fill, labelColor, port, button, positionedLabel)
 	p.Engrave(x, labelY, bareLabel)
 }

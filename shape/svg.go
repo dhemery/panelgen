@@ -15,7 +15,7 @@ type Svg struct {
 }
 
 func NewSvg(content ...Bounded) Svg {
-	b := boundsOf(content)
+	b := BoundsOf(content...)
 	s := Svg{
 		Version:   "1.1",
 		Namespace: "http://www.w3.org/2000/svg",
