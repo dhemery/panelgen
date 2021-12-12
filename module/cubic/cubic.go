@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"dhemery.com/panelgen/panel"
-	"dhemery.com/panelgen/shape"
+	"dhemery.com/panelgen/svg"
 )
 
 const (
@@ -18,8 +18,8 @@ const (
 )
 
 var (
-	bg = shape.HslColor(hue, 1, .97)
-	fg = shape.HslColor(hue, 1, .3)
+	bg = svg.HslColor(hue, 1, .97)
+	fg = svg.HslColor(hue, 1, .3)
 )
 
 func Panel() *panel.Panel {

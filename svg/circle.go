@@ -1,4 +1,4 @@
-package shape
+package svg
 
 type Circle struct {
 	XMLName     string  `xml:"circle"`
@@ -32,4 +32,10 @@ func (c Circle) Width() float64 {
 
 func (c Circle) Height() float64 {
 	return c.Bottom() - c.Top()
+}
+
+func (c Circle) Translate(dx, dy float64) Element {
+	c.CX += dx
+	c.CY += dy
+	return c
 }

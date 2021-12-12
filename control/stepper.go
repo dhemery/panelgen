@@ -3,21 +3,21 @@ package control
 import (
 	"fmt"
 
-	"dhemery.com/panelgen/shape"
+	"dhemery.com/panelgen/svg"
 )
 
-func Stepper(stepperSlug string, stroke, fill shape.Color, width float64, selection int, stateLabels ...string) Control {
+func Stepper(stepperSlug string, stroke, fill svg.Color, width float64, selection int, stateLabels ...string) Control {
 	const (
 		padding     = 1
 		strokeWidth = 0.25
 	)
-	var defaultFrame Frame
-	frames := map[string]Frame{}
+	var defaultFrame svg.Element
+	frames := map[string]svg.Element{}
 
 	for i, stateLabel := range stateLabels {
 		frameSlug := fmt.Sprint(stepperSlug, "-", i+1)
-		label := shape.TextCentered(stateLabel, shape.SmallFont, stroke)
-		box := shape.Rect{
+		label := svg.TextCentered(stateLabel, svg.SmallFont, stroke)
+		box := svg.Rect{
 			X:           -width/2 - padding,
 			Y:           -label.Height()/2 - padding,
 			H:           label.Height() + 2*padding,
@@ -26,7 +26,7 @@ func Stepper(stepperSlug string, stroke, fill shape.Color, width float64, select
 			Stroke:      stroke,
 			Fill:        fill,
 		}
-		frame := newGroupFrame(box, label)
+		frame := svg.GroupOf(box, label)
 		if selection == i+1 {
 			defaultFrame = frame
 		}

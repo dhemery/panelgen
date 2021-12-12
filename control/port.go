@@ -1,12 +1,14 @@
 package control
 
-import "dhemery.com/panelgen/shape"
+import (
+	"dhemery.com/panelgen/svg"
+)
 
 const (
 	PortRadius = 4
 )
 
-func Port(stroke, fill shape.Color) Control {
+func Port(stroke, fill svg.Color) Control {
 	const (
 		slug            = "port"
 		nutRadius       = PortRadius
@@ -14,25 +16,25 @@ func Port(stroke, fill shape.Color) Control {
 		holeRadius      = 1.8
 		shadowThickness = .2
 	)
-	nut := shape.Circle{
+	nut := svg.Circle{
 		R:           nutRadius - shadowThickness/2,
 		Stroke:      stroke,
 		Fill:        fill,
 		StrokeWidth: shadowThickness,
 	}
-	barrel := shape.Circle{
+	barrel := svg.Circle{
 		R:           barrelRadius - shadowThickness/2,
 		Stroke:      stroke,
-		Fill:        shape.NoColor,
+		Fill:        svg.NoColor,
 		StrokeWidth: shadowThickness,
 	}
-	hole := shape.Circle{
+	hole := svg.Circle{
 		R:    holeRadius,
 		Fill: stroke,
 	}
-	frame := newGroupFrame(nut, barrel, hole)
+	frame := svg.GroupOf(nut, barrel, hole)
 	return Control{
-		Frames:       map[string]Frame{slug: frame},
+		Frames:       map[string]svg.Element{slug: frame},
 		DefaultFrame: frame,
 	}
 }

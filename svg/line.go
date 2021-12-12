@@ -1,4 +1,4 @@
-package shape
+package svg
 
 import "math"
 

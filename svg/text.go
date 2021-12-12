@@ -1,4 +1,4 @@
-package shape
+package svg
 
 type Font struct {
 	FontFamily  string  `xml:"font-family,attr"`

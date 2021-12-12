@@ -1,4 +1,4 @@
-package shape
+package svg
 
 import (
 	"encoding/xml"
@@ -13,7 +13,7 @@ type Group struct {
 	top, right, bottom, left float64
 }
 
-func NewGroup(elements ...Bounded) Group {
+func GroupOf(elements ...Bounded) Group {
 	b := Bounds(elements...)
 	return Group{
 		Elements: elements,
@@ -24,7 +24,7 @@ func NewGroup(elements ...Bounded) Group {
 	}
 }
 
-func (g Group) Translate(x, y float64) Group {
+func (g Group) Translate(x, y float64) Element {
 	g.Translation = fmt.Sprintf("translate(%f %f)", x, y)
 	g.top += y
 	g.bottom += y

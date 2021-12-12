@@ -1,4 +1,4 @@
-package shape
+package svg
 
 type Bounded interface {
 	Top() float64
@@ -7,6 +7,11 @@ type Bounded interface {
 	Left() float64
 	Width() float64
 	Height() float64
+}
+
+type Element interface {
+	Bounded
+	Translate(dx, dy float64) Element
 }
 
 type bounds struct {
@@ -32,7 +37,7 @@ func (b bounds) Height() float64 {
 	return b.Bottom() - b.Top()
 }
 
-func Bounds(shapes ...Bounded) Bounded {
+func Bounds(shapes ...Bounded) bounds {
 	if len(shapes) < 1 {
 		return bounds{}
 	}
