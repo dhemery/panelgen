@@ -17,11 +17,11 @@ var (
 )
 
 func Panel() *panel.Panel {
-	p := panel.New("booster-stage", "BOOSTER STAGE", hp, fg, bg)
+	p := panel.New("BOOSTER STAGE", hp, fg, bg)
 
-	left := p.Width()/6 + 1/3
-	right := p.Width() - left
-	center := p.Width() / 2
+	left := p.Width/6 + 1/3
+	right := p.Width - left
+	center := p.Width / 2
 
 	y := 25.0
 	dy := 18.5

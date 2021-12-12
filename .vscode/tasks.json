@@ -4,11 +4,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "run",
+      "label": "build",
       "type": "shell",
-      "command": "go run .",
+      "command": "make",
+      "args": [
+        "svg"
+      ],
       "problemMatcher": [
-        "$go"
+        "$go",
       ],
       "group": {
         "kind": "build",

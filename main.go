@@ -6,33 +6,55 @@ import (
 	"os"
 	"path/filepath"
 
-	boosterstage "dhemery.com/panelgen/module/booster-stage"
-	"dhemery.com/panelgen/module/cubic"
 	"dhemery.com/panelgen/panel"
+	boosterstage "dhemery.com/panelgen/panel/booster-stage"
+	"dhemery.com/panelgen/panel/cubic"
 )
 
 func main() {
-	panels := []*panel.Panel{
-		cubic.Panel(),
-		boosterstage.Panel(),
+	type buildFunc func() *panel.Panel
+
+	builders := map[string]buildFunc{}
+
+	builders["booster-stage"] = boosterstage.Panel
+	builders["cubic"] = cubic.Panel
+
+	for slug, buildFn := range builders {
+		export(slug, buildFn())
+	}
+}
+
+const (
+	buildDir = "_build"
+)
+
+var (
+	frameDir     = filepath.Join(buildDir, "controls")
+	faceplateDir = filepath.Join(buildDir, "faceplates")
+	imageDir     = filepath.Join(buildDir, "images")
+)
+
+func export(moduleSlug string, p *panel.Panel) error {
+	faceplatePath := filepath.Join(faceplateDir, moduleSlug+".svg")
+	if err := write(faceplatePath, p.FaceplateSvg()); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
+		return err
 	}
 
-	for _, p := range panels {
-		path := filepath.Join("out", p.Slug, p.Slug+".svg")
-		if err := write(path, p.FaceplateSvg()); err != nil {
+	imagePath := filepath.Join(imageDir, "image", moduleSlug+".svg")
+	if err := write(imagePath, p.ImageSvg()); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
+		return err
+	}
+
+	for frameSlug, frameSvg := range p.FrameSvgs() {
+		framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
+		if err := write(framePath, frameSvg); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
-		}
-		path = filepath.Join("out", "image", p.Slug+".svg")
-		if err := write(path, p.ImageSvg()); err != nil {
-			_, _ = fmt.Fprintln(os.Stderr, err)
-		}
-		for slug, svg := range p.FrameSvgs() {
-			path = filepath.Join("out", p.Slug, slug+".svg")
-			if err := write(path, svg); err != nil {
-				_, _ = fmt.Fprintln(os.Stderr, err)
-			}
+			return err
 		}
 	}
+	return nil
 }
 
 func write(path string, data interface{}) error {
@@ -44,6 +66,7 @@ func write(path string, data interface{}) error {
 		return err
 	}
 	defer func() { _ = w.Close }()
+	w.Write([]byte(xml.Header))
 	e := xml.NewEncoder(w)
 	e.Indent("", "    ")
 	return e.Encode(data)

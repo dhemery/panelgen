@@ -5,12 +5,6 @@ import (
 	"dhemery.com/panelgen/svg"
 )
 
-const (
-	boxRadius   = 0.5
-	padding     = 1
-	strokeWidth = 0.35
-)
-
 type Hp int
 
 func (hp Hp) toMM() float64 {
@@ -19,15 +13,18 @@ func (hp Hp) toMM() float64 {
 }
 
 type Panel struct {
-	Slug       string
 	Engravings []svg.Element
 	Frames     []svg.Element
 	Controls   []control.Control
 	Fg, Bg     svg.Color
-	Hp         Hp
+	Width      float64
 }
 
-func New(slug, name string, hp Hp, fg, bg svg.Color) *Panel {
+const (
+	padding = 1
+)
+
+func New(name string, hp Hp, fg, bg svg.Color) *Panel {
 	const (
 		nameLabelY       = 9
 		outlineThickness = 0.5
@@ -36,31 +33,26 @@ func New(slug, name string, hp Hp, fg, bg svg.Color) *Panel {
 	)
 
 	p := &Panel{
-		Slug: slug,
-		Fg:   fg,
-		Bg:   bg,
-		Hp:   hp,
+		Fg:    fg,
+		Bg:    bg,
+		Width: hp.toMM(),
 	}
 
 	faceplateRect := svg.Rect{
 		X:           outlineThickness / 2,
 		Y:           outlineThickness / 2,
-		W:           p.Width() - outlineThickness,
+		W:           p.Width - outlineThickness,
 		H:           panelHeight - outlineThickness,
 		Fill:        bg,
 		Stroke:      fg,
 		StrokeWidth: outlineThickness,
 	}
 	p.Engrave(faceplateRect)
-	center := p.Width() / 2
+	center := p.Width / 2
 
-	p.Engrave(svg.TextBelow("DHE", svg.TitleFont, p.Fg).Translate(center, brandLabelY))
 	p.Engrave(svg.TextAbove(name, svg.TitleFont, p.Fg).Translate(center, nameLabelY))
+	p.Engrave(svg.TextBelow("DHE", svg.TitleFont, p.Fg).Translate(center, brandLabelY))
 	return p
-}
-
-func (p *Panel) Width() float64 {
-	return p.Hp.toMM()
 }
 
 func (p *Panel) Port(x, y float64, name string, labelColor svg.Color) {
@@ -77,7 +69,7 @@ func (p *Panel) InPort(x, y float64, name string) {
 	port := p.Install(x, y, control.Port(p.Fg, p.Bg))
 	labelY := port.Top() - padding
 	label := svg.TextAbove(name, svg.SmallFont, p.Fg).Translate(x, labelY)
-	p.Engrave(boxAround(p.Bg, p.Fg, port, label))
+	p.Engrave(boxAround(p.Fg, p.Bg, port, label))
 	p.Engrave(label)
 }
 
@@ -87,7 +79,7 @@ func (p *Panel) InButtonPort(x, y float64, name string) {
 	button := p.Install(buttonX, y, control.Button(p.Bg, p.Fg))
 	labelY := port.Top() - padding
 	label := svg.TextAbove(name, svg.SmallFont, p.Fg).Translate(x, labelY)
-	p.Engrave(boxAround(p.Bg, p.Fg, port, button, label))
+	p.Engrave(boxAround(p.Fg, p.Bg, port, button, label))
 	p.Engrave(label)
 }
 
@@ -158,7 +150,11 @@ func (p *Panel) FrameSvgs() map[string]svg.Svg {
 	return frames
 }
 
-func boxAround(fill, stroke svg.Color, elements ...svg.Element) svg.Rect {
+func boxAround(stroke, fill svg.Color, elements ...svg.Element) svg.Rect {
+	const (
+		cornerRadius = 0.5
+		strokeWidth  = 0.35
+	)
 	bounds := svg.Bounds(elements...)
 	return svg.Rect{
 		X:           bounds.Left() - padding,
@@ -168,7 +164,7 @@ func boxAround(fill, stroke svg.Color, elements ...svg.Element) svg.Rect {
 		Fill:        fill,
 		Stroke:      stroke,
 		StrokeWidth: strokeWidth,
-		RX:          boxRadius,
-		RY:          boxRadius,
+		RX:          cornerRadius,
+		RY:          cornerRadius,
 	}
 }

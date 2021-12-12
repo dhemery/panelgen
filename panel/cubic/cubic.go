@@ -23,9 +23,9 @@ var (
 )
 
 func Panel() *panel.Panel {
-	p := panel.New("cubic", "CUBIC", hp, fg, bg)
-	left := p.Width()/4 + 4/3
-	right := p.Width() - left
+	p := panel.New("CUBIC", hp, fg, bg)
+	left := p.Width/4 + 4/3
+	right := p.Width - left
 
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float64(row)
