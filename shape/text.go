@@ -16,25 +16,15 @@ type TextAlignment struct {
 }
 
 func TextAbove(x, y float64, content string, font Font, color Color) Text {
-	return Text{
-		X:             x,
-		Y:             y,
-		Font:          font,
-		TextAlignment: alignTextAbove,
-		Fill:          color,
-		Content:       content,
-	}
+	return newText(x, y, content, alignTextAbove, font, color)
 }
 
 func TextBelow(x, y float64, content string, font Font, color Color) Text {
-	return Text{
-		X:             x,
-		Y:             y,
-		Font:          font,
-		TextAlignment: alignTextBelow,
-		Fill:          color,
-		Content:       content,
-	}
+	return newText(x, y, content, alignTextBelow, font, color)
+}
+
+func TextCentered(x, y float64, content string, font Font, color Color) Text {
+	return newText(x, y, content, alignTextCentered, font, color)
 }
 
 var (
@@ -108,6 +98,17 @@ var (
 		BaselineShift:    0.07,
 	}
 )
+
+func newText(x, y float64, content string, alignment TextAlignment, font Font, color Color) Text {
+	return Text{
+		X:             x,
+		Y:             y + font.FontSize*font.AscentRatio*alignment.BaselineShift,
+		Font:          font,
+		TextAlignment: alignment,
+		Fill:          color,
+		Content:       content,
+	}
+}
 
 type Text struct {
 	XMLName string `xml:"text"`
