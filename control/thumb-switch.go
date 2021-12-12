@@ -6,28 +6,6 @@ import (
 	"dhemery.com/panelgen/svg"
 )
 
-func thumbSwitchKnurl(length, thickness float64, stroke svg.Color) svg.Line {
-	return svg.Line{
-		X1:          -length / 2,
-		X2:          length / 2,
-		StrokeWidth: thickness,
-		Stroke:      stroke,
-		Cap:         "round",
-	}
-}
-
-func thumbSwitchLever(width, knurlThickness float64, stroke, fill svg.Color) svg.Group {
-	knurl := thumbSwitchKnurl(width, knurlThickness, stroke)
-	knurls := []svg.Element{}
-	for i := -2; i <= 2; i++ {
-		k := knurl
-		k.Y1 = knurlThickness * 2 * float64(i)
-		k.Y2 = k.Y1
-		knurls = append(knurls, k)
-	}
-	return svg.GroupOf(knurls...)
-}
-
 func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {
 	const (
 		width            = 3.0
@@ -71,4 +49,26 @@ func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {
 		Frames:       frames,
 		DefaultFrame: defaultFrame,
 	}
+}
+
+func thumbSwitchKnurl(length, thickness float64, stroke svg.Color) svg.Line {
+	return svg.Line{
+		X1:          -length / 2,
+		X2:          length / 2,
+		StrokeWidth: thickness,
+		Stroke:      stroke,
+		Cap:         "round",
+	}
+}
+
+func thumbSwitchLever(width, knurlThickness float64, stroke, fill svg.Color) svg.Group {
+	knurl := thumbSwitchKnurl(width, knurlThickness, stroke)
+	knurls := []svg.Element{}
+	for i := -2; i <= 2; i++ {
+		k := knurl
+		k.Y1 = knurlThickness * 2 * float64(i)
+		k.Y2 = k.Y1
+		knurls = append(knurls, k)
+	}
+	return svg.GroupOf(knurls...)
 }

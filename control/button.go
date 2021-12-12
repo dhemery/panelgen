@@ -4,6 +4,14 @@ import (
 	"dhemery.com/panelgen/svg"
 )
 
+func Button(pressedColor, releasedColor svg.Color) Control {
+	return button("button", pressedColor, releasedColor)
+}
+
+func OutputButton(pressedColor, releasedColor svg.Color) Control {
+	return button("output-button", pressedColor, releasedColor)
+}
+
 const (
 	ButtonDiameter = 6
 	ButtonRadius   = ButtonDiameter / 2
@@ -32,12 +40,4 @@ func button(slug string, pressedColor, releasedColor svg.Color) Control {
 		},
 		DefaultFrame: released,
 	}
-}
-
-func Button(pressedColor, releasedColor svg.Color) Control {
-	return button("button", pressedColor, releasedColor)
-}
-
-func OutputButton(pressedColor, releasedColor svg.Color) Control {
-	return button("output-button", pressedColor, releasedColor)
 }

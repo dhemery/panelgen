@@ -4,10 +4,6 @@ import (
 	"dhemery.com/panelgen/svg"
 )
 
-const (
-	PortRadius = 4
-)
-
 func Port(stroke, fill svg.Color) Control {
 	const (
 		slug            = "port"
@@ -38,3 +34,7 @@ func Port(stroke, fill svg.Color) Control {
 		DefaultFrame: frame,
 	}
 }
+
+const (
+	PortRadius = 4
+)
