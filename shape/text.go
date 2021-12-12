@@ -15,16 +15,16 @@ type TextAlignment struct {
 	BaselineShift    float64 `xml:"-"`
 }
 
-func TextAbove(x, y float64, content string, font Font, color Color) Text {
-	return newText(x, y, content, alignTextAbove, font, color)
+func TextAbove(content string, font Font, color Color) text {
+	return newText(content, alignTextAbove, font, color)
 }
 
-func TextBelow(x, y float64, content string, font Font, color Color) Text {
-	return newText(x, y, content, alignTextBelow, font, color)
+func TextBelow(content string, font Font, color Color) text {
+	return newText(content, alignTextBelow, font, color)
 }
 
-func TextCentered(x, y float64, content string, font Font, color Color) Text {
-	return newText(x, y, content, alignTextCentered, font, color)
+func TextCentered(content string, font Font, color Color) text {
+	return newText(content, alignTextCentered, font, color)
 }
 
 var (
@@ -99,10 +99,9 @@ var (
 	}
 )
 
-func newText(x, y float64, content string, alignment TextAlignment, font Font, color Color) Text {
-	return Text{
-		X:             x,
-		Y:             y + font.FontSize*font.AscentRatio*alignment.BaselineShift,
+func newText(content string, alignment TextAlignment, font Font, color Color) text {
+	return text{
+		Y:             font.FontSize * font.AscentRatio * alignment.BaselineShift,
 		Font:          font,
 		TextAlignment: alignment,
 		Fill:          color,
@@ -110,7 +109,7 @@ func newText(x, y float64, content string, alignment TextAlignment, font Font, c
 	}
 }
 
-type Text struct {
+type text struct {
 	XMLName string `xml:"text"`
 	Font
 	TextAlignment
@@ -120,22 +119,27 @@ type Text struct {
 	Content string  `xml:",innerxml"`
 }
 
-func (t Text) Top() float64 {
+func (t text) Top() float64 {
 	return t.Bottom() - t.Height()
 }
-func (t Text) Right() float64 {
+func (t text) Right() float64 {
 	return t.X + t.Width()*t.PortionRight
 }
-func (t Text) Bottom() float64 {
+func (t text) Bottom() float64 {
 	return t.Y + t.Height()*t.PortionBelow
 }
-func (t Text) Left() float64 {
+func (t text) Left() float64 {
 	return t.Right() - t.Width()
 }
-func (t Text) Width() float64 {
+func (t text) Width() float64 {
 	return 0.1
 }
-func (t Text) Height() float64 {
+func (t text) Height() float64 {
 	// The panels use only uppercase text, so the entire height of a <text> is its ascent
 	return t.FontSize * t.AscentRatio
+}
+func (t text) Translate(dx, dy float64) text {
+	t.X += dx
+	t.Y += dy
+	return t
 }

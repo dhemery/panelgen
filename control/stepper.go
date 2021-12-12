@@ -16,7 +16,7 @@ func Stepper(stepperSlug string, stroke, fill shape.Color, width float64, select
 
 	for i, stateLabel := range stateLabels {
 		frameSlug := fmt.Sprint(stepperSlug, "-", i+1)
-		label := shape.TextCentered(0, 0, stateLabel, shape.SmallFont, stroke)
+		label := shape.TextCentered(stateLabel, shape.SmallFont, stroke)
 		box := shape.Rect{
 			X:           -width/2 - padding,
 			Y:           -label.Height()/2 - padding,
