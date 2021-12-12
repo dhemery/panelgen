@@ -138,7 +138,7 @@ func (t text) Height() float64 {
 	// The panels use only uppercase text, so the entire height of a <text> is its ascent
 	return t.FontSize * t.AscentRatio
 }
-func (t text) Translate(dx, dy float64) text {
+func (t text) Translate(dx, dy float64) Element {
 	t.X += dx
 	t.Y += dy
 	return t

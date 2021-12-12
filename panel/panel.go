@@ -20,8 +20,8 @@ func (hp Hp) toMM() float64 {
 
 type Panel struct {
 	Slug       string
-	Engravings []svg.Bounded
-	Frames     []svg.Bounded
+	Engravings []svg.Element
+	Frames     []svg.Element
 	Controls   []control.Control
 	Fg, Bg     svg.Color
 	Hp         Hp
@@ -132,7 +132,7 @@ func (p *Panel) Install(x, y float64, c control.Control) svg.Element {
 }
 
 // Engrave engraves the shape into the faceplate at the specified position.
-func (p *Panel) Engrave(s svg.Bounded) {
+func (p *Panel) Engrave(s svg.Element) {
 	p.Engravings = append(p.Engravings, s)
 }
 
@@ -158,7 +158,7 @@ func (p *Panel) FrameSvgs() map[string]svg.Svg {
 	return frames
 }
 
-func boxAround(fill, stroke svg.Color, elements ...svg.Bounded) svg.Rect {
+func boxAround(fill, stroke svg.Color, elements ...svg.Element) svg.Rect {
 	bounds := svg.Bounds(elements...)
 	return svg.Rect{
 		X:           bounds.Left() - padding,

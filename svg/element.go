@@ -1,5 +1,10 @@
 package svg
 
+type Element interface {
+	Bounded
+	Translate(dx, dy float64) Element
+}
+
 type Bounded interface {
 	Top() float64
 	Right() float64
@@ -9,9 +14,32 @@ type Bounded interface {
 	Height() float64
 }
 
-type Element interface {
-	Bounded
-	Translate(dx, dy float64) Element
+func Bounds(elements ...Element) Bounded {
+	if len(elements) < 1 {
+		return bounds{}
+	}
+	first := elements[0]
+	b := bounds{
+		top:    first.Top(),
+		right:  first.Right(),
+		bottom: first.Bottom(),
+		left:   first.Left(),
+	}
+	for _, s := range elements[1:] {
+		if v := s.Top(); v < b.top {
+			b.top = v
+		}
+		if v := s.Right(); v > b.right {
+			b.right = v
+		}
+		if v := s.Bottom(); v > b.bottom {
+			b.bottom = v
+		}
+		if v := s.Left(); v < b.left {
+			b.left = v
+		}
+	}
+	return b
 }
 
 type bounds struct {
@@ -35,32 +63,4 @@ func (b bounds) Width() float64 {
 }
 func (b bounds) Height() float64 {
 	return b.Bottom() - b.Top()
-}
-
-func Bounds(shapes ...Bounded) bounds {
-	if len(shapes) < 1 {
-		return bounds{}
-	}
-	first := shapes[0]
-	b := bounds{
-		top:    first.Top(),
-		right:  first.Right(),
-		bottom: first.Bottom(),
-		left:   first.Left(),
-	}
-	for _, s := range shapes[1:] {
-		if v := s.Top(); v < b.top {
-			b.top = v
-		}
-		if v := s.Right(); v > b.right {
-			b.right = v
-		}
-		if v := s.Bottom(); v > b.bottom {
-			b.bottom = v
-		}
-		if v := s.Left(); v < b.left {
-			b.left = v
-		}
-	}
-	return b
 }

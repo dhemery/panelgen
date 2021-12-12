@@ -5,23 +5,23 @@ import (
 	"fmt"
 )
 
+func GroupOf(content ...Element) Group {
+	b := Bounds(content...)
+	return Group{
+		Content: content,
+		top:     b.Top(),
+		right:   b.Right(),
+		bottom:  b.Bottom(),
+		left:    b.Left(),
+	}
+}
+
 type Group struct {
 	XMLName                  xml.Name `xml:"g"`
 	Id                       string   `xml:"id,attr,omitempty"`
 	Translation              string   `xml:"transform,attr,omitempty"`
-	Elements                 []Bounded
+	Content                  []Element
 	top, right, bottom, left float64
-}
-
-func GroupOf(elements ...Bounded) Group {
-	b := Bounds(elements...)
-	return Group{
-		Elements: elements,
-		top:      b.Top(),
-		right:    b.Right(),
-		bottom:   b.Bottom(),
-		left:     b.Left(),
-	}
 }
 
 func (g Group) Translate(x, y float64) Element {

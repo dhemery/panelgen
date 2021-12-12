@@ -36,3 +36,9 @@ func (r Rect) Width() float64 {
 func (r Rect) Height() float64 {
 	return r.Bottom() - r.Top()
 }
+
+func (r Rect) Translate(dx, dy float64) Element {
+	r.X += dx
+	r.Y += dy
+	return r
+}
