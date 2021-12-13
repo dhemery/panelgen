@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"dhemery.com/panelgen/internal/panel"
@@ -37,9 +38,10 @@ func Build(slugs []string) error {
 
 func allSlugs() []string {
 	slugs := []string{}
-	for slug, _ := range panel.Builders() {
+	for slug := range panel.Builders() {
 		slugs = append(slugs, slug)
 	}
+	sort.StringSlice(slugs).Sort()
 	return slugs
 }
 

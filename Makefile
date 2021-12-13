@@ -23,6 +23,6 @@ clean:
 clobber: clean
 	rm -rf $(INSTALL_DIR)
 
-.PHONY: clean clobber $(MODULES)
+.PHONY: clean clobber
 
 .DEFAULT_GOAL := panels
