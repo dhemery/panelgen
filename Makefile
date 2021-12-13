@@ -1,5 +1,5 @@
 BUILD_DIR=_build
-FACEPLATE_BUILD_DIR=$(BUILD_DIR)/faceplates
+IMAGE_BUILD_DIR=$(BUILD_DIR)/images
 CONTROL_BUILD_DIR=$(BUILD_DIR)/frames
 
 MODULE_SLUGS=$(shell go run .)
@@ -10,12 +10,12 @@ ASSET_INSTALL_DIR=$(INSTALL_DIR)/svg
 
 PANEL_SOURCE_DIR=internal/panel
 
-FACEPLATES=$(patsubst %, $(FACEPLATE_BUILD_DIR)/%.svg, $(MODULE_SLUGS))
+IMAGES=$(patsubst %, $(IMAGE_BUILD_DIR)/%.svg, $(MODULE_SLUGS))
 
-$(FACEPLATE_BUILD_DIR)/%.svg: $(PANEL_SOURCE_DIR)/%.go
+$(IMAGE_BUILD_DIR)/%.svg: $(PANEL_SOURCE_DIR)/%.go
 	go run . $(patsubst $(PANEL_SOURCE_DIR)/%.go, %, $^)
 
-panels: $(FACEPLATES)
+images: $(IMAGES)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -25,4 +25,13 @@ clobber: clean
 
 .PHONY: clean clobber
 
-.DEFAULT_GOAL := panels
+ # def install_svg(from, to, *options)                                                                    
+ #   from = from.expand_path.to_s                                                                         
+ #   to = to.expand_path.to_s                                                                             
+ #   sh './scripts/install-svg.sh', from, to, *options                                                    
+ # end                                                                                                    
+ #                                                                                                        
+ # def install_faceplate(from, to)                                                                        
+ #   install_svg from, to, '--export-id=faceplate', '--export-id-only'                                    
+ # end                                                                                                    
+ 

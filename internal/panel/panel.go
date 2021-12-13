@@ -128,16 +128,12 @@ func (p *Panel) Engrave(s svg.Element) {
 	p.Engravings = append(p.Engravings, s)
 }
 
-func (p *Panel) FaceplateSvg() svg.Svg {
-	return svg.NewSvg(p.Engravings...)
-}
-
 func (p *Panel) ImageSvg() svg.Svg {
 	faceplateGroup := svg.GroupOf(p.Engravings...)
 	faceplateGroup.Id = "faceplate"
-	imageGroup := svg.GroupOf(p.Frames...)
-	imageGroup.Id = "image"
-	return svg.NewSvg(faceplateGroup, imageGroup)
+	controlsGroup := svg.GroupOf(p.Frames...)
+	controlsGroup.Id = "controls"
+	return svg.NewSvg(faceplateGroup, controlsGroup)
 }
 
 func (p *Panel) FrameSvgs() map[string]svg.Svg {

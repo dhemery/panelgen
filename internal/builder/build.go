@@ -50,18 +50,12 @@ const (
 )
 
 var (
-	frameDir     = filepath.Join(buildDir, "controls")
-	faceplateDir = filepath.Join(buildDir, "faceplates")
-	imageDir     = filepath.Join(buildDir, "images")
+	frameDir = filepath.Join(buildDir, "frames")
+	imageDir = filepath.Join(buildDir, "images")
 )
 
 func export(moduleSlug string, p *panel.Panel) error {
-	faceplatePath := filepath.Join(faceplateDir, moduleSlug+".svg")
-	if err := write(faceplatePath, p.FaceplateSvg()); err != nil {
-		return err
-	}
-
-	imagePath := filepath.Join(imageDir, "image", moduleSlug+".svg")
+	imagePath := filepath.Join(imageDir, moduleSlug+".svg")
 	if err := write(imagePath, p.ImageSvg()); err != nil {
 		return err
 	}
