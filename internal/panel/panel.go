@@ -1,8 +1,8 @@
 package panel
 
 import (
-	"dhemery.com/panelgen/control"
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/control"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 type Hp int
@@ -24,7 +24,7 @@ const (
 	padding = 1
 )
 
-func New(name string, hp Hp, fg, bg svg.Color) *Panel {
+func NewPanel(name string, hp Hp, fg, bg svg.Color) *Panel {
 	const (
 		nameLabelY       = 9
 		outlineThickness = 0.5

@@ -1,7 +1,7 @@
 package control
 
 import (
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 func Button(pressedColor, releasedColor svg.Color) Control {

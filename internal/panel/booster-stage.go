@@ -1,24 +1,27 @@
-package boosterstage
+package panel
 
 import (
-	"dhemery.com/panelgen/control"
-	"dhemery.com/panelgen/panel"
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/control"
+
+	"dhemery.com/panelgen/internal/svg"
 )
 
-const (
-	hue = 0
-	hp  = 8
-)
+func init() {
+	registerBuilder("booster-stage", BoosterStage)
+}
 
-var (
-	bg = svg.HslColor(hue, 1, .97)
-	fg = svg.HslColor(hue, 1, .3)
-)
+func BoosterStage() *Panel {
+	const (
+		hue = 0
+		hp  = 8
+	)
 
-func Panel() *panel.Panel {
-	p := panel.New("BOOSTER STAGE", hp, fg, bg)
+	var (
+		bg = svg.HslColor(hue, 1, .97)
+		fg = svg.HslColor(hue, 1, .3)
+	)
 
+	p := NewPanel("BOOSTER STAGE", hp, fg, bg)
 	left := p.Width/6 + 1/3
 	right := p.Width - left
 	center := p.Width / 2

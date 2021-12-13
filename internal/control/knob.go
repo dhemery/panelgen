@@ -1,7 +1,7 @@
 package control
 
 import (
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 func TinyKnob(knobColor, pointerColor svg.Color) Control {

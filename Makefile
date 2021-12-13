@@ -1,12 +1,21 @@
 BUILD_DIR=_build
 FACEPLATE_BUILD_DIR=$(BUILD_DIR)/faceplates
 CONTROL_BUILD_DIR=$(BUILD_DIR)/frames
+
+MODULE_SLUGS=$(shell go run .)
+
 INSTALL_DIR=_install
 IMAGE_INSTALL_DIR=$(INSTALL_DIR)/images
 ASSET_INSTALL_DIR=$(INSTALL_DIR)/svg
 
-svg:
-	go run .
+PANEL_SOURCE_DIR=internal/panel
+
+FACEPLATES=$(patsubst %, $(FACEPLATE_BUILD_DIR)/%.svg, $(MODULE_SLUGS))
+
+$(FACEPLATE_BUILD_DIR)/%.svg: $(PANEL_SOURCE_DIR)/%.go
+	go run . $(patsubst $(PANEL_SOURCE_DIR)/%.go, %, $^)
+
+panels: $(FACEPLATES)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -14,4 +23,6 @@ clean:
 clobber: clean
 	rm -rf $(INSTALL_DIR)
 
-.PHONY: clean clobber svg
+.PHONY: clean clobber $(MODULES)
+
+.DEFAULT_GOAL := panels

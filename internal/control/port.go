@@ -1,7 +1,7 @@
 package control
 
 import (
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 func Port(stroke, fill svg.Color) Control {

@@ -3,7 +3,7 @@ package control
 import (
 	"fmt"
 
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {

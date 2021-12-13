@@ -3,7 +3,7 @@ package control
 import (
 	"fmt"
 
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
 func Stepper(stepperSlug string, stroke, fill svg.Color, width float64, selection int, stateLabels ...string) Control {

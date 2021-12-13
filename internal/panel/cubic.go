@@ -1,29 +1,32 @@
-package cubic
+package panel
 
 import (
 	"fmt"
 
-	"dhemery.com/panelgen/panel"
-	"dhemery.com/panelgen/svg"
+	"dhemery.com/panelgen/internal/svg"
 )
 
-const (
-	hue = 180
-	hp  = 5
-)
+func init() {
+	registerBuilder("cubic", Cubic)
+}
 
-const (
-	top    = 20
-	deltaY = 15
-)
+func Cubic() *Panel {
+	const (
+		hue = 180
+		hp  = 5
+	)
 
-var (
-	bg = svg.HslColor(hue, 1, .97)
-	fg = svg.HslColor(hue, 1, .3)
-)
+	const (
+		top    = 20
+		deltaY = 15
+	)
 
-func Panel() *panel.Panel {
-	p := panel.New("CUBIC", hp, fg, bg)
+	var (
+		bg = svg.HslColor(hue, 1, .97)
+		fg = svg.HslColor(hue, 1, .3)
+	)
+
+	p := NewPanel("CUBIC", hp, fg, bg)
 	left := p.Width/4 + 4/3
 	right := p.Width - left
 
