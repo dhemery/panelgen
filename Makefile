@@ -8,7 +8,7 @@ FRAME_BUILD_DIR=$(BUILD_DIR)/frames
 
 IMAGES=$(patsubst %, $(IMAGE_BUILD_DIR)/%.svg, $(MODULE_SLUGS))
 
-FRAMES=$(wildcard $(FRAME_BUILD_DIR)/*/*.svg)
+FRAMES=$(patsubst %, $(FRAME_BUILD_DIR)/%/port.svg, $(MODULE_SLUGS))
 
 INSTALL_DIR=$(abspath _install)
 IMAGE_INSTALL_DIR=$(INSTALL_DIR)/images
@@ -35,11 +35,11 @@ $(IMAGE_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
 
 $(ASSET_INSTALL_DIR)/%/faceplate.svg: $(IMAGE_BUILD_DIR)/%.svg
 	mkdir -p $(dir $@)
-	./scripts/install-svg.sh $(patsubst $(ASSET_INSTALL_DIR)/%/faceplate.svg, $(IMAGE_BUILD_DIR)/%.svg, $@) $@ --export-id=faceplate --export-id-only
+	./scripts/install-faceplate.sh $(patsubst $(ASSET_INSTALL_DIR)/%/faceplate.svg, $(IMAGE_BUILD_DIR)/%.svg, $@) $@
 
 $(ASSET_INSTALL_DIR)/%: $(FRAME_BUILD_DIR)/%
 	mkdir -p $(dir $@)
-	./scripts/install-svg.sh $(patsubst $(ASSET_INSTALL_DIR)/%, $(FRAME_BUILD_DIR)/%, $@) $@
+	./scripts/install-frames.sh $(dir $<) $(ASSET_INSTALL_DIR)
 
 $(INSTALLED_FACEPLATES):
 
