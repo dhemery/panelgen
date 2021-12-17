@@ -19,6 +19,10 @@ func TextAbove(content string, font Font, color Color) text {
 	return newText(content, alignTextAbove, font, color)
 }
 
+func TextRight(content string, font Font, color Color) text {
+	return newText(content, alignTextRight, font, color)
+}
+
 func TextBelow(content string, font Font, color Color) text {
 	return newText(content, alignTextBelow, font, color)
 }
@@ -80,20 +84,20 @@ var (
 		DominantBaseline: "middle",
 		TextAnchor:       "end",
 		PortionBelow:     0.5,
-		PortionRight:     0,
+		PortionRight:     0.0,
 		BaselineShift:    0.18,
 	}
 	alignTextRight = TextAlignment{
 		DominantBaseline: "middle",
 		TextAnchor:       "start",
 		PortionBelow:     0.5,
-		PortionRight:     1,
+		PortionRight:     1.0,
 		BaselineShift:    0.18,
 	}
 	alignTextBelow = TextAlignment{
 		DominantBaseline: "hanging",
 		TextAnchor:       "middle",
-		PortionBelow:     1,
+		PortionBelow:     1.0,
 		PortionRight:     0.5,
 		BaselineShift:    0.07,
 	}

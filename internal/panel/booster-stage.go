@@ -1,8 +1,6 @@
 package panel
 
 import (
-	"dhemery.com/panelgen/internal/control"
-
 	"dhemery.com/panelgen/internal/svg"
 )
 
@@ -17,8 +15,11 @@ func BoosterStage() *Panel {
 	)
 
 	var (
-		bg = svg.HslColor(hue, 1, .97)
-		fg = svg.HslColor(hue, 1, .3)
+		bg                        = svg.HslColor(hue, 1, .97)
+		fg                        = svg.HslColor(hue, 1, .3)
+		shapeSwitchLabels         = []string{"J", "S"}
+		levelRangeSwitchLabels    = []string{"BI", "UNI"}
+		durationRangeSwitchLabels = []string{"1", "10", "100"}
 	)
 
 	p := NewPanel("BOOSTER STAGE", hp, fg, bg)
@@ -31,17 +32,17 @@ func BoosterStage() *Panel {
 
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "LEVEL")
-	p.Install(right, y, control.ThumbSwitch(2, 1, p.Fg, p.Bg))
+	p.ThumbSwitch(right, y, 1, levelRangeSwitchLabels)
 
 	y += dy
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "CURVE")
-	p.Install(right, y, control.ThumbSwitch(2, 1, p.Fg, p.Bg))
+	p.ThumbSwitch(right, y, 1, shapeSwitchLabels)
 
 	y += dy
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "DURATION")
-	p.Install(right, y, control.ThumbSwitch(3, 2, p.Fg, p.Bg))
+	p.ThumbSwitch(right, y, 2, durationRangeSwitchLabels)
 
 	y = 82
 	dy = 15

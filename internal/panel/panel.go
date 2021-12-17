@@ -113,6 +113,27 @@ func (p *Panel) LargeKnob(x, y float64, name string) {
 	p.Engrave(svg.TextAbove(name, svg.SmallFont, p.Fg).Translate(x, labelY))
 }
 
+func (p *Panel) ThumbSwitch2(x, y float64, selection int, labels []string) {
+	frame := p.Install(x, y, control.ThumbSwitch(2, selection, p.Fg, p.Bg))
+	labelY := frame.Bottom() + padding
+	p.Engrave(svg.TextBelow(labels[0], svg.SmallFont, p.Fg).Translate(x, labelY))
+	labelY = frame.Top() - padding
+	p.Engrave(svg.TextAbove(labels[1], svg.SmallFont, p.Fg).Translate(x, labelY))
+}
+
+func (p *Panel) ThumbSwitch(x, y float64, selection int, labels []string) {
+	size := len(labels)
+	frame := p.Install(x, y, control.ThumbSwitch(size, selection, p.Fg, p.Bg))
+	labelY := frame.Bottom() + padding
+	p.Engrave(svg.TextBelow(labels[0], svg.SmallFont, p.Fg).Translate(x, labelY))
+	if size == 3 {
+		labelX := frame.Right() + padding
+		p.Engrave(svg.TextRight(labels[1], svg.SmallFont, p.Fg).Translate(labelX, y))
+	}
+	labelY = frame.Top() - padding
+	p.Engrave(svg.TextAbove(labels[size-1], svg.SmallFont, p.Fg).Translate(x, labelY))
+}
+
 // Install installs the control at the specified position.
 // The panel image will show the control's selected frame at that position.
 // The module's svg directory will include an svg file for each frame of the control.
