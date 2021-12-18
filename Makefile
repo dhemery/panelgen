@@ -16,7 +16,7 @@ ASSET_INSTALL_DIR=$(INSTALL_DIR)/svg
 
 INSTALLED_IMAGES=$(patsubst %, $(IMAGE_INSTALL_DIR)/%.svg, $(MODULE_SLUGS))
 INSTALLED_FRAMES=$(patsubst $(FRAME_BUILD_DIR)/%, $(ASSET_INSTALL_DIR)/%, $(FRAMES))
-INSTALLED_FACEPLATES=$(patsubst %, $(ASSET_INSTALL_DIR)/%/faceplate.svg, $(MODULE_SLUGS))
+INSTALLED_FACEPLATES=$(patsubst %, $(ASSET_INSTALL_DIR)/%.svg, $(MODULE_SLUGS))
 
 PANEL_SOURCE_DIR=internal/panel
 
@@ -31,11 +31,12 @@ $(IMAGE_BUILD_DIR) $(ASSET_INSTALL_DIR):
 $(INSTALLED_IMAGES): $(IMAGE_BUILD_DIR)
 
 $(IMAGE_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
+	mkdir -p $(dir $@)
 	./scripts/install-svg.sh $(patsubst $(IMAGE_INSTALL_DIR)%, $(IMAGE_BUILD_DIR)/%, $@) $@
 
-$(ASSET_INSTALL_DIR)/%/faceplate.svg: $(IMAGE_BUILD_DIR)/%.svg
+$(ASSET_INSTALL_DIR)/%.svg: $(IMAGE_BUILD_DIR)/%.svg
 	mkdir -p $(dir $@)
-	./scripts/install-faceplate.sh $(patsubst $(ASSET_INSTALL_DIR)/%/faceplate.svg, $(IMAGE_BUILD_DIR)/%.svg, $@) $@
+	./scripts/install-faceplate.sh $(patsubst $(ASSET_INSTALL_DIR)/%.svg, $(IMAGE_BUILD_DIR)/%.svg, $@) $@
 
 $(ASSET_INSTALL_DIR)/%: $(FRAME_BUILD_DIR)/%
 	mkdir -p $(dir $@)
