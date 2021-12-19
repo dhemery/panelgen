@@ -137,14 +137,11 @@ func (p *Panel) LargeKnob(x, y float64, name string) {
 func (p *Panel) ThumbSwitch(x, y float64, selection int, labels []string) {
 	size := len(labels)
 	frame := p.Install(x, y, control.ThumbSwitch(size, selection, p.Fg, p.Bg))
-	labelY := frame.Bottom() + padding
-	p.Engrave(svg.TextBelow(labels[0], svg.SmallFont, p.Fg).Translate(x, labelY))
+	p.Engrave(svg.TextBelow(labels[0], svg.SmallFont, p.Fg).Translate(x, frame.Bottom()+padding))
+	p.Engrave(svg.TextAbove(labels[size-1], svg.SmallFont, p.Fg).Translate(x, frame.Top()-padding))
 	if size == 3 {
-		labelX := frame.Right() + padding
-		p.Engrave(svg.TextRight(labels[1], svg.SmallFont, p.Fg).Translate(labelX, y))
+		p.Engrave(svg.TextRight(labels[1], svg.SmallFont, p.Fg).Translate(frame.Right()+padding, y))
 	}
-	labelY = frame.Top() - padding
-	p.Engrave(svg.TextAbove(labels[size-1], svg.SmallFont, p.Fg).Translate(x, labelY))
 }
 
 // Install installs the control at the specified position.
@@ -157,7 +154,7 @@ func (p *Panel) Install(x, y float64, c control.Control) svg.Element {
 	return frame
 }
 
-// Engrave engraves the shape into the faceplate at the specified position.
+// Engrave engraves the shape into the faceplate.
 func (p *Panel) Engrave(s svg.Element) {
 	p.Engravings = append(p.Engravings, s)
 }
