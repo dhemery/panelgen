@@ -169,15 +169,15 @@ func (p *Panel) FrameSvgs() map[string]svg.Svg {
 
 func boxAround(stroke, fill svg.Color, elements ...svg.Element) svg.Rect {
 	const (
-		cornerRadius = 0.5
+		cornerRadius = 1.0
 		strokeWidth  = 0.35
 	)
 	bounds := svg.Bounds(elements...)
 	return svg.Rect{
 		X:           bounds.Left() - padding,
 		Y:           bounds.Top() - padding,
-		H:           bounds.Height() + 2*padding,
-		W:           bounds.Width() + 2*padding,
+		H:           bounds.Height() + 2.0*padding,
+		W:           bounds.Width() + 2.0*padding,
 		Fill:        fill,
 		Stroke:      stroke,
 		StrokeWidth: strokeWidth,

@@ -15,23 +15,24 @@ func BoosterStage() *Panel {
 	)
 
 	var (
-		bg                        = svg.HslColor(hue, 1, .97)
-		fg                        = svg.HslColor(hue, 1, .3)
+		bg                        = svg.HslColor(hue, 1.0, .97)
+		fg                        = svg.HslColor(hue, 1.0, .3)
 		shapeSwitchLabels         = []string{"J", "S"}
 		levelRangeSwitchLabels    = []string{"BI", "UNI"}
 		durationRangeSwitchLabels = []string{"1", "10", "100"}
 	)
 
 	p := NewPanel("BOOSTER STAGE", hp, fg, bg)
-	left := p.Width/6 + 1/3
+	left := p.Width/6.0 + 1.0/3.0
 	right := p.Width - left
-	center := p.Width / 2
+	center := p.Width / 2.0
 
 	y := 25.0
 	dy := 18.5
 
+	// TODO: Connection lines
 	p.CvPort(left, y)
-	p.LargeKnob(center, y, "LEVEL")
+	p.LargeKnob(center, y, "LEVEL") // TODO: Bigger text
 	p.ThumbSwitch(right, y, 1, levelRangeSwitchLabels)
 
 	y += dy
@@ -55,7 +56,7 @@ func BoosterStage() *Panel {
 	p.OutButtonPort(right, y, "EOC")
 
 	y += dy
-	p.InButtonPort(left, y, "IN")
-	p.OutButtonPort(right, y, "OUT")
+	p.InPort(left, y, "IN")
+	p.OutPort(right, y, "OUT")
 	return p
 }
