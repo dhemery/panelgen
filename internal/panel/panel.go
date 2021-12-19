@@ -21,12 +21,13 @@ type Panel struct {
 }
 
 const (
-	padding = 1
+	padding     = 1.0
+	strokeWidth = 0.35
 )
 
 func NewPanel(name string, hp Hp, fg, bg svg.Color) *Panel {
 	const (
-		nameLabelY       = 9
+		nameLabelY       = 9.0
 		outlineThickness = 0.5
 		panelHeight      = 128.5
 		brandLabelY      = panelHeight - nameLabelY
@@ -63,6 +64,26 @@ func (p *Panel) Port(x, y float64, name string, labelColor svg.Color) {
 
 func (p *Panel) CvPort(x, y float64) {
 	p.Port(x, y, "CV", p.Fg)
+}
+
+func (p *Panel) Line(x1, y1, x2, y2 float64) {
+	line := svg.Line{
+		X1:          x1,
+		Y1:          y1,
+		X2:          x2,
+		Y2:          y2,
+		Stroke:      p.Fg,
+		StrokeWidth: strokeWidth,
+	}
+	p.Engrave(line)
+}
+
+func (p *Panel) HLine(x1, x2, y float64) {
+	p.Line(x1, y, x2, y)
+}
+
+func (p *Panel) VLine(x, y1, y2 float64) {
+	p.Line(x, y1, x, y2)
 }
 
 func (p *Panel) InPort(x, y float64, name string) {
@@ -110,15 +131,7 @@ func (p *Panel) SmallKnob(x, y float64, name string) {
 func (p *Panel) LargeKnob(x, y float64, name string) {
 	knob := p.Install(x, y, control.LargeKnob(p.Fg, p.Bg))
 	labelY := knob.Top() - padding
-	p.Engrave(svg.TextAbove(name, svg.SmallFont, p.Fg).Translate(x, labelY))
-}
-
-func (p *Panel) ThumbSwitch2(x, y float64, selection int, labels []string) {
-	frame := p.Install(x, y, control.ThumbSwitch(2, selection, p.Fg, p.Bg))
-	labelY := frame.Bottom() + padding
-	p.Engrave(svg.TextBelow(labels[0], svg.SmallFont, p.Fg).Translate(x, labelY))
-	labelY = frame.Top() - padding
-	p.Engrave(svg.TextAbove(labels[1], svg.SmallFont, p.Fg).Translate(x, labelY))
+	p.Engrave(svg.TextAbove(name, svg.LargeFont, p.Fg).Translate(x, labelY))
 }
 
 func (p *Panel) ThumbSwitch(x, y float64, selection int, labels []string) {
