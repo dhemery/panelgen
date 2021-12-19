@@ -14,19 +14,19 @@ type Line struct {
 }
 
 func (l Line) Top() float64 {
-	return math.Min(l.Y1, l.Y2) - l.StrokeWidth
+	return math.Min(l.Y1, l.Y2) - l.StrokeWidth/2
 }
 
 func (l Line) Right() float64 {
-	return math.Max(l.X1, l.X2) + l.StrokeWidth
+	return math.Max(l.X1, l.X2) + l.StrokeWidth/2
 }
 
 func (l Line) Bottom() float64 {
-	return math.Max(l.Y1, l.Y2) + l.StrokeWidth
+	return math.Max(l.Y1, l.Y2) + l.StrokeWidth/2
 }
 
 func (l Line) Left() float64 {
-	return math.Min(l.X1, l.X2) - l.StrokeWidth
+	return math.Min(l.X1, l.X2) - l.StrokeWidth/2
 }
 
 func (l Line) Width() float64 {
@@ -40,7 +40,7 @@ func (l Line) Height() float64 {
 func (l Line) Translate(dx, dy float64) Element {
 	l.X1 += dx
 	l.X2 += dx
-	l.Y1 += dx
-	l.Y2 += dx
+	l.Y1 += dy
+	l.Y2 += dy
 	return l
 }

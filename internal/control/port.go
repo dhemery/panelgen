@@ -4,29 +4,32 @@ import (
 	"dhemery.com/panelgen/internal/svg"
 )
 
-func Port(stroke, fill svg.Color) Control {
+func Port(fg, bg svg.Color) Control {
 	const (
-		slug            = "port"
-		nutRadius       = PortRadius
-		barrelRadius    = 3.0
-		holeRadius      = 1.8
-		shadowThickness = .2
+		slug         = "port"
+		fgThickness  = .45
+		bgThickness  = .95
+		nutRadius    = PortRadius
+		barrelRadius = 3.5
+		holeRadius   = 2.325
 	)
 	nut := svg.Circle{
-		R:           nutRadius - shadowThickness/2,
-		Stroke:      stroke,
-		Fill:        fill,
-		StrokeWidth: shadowThickness,
+		R:           nutRadius,
+		Stroke:      svg.NoColor,
+		StrokeWidth: 0,
+		Fill:        fg,
 	}
 	barrel := svg.Circle{
-		R:           barrelRadius - shadowThickness/2,
-		Stroke:      stroke,
+		R:           barrelRadius,
+		Stroke:      bg,
+		StrokeWidth: bgThickness,
 		Fill:        svg.NoColor,
-		StrokeWidth: shadowThickness,
 	}
 	hole := svg.Circle{
-		R:    holeRadius,
-		Fill: stroke,
+		R:           holeRadius,
+		Stroke:      bg,
+		StrokeWidth: bgThickness,
+		Fill:        svg.NoColor,
 	}
 	frame := svg.GroupOf(nut, barrel, hole)
 	return Control{
@@ -36,5 +39,6 @@ func Port(stroke, fill svg.Color) Control {
 }
 
 const (
-	PortRadius = 4
+	portDiameter = 8.4
+	PortRadius   = portDiameter / 2
 )

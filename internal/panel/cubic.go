@@ -27,7 +27,7 @@ func Cubic() *Panel {
 	)
 
 	p := NewPanel("CUBIC", hp, fg, bg)
-	left := p.Width/4 + 4/3
+	left := p.Width/4 + 1.0/3.0
 	right := p.Width - left
 
 	for row := 0; row < 4; row++ {

@@ -4,6 +4,10 @@ import (
 	"dhemery.com/panelgen/internal/svg"
 )
 
+const (
+	ButtonRadius = 3.0
+)
+
 func Button(pressedColor, releasedColor svg.Color) Control {
 	return button("button", pressedColor, releasedColor)
 }
@@ -12,21 +16,16 @@ func OutputButton(pressedColor, releasedColor svg.Color) Control {
 	return button("output-button", pressedColor, releasedColor)
 }
 
-const (
-	ButtonDiameter = 6
-	ButtonRadius   = ButtonDiameter / 2
-)
-
 func buttonState(buttonColor, ringColor svg.Color) svg.Circle {
 	const (
-		thickness = ButtonDiameter / 6
-		radius    = ButtonRadius - thickness
+		strokeWidth = 1.0
+		radius      = ButtonRadius - strokeWidth/2
 	)
 	return svg.Circle{
 		R:           radius,
-		Fill:        buttonColor,
 		Stroke:      ringColor,
-		StrokeWidth: thickness,
+		StrokeWidth: strokeWidth,
+		Fill:        buttonColor,
 	}
 }
 
