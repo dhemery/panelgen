@@ -14,7 +14,7 @@ type Bounded interface {
 	Height() float64
 }
 
-func Bounds(elements ...Element) Bounded {
+func Bounds(elements ...Bounded) Bounded {
 	if len(elements) < 1 {
 		return bounds{}
 	}

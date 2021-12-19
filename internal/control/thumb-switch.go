@@ -26,7 +26,7 @@ func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {
 		knurlLength      = housingWidth - 2*knurlSpacing
 	)
 	lever := thumbSwitchLever(knurlLength, knurlThickness, stroke, fill)
-	levers := []svg.Element{}
+	levers := []svg.Bounded{}
 	leverY, leverDeltaY := thumbSwitchSpec(size, width, knurlThickness)
 	for i := 0; i < size; i++ {
 		levers = append(levers, lever.Translate(0, leverY))
@@ -76,7 +76,7 @@ func thumbSwitchKnurl(length, thickness float64, stroke svg.Color) svg.Line {
 
 func thumbSwitchLever(knurlLength, knurlThickness float64, stroke, fill svg.Color) svg.Group {
 	knurl := thumbSwitchKnurl(knurlLength, knurlThickness, stroke)
-	knurls := []svg.Element{}
+	knurls := []svg.Bounded{}
 	for i := -2; i <= 2; i++ {
 		yOffset := knurlThickness * 2 * float64(i)
 		knurls = append(knurls, knurl.Translate(0, yOffset))

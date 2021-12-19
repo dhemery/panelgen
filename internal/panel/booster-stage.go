@@ -15,11 +15,8 @@ func BoosterStage() *Panel {
 	)
 
 	var (
-		bg                        = svg.HslColor(hue, 1.0, .97)
-		fg                        = svg.HslColor(hue, 1.0, .3)
-		shapeSwitchLabels         = []string{"J", "S"}
-		levelRangeSwitchLabels    = []string{"BI", "UNI"}
-		durationRangeSwitchLabels = []string{"1", "10", "100"}
+		bg = svg.HslColor(hue, 1.0, .97)
+		fg = svg.HslColor(hue, 1.0, .3)
 	)
 
 	p := NewPanel("BOOSTER STAGE", hp, fg, bg)
@@ -33,19 +30,19 @@ func BoosterStage() *Panel {
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "LEVEL")
-	p.ThumbSwitch(right, y, 1, levelRangeSwitchLabels)
+	p.LevelRangeThumbSwitch(right, y, 1)
 
 	y += dy
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "CURVE")
-	p.ThumbSwitch(right, y, 1, shapeSwitchLabels)
+	p.ShapeThumbSwitch(right, y, 1)
 
 	y += dy
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "DURATION")
-	p.ThumbSwitch(right, y, 2, durationRangeSwitchLabels)
+	p.DurationRangeThumbSwitch(right, y, 2)
 
 	y = 82
 	dy = 15

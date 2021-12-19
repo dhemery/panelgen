@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func GroupOf(content ...Element) Group {
+func GroupOf(content ...Bounded) Group {
 	b := Bounds(content...)
 	return Group{
 		Content: content,
@@ -20,7 +20,7 @@ type Group struct {
 	XMLName                  xml.Name `xml:"g"`
 	Id                       string   `xml:"id,attr,omitempty"`
 	Translation              string   `xml:"transform,attr,omitempty"`
-	Content                  []Element
+	Content                  []Bounded
 	top, right, bottom, left float64
 }
 

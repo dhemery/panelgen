@@ -11,10 +11,10 @@ type Svg struct {
 	ViewBox   string `xml:"viewBox,attr,omitempty"`
 	Height    string `xml:"height,attr,omitempty"`
 	Width     string `xml:"width,attr,omitempty"`
-	Content   []Element
+	Content   []Bounded
 }
 
-func NewSvg(content ...Element) Svg {
+func NewSvg(content ...Bounded) Svg {
 	b := Bounds(content...)
 	s := Svg{
 		Version:   "1.1",
