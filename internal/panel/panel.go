@@ -87,6 +87,14 @@ func (p *Panel) VLine(x, y1, y2 float64) {
 	p.Line(x, y1, x, y2)
 }
 
+func (p *Panel) Button(x, y float64, name string) {
+	button := control.Button(p.Bg, p.Fg)
+	label := labelAbove(name, button, svg.SmallFont, p.Fg)
+
+	p.Install(x, y, button)
+	p.Engrave(x, y, label)
+}
+
 func (p *Panel) InPort(x, y float64, name string) {
 	port := control.Port(p.Fg, p.Bg)
 	label := labelAbove(name, port, svg.SmallFont, p.Fg)
@@ -140,7 +148,13 @@ func (p *Panel) LargeKnob(x, y float64, name string) {
 	p.Engrave(x, y, labelAbove(name, knob, svg.LargeFont, p.Fg))
 }
 
-func (p *Panel) ThumbSwitch(x, y float64, selection int, labels []string) {
+func (p *Panel) Attenuverter(x, y float64) {
+	knob := control.TinyKnob(p.Fg, p.Bg)
+	p.Install(x, y, knob)
+	p.Engrave(x, y, labelAbove("- +", knob, svg.LargeFont, p.Fg))
+}
+
+func (p *Panel) ThumbSwitch(x, y float64, selection int, labels ...string) {
 	size := len(labels)
 	thumbSwitch := control.ThumbSwitch(size, selection, p.Fg, p.Bg)
 	p.Install(x, y, thumbSwitch)
@@ -151,14 +165,22 @@ func (p *Panel) ThumbSwitch(x, y float64, selection int, labels []string) {
 	}
 }
 
-func (p *Panel) DurationRangeThumbSwitch(x, y float64, selection int) {
-	p.ThumbSwitch(x, y, selection, []string{"1", "10", "100"})
+func (p *Panel) DurationRangeSwitch(x, y float64, selection int) {
+	p.ThumbSwitch(x, y, selection, "1", "10", "100")
 }
-func (p *Panel) LevelRangeThumbSwitch(x, y float64, selection int) {
-	p.ThumbSwitch(x, y, selection, []string{"BI", "UNI"})
+func (p *Panel) LevelRangeSwitch(x, y float64, selection int) {
+	p.ThumbSwitch(x, y, selection, "BI", "UNI")
 }
-func (p *Panel) ShapeThumbSwitch(x, y float64, selection int) {
-	p.ThumbSwitch(x, y, selection, []string{"J", "S"})
+func (p *Panel) ShapeSwitch(x, y float64, selection int) {
+	p.ThumbSwitch(x, y, selection, "J", "S")
+}
+
+func (p *Panel) Stepper(x, y float64, name string, width float64, selection int, labels ...string) {
+	stepper := control.Stepper("ratio-mode", p.Fg, p.Bg, width, selection, labels)
+	label := labelAbove(name, stepper, svg.SmallFont, p.Fg)
+
+	p.Install(x, y, stepper)
+	p.Engrave(x, y, label)
 }
 
 // Install installs the control at the specified position.

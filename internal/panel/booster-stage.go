@@ -30,19 +30,19 @@ func BoosterStage() *Panel {
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "LEVEL")
-	p.LevelRangeThumbSwitch(right, y, 1)
+	p.LevelRangeSwitch(right, y, 1)
 
 	y += dy
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "CURVE")
-	p.ShapeThumbSwitch(right, y, 1)
+	p.ShapeSwitch(right, y, 1)
 
 	y += dy
 	p.HLine(left, right, y)
 	p.CvPort(left, y)
 	p.LargeKnob(center, y, "DURATION")
-	p.DurationRangeThumbSwitch(right, y, 2)
+	p.DurationRangeSwitch(right, y, 2)
 
 	y = 82
 	dy = 15

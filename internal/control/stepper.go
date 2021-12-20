@@ -6,7 +6,7 @@ import (
 	"dhemery.com/panelgen/internal/svg"
 )
 
-func Stepper(stepperSlug string, stroke, fill svg.Color, width float64, selection int, stateLabels ...string) Control {
+func Stepper(stepperSlug string, stroke, fill svg.Color, width float64, selection int, stateLabels []string) Control {
 	const (
 		padding     = 1
 		strokeWidth = 0.25
