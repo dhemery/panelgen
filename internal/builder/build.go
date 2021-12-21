@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"dhemery.com/panelgen/internal/panel"
@@ -59,7 +60,8 @@ func List() {
 	for path := range pathSet {
 		paths = append(paths, path)
 	}
-	fmt.Println(strings.Join(paths, " "))
+	sort.Sort(sort.StringSlice(paths))
+	fmt.Println(strings.Join(paths, "\n"))
 }
 
 var builtPanels map[string]*panel.Panel
