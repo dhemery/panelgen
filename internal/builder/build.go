@@ -1,48 +1,75 @@
 package builder
 
 import (
+	"bytes"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"dhemery.com/panelgen/internal/panel"
+	"dhemery.com/panelgen/internal/svg"
 )
 
-func List() {
-	slugs := strings.Join(allSlugs(), " ")
-	fmt.Println(slugs)
-}
+func Generate() error {
+	contents := map[string][]byte{}
 
-func BuildAll() error {
-	return Build(allSlugs())
-}
-
-func Build(slugs []string) error {
-	builders := panel.Builders()
-	for _, slug := range slugs {
-		build, ok := builders[slug]
-		if !ok {
-			return errors.New("No such module: " + slug)
+	for moduleSlug, p := range buildPanels() {
+		imagePath := filepath.Join(imageDir, moduleSlug+".svg")
+		imageBytes, err := encode(p.ImageSvg())
+		if err != nil {
+			return err
 		}
-		fmt.Println("Building", slug)
-		if err := export(slug, build()); err != nil {
+		contents[imagePath] = imageBytes
+		for frameSlug, frameSvg := range p.FrameSvgs() {
+			framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
+			frameBytes, err := encode(frameSvg)
+			if err != nil {
+				return err
+			}
+			contents[framePath] = frameBytes
+		}
+	}
+
+	for path, content := range contents {
+		if !outdated(path, content) {
+			fmt.Println("up to date:", path)
+			continue
+		}
+		fmt.Println("outdated :", path)
+		if err := write(path, content); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func allSlugs() []string {
-	slugs := []string{}
-	for slug := range panel.Builders() {
-		slugs = append(slugs, slug)
+func List() {
+	paths := []string{}
+	for moduleSlug, modulePanel := range buildPanels() {
+		imagePath := filepath.Join(imageDir, moduleSlug+".svg")
+		paths = append(paths, imagePath)
+		for _, c := range modulePanel.Controls {
+			for frameSlug := range c.Frames {
+				framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
+				paths = append(paths, framePath)
+			}
+		}
 	}
-	sort.StringSlice(slugs).Sort()
-	return slugs
+	fmt.Println(strings.Join(paths, " "))
+}
+
+var builtPanels map[string]*panel.Panel
+
+func buildPanels() map[string]*panel.Panel {
+	if builtPanels == nil {
+		builtPanels = map[string]*panel.Panel{}
+		for slug, buildPanel := range panel.Builders() {
+			builtPanels[slug] = buildPanel()
+		}
+	}
+	return builtPanels
 }
 
 const (
@@ -54,22 +81,17 @@ var (
 	imageDir = filepath.Join(buildDir, "images")
 )
 
-func export(moduleSlug string, p *panel.Panel) error {
-	imagePath := filepath.Join(imageDir, moduleSlug+".svg")
-	if err := write(imagePath, p.ImageSvg()); err != nil {
-		return err
-	}
+func encode(s svg.Svg) ([]byte, error) {
+	b := &bytes.Buffer{}
+	b.Write([]byte(xml.Header))
+	e := xml.NewEncoder(b)
+	e.Indent("", "    ")
+	err := e.Encode(s)
+	return b.Bytes(), err
 
-	for frameSlug, frameSvg := range p.FrameSvgs() {
-		framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
-		if err := write(framePath, frameSvg); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
-func write(path string, data interface{}) error {
+func write(path string, content []byte) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return err
 	}
@@ -77,9 +99,14 @@ func write(path string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer func() { _ = w.Close }()
-	w.Write([]byte(xml.Header))
-	e := xml.NewEncoder(w)
-	e.Indent("", "    ")
-	return e.Encode(data)
+	_, err = w.Write(content)
+	return err
+}
+
+func outdated(path string, content []byte) bool {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return true
+	}
+	return bytes.Compare(b, content) != 0
 }

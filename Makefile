@@ -1,50 +1,43 @@
-.DEFAULT_GOAL := images
-
-MODULE_SLUGS=$(shell go run .)
+.DEFAULT_GOAL := build
 
 BUILD_DIR=$(abspath _build)
 IMAGE_BUILD_DIR=$(BUILD_DIR)/images
 FRAME_BUILD_DIR=$(BUILD_DIR)/frames
 
-IMAGES=$(patsubst %, $(IMAGE_BUILD_DIR)/%.svg, $(MODULE_SLUGS))
-
-FRAMES=$(patsubst %, $(FRAME_BUILD_DIR)/%/port.svg, $(MODULE_SLUGS))
+BUILD_FILES=$(abspath $(shell go run . -l))
+IMAGE_BUILD_FILES=$(filter $(IMAGE_BUILD_DIR)/%, $(BUILD_FILES))
+FRAME_BUILD_FILES=$(filter $(FRAME_BUILD_DIR)/%, $(BUILD_FILES))
 
 INSTALL_DIR=$(abspath _install)
 IMAGE_INSTALL_DIR=$(INSTALL_DIR)/images
 ASSET_INSTALL_DIR=$(INSTALL_DIR)/svg
 
-INSTALLED_IMAGES=$(patsubst %, $(IMAGE_INSTALL_DIR)/%.svg, $(MODULE_SLUGS))
-INSTALLED_FRAMES=$(patsubst $(FRAME_BUILD_DIR)/%, $(ASSET_INSTALL_DIR)/%, $(FRAMES))
-INSTALLED_FACEPLATES=$(patsubst %, $(ASSET_INSTALL_DIR)/%.svg, $(MODULE_SLUGS))
+IMAGE_INSTALL_FILES=$(subst $(IMAGE_BUILD_DIR), $(IMAGE_INSTALL_DIR), $(IMAGE_BUILD_FILES))
+FRAME_INSTALL_FILES=$(subst $(FRAME_BUILD_DIR), $(ASSET_INSTALL_DIR), $(FRAME_BUILD_FILES))
+FRAME_INSTALL_DIRS=$(sort $(dir $(FRAME_INSTALL_FILES)))
+FACEPLATE_INSTALL_FILES=$(subst $(IMAGE_BUILD_DIR), $(ASSET_INSTALL_DIR), $(IMAGE_BUILD_FILES))
 
-PANEL_SOURCE_DIR=internal/panel
+$(ASSET_INSTALL_DIR) $(IMAGE_INSTALL_DIR) $(FRAME_INSTALL_DIRS):
+	mkdir -p $@
 
-$(IMAGE_BUILD_DIR)/%.svg: $(PANEL_SOURCE_DIR)/%.go
-	go run . $(patsubst $(PANEL_SOURCE_DIR)/%.go, %, $^)
-
-images: $(IMAGES)
-
-$(IMAGE_BUILD_DIR) $(ASSET_INSTALL_DIR):
-	mkdir -p $(dir $@)
-
-$(INSTALLED_IMAGES): $(IMAGE_BUILD_DIR)
+$(IMAGE_INSTALL_DIR)/%:  $(dir $(IMAGE_INSTALL_DIR)/%)
 
 $(IMAGE_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
-	mkdir -p $(dir $@)
-	./scripts/install-svg.sh $(patsubst $(IMAGE_INSTALL_DIR)%, $(IMAGE_BUILD_DIR)/%, $@) $@
-
-$(ASSET_INSTALL_DIR)/%.svg: $(IMAGE_BUILD_DIR)/%.svg
-	mkdir -p $(dir $@)
-	./scripts/install-faceplate.sh $(patsubst $(ASSET_INSTALL_DIR)/%.svg, $(IMAGE_BUILD_DIR)/%.svg, $@) $@
+	./scripts/install-svg.sh $< $@
 
 $(ASSET_INSTALL_DIR)/%: $(FRAME_BUILD_DIR)/%
-	mkdir -p $(dir $@)
-	./scripts/install-frames.sh $(dir $<) $(ASSET_INSTALL_DIR)
+	./scripts/install-svg.sh $< $@
 
-$(INSTALLED_FACEPLATES):
+$(FACEPLATE_INSTALL_FILES): $(ASSET_INSTALL_DIR)
 
-install: images $(INSTALLED_IMAGES) $(INSTALLED_FRAMES) $(INSTALLED_FACEPLATES)
+$(ASSET_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
+	./scripts/install-faceplate.sh $< $@
+
+.PHONY: build
+build:
+	go run . -g
+
+install: $(IMAGE_INSTALL_FILES) $(FRAME_INSTALL_FILES) $(FACEPLATE_INSTALL_FILES)
 
 clean:
 	rm -rf $(BUILD_DIR)

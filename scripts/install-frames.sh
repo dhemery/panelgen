@@ -12,7 +12,6 @@ to_dir="${2}"
 
 for file in ${from_dir}/*
 do
-    mkdir -p ${to_dir}
     frame_name="$(basename ${file})"
     module_slug="$(basename $(dirname ${file}))"
     to_file="${to_dir}/${module_slug}/${frame_name}"

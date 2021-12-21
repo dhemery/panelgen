@@ -7,14 +7,16 @@ import (
 )
 
 func Execute() error {
-	allFlag := flag.Bool("all", false, "build all modules")
+	generateFlag := flag.Bool("g", false, "generate outdated files")
+	listFlag := flag.Bool("l", false, "list generated files")
 	flag.Parse()
-	if *allFlag {
-		return builder.BuildAll()
+	if *generateFlag {
+		if err := builder.Generate(); err != nil {
+			return err
+		}
 	}
-	if flag.NArg() > 0 {
-		return builder.Build(flag.Args())
+	if *listFlag {
+		builder.List()
 	}
-	builder.List()
 	return nil
 }

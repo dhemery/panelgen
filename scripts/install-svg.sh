@@ -16,8 +16,6 @@ declare -a convert_texts_to_paths=(
     '--export-plain-svg'
 )
 
-mkdir -p "$(dirname ${to})"
-
 if grep --silent '<text' "${from}"; then
     inkscape "${convert_texts_to_paths[@]}" "${@}" "${from}" \
     | sed -E 's/ id="[^"]*"//g' \
