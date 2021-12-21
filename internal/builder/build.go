@@ -34,10 +34,8 @@ func Generate() error {
 
 	for path, content := range contents {
 		if !outdated(path, content) {
-			fmt.Println("up to date:", path)
 			continue
 		}
-		fmt.Println("outdated :", path)
 		if err := write(path, content); err != nil {
 			return err
 		}
@@ -46,16 +44,20 @@ func Generate() error {
 }
 
 func List() {
-	paths := []string{}
+	pathSet := make(map[string]bool)
 	for moduleSlug, modulePanel := range buildPanels() {
 		imagePath := filepath.Join(imageDir, moduleSlug+".svg")
-		paths = append(paths, imagePath)
+		pathSet[imagePath] = true
 		for _, c := range modulePanel.Controls {
 			for frameSlug := range c.Frames {
 				framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
-				paths = append(paths, framePath)
+				pathSet[framePath] = true
 			}
 		}
+	}
+	paths := []string{}
+	for path := range pathSet {
+		paths = append(paths, path)
 	}
 	fmt.Println(strings.Join(paths, " "))
 }
