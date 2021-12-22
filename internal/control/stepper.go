@@ -18,10 +18,11 @@ func Stepper(stepperSlug string, stroke, fill svg.Color, font svg.Font, width fl
 	for i, stateLabel := range stateLabels {
 		frameSlug := fmt.Sprintf("%s-%d", stepperSlug, i+1)
 		label := svg.TextCentered(stateLabel, font, stroke)
+		height := label.Height() + 2.0*padding
 		box := svg.Rect{
-			X:           -width / 2,
-			Y:           -label.Height() / 2,
-			H:           label.Height(),
+			X:           -width / 2.0,
+			Y:           -height / 2.0,
+			H:           height,
 			W:           width,
 			StrokeWidth: strokeWidth,
 			Stroke:      stroke,
