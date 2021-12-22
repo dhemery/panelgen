@@ -16,7 +16,7 @@ func (hp Hp) toMM() float64 {
 }
 
 type Panel struct {
-	FrameDir        string
+	FrameDir   string
 	Engravings []svg.Bounded
 	Frames     []svg.Bounded
 	Controls   []control.Control
@@ -39,10 +39,10 @@ func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
 	)
 
 	p := &Panel{
-		FrameDir:   dir,
-		Fg:    fg,
-		Bg:    bg,
-		Width: hp.toMM(),
+		FrameDir: dir,
+		Fg:       fg,
+		Bg:       bg,
+		Width:    hp.toMM(),
 	}
 
 	faceplateRect := svg.Rect{
