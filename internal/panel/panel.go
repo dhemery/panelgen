@@ -195,11 +195,14 @@ func (p *Panel) Light(x, y float64) {
 	})
 }
 
-// Install installs the control at the specified position.
-// The panel image will show the control's selected frame at that position.
-// The module's svg directory will include an svg file for each frame of the control.
-func (p *Panel) Install(x, y float64, c control.Control) {
+// Add adds the control to the panel's list of controls.
+func (p *Panel) Add(c control.Control) {
 	p.Controls = append(p.Controls, c)
+}
+
+// Install adds the control and draws its default frame at the specified position.
+func (p *Panel) Install(x, y float64, c control.Control) {
+	p.Add(c)
 	p.Frames = append(p.Frames, c.DefaultFrame.Translate(x, y))
 }
 
