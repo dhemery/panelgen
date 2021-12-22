@@ -11,13 +11,12 @@ func init() {
 }
 
 const (
-	funcHue        = 220.0
-	funcTop        = 23.0
-	funcBottom     = 108.0
-	funcPortOffset = 1.25
-	funcRowCount   = 6
-	funcDy         = (funcBottom - funcTop) / float64(funcRowCount-1)
-	funcDir        = "func"
+	funcHue      = 220.0
+	funcTop      = 23.0
+	funcBottom   = 108.0
+	funcRowCount = 6
+	funcDy       = (funcBottom - funcTop) / float64(funcRowCount-1)
+	funcDir      = "func"
 )
 
 var (
@@ -38,7 +37,7 @@ func Func() *Panel {
 
 	x := p.Width / 2.0
 	y := funcTop
-	p.InPort(x, y+funcPortOffset, "IN")
+	p.InPort(x, y+boxedPortYOffset, "IN")
 	y += funcDy
 	p.ThumbSwitch(x, y, 1, "ADD", "MULT")
 	y += funcDy
@@ -46,8 +45,8 @@ func Func() *Panel {
 	y += funcDy
 	p.Install(x, y, funcOffsetRangeStepper)
 	p.Add(funcMultiplierRangeStepper)
-	y += 2. * funcDy
-	p.OutPort(x, y+funcPortOffset, "OUT")
+	y += 2.0 * funcDy
+	p.OutPort(x, y+boxedPortYOffset, "OUT")
 
 	return p
 }
@@ -68,12 +67,12 @@ func Func6() *Panel {
 	for channel := 0; channel < funcRowCount; channel++ {
 		y := funcTop + float64(channel)*funcDy
 		p.HLine(left, right, y)
-		p.InPort(left, y+funcPortOffset, "IN")
+		p.InPort(left, y+boxedPortYOffset, "IN")
 		p.ThumbSwitch(leftCenter, y, 1, "ADD", "MULT")
 		p.Install(center, y, funcKnob)
 		p.Install(rightCenter, y, funcOffsetRangeStepper)
 		p.Add(funcMultiplierRangeStepper)
-		p.OutPort(right, y+funcPortOffset, "OUT")
+		p.OutPort(right, y+boxedPortYOffset, "OUT")
 	}
 
 	return p

@@ -6,10 +6,10 @@ import (
 )
 
 func init() {
-	registerBuilder("buttons", Buttons)
+	registerBuilder("buttons", buttons)
 }
 
-func Buttons() *Panel {
+func buttons() *Panel {
 	const (
 		hue = 60
 		hp  = 5

@@ -8,19 +8,18 @@ import (
 )
 
 func init() {
-	for _, size := range []int{4, 8, 16} {
-		slug := fmt.Sprintf("curve-sequencer-%d", size)
-		registerBuilder(slug, buildCurveSequencer(size))
+	for _, cs := range []curveSequencer{4, 8, 16} {
+		registerBuilder(cs.slug(), cs.build)
 	}
 }
 
-func buildCurveSequencer(size int) buildFunc {
-	return func() *Panel {
-		return CurveSequencer(size)
-	}
+type curveSequencer int
+
+func (cs curveSequencer) slug() string {
+	return fmt.Sprintf("curve-sequencer-%d", cs)
 }
 
-func CurveSequencer(steps int) *Panel {
+func (cs curveSequencer) build() *Panel {
 	const (
 		hue      = 30
 		stepDxHp = 2.25
@@ -30,13 +29,14 @@ func CurveSequencer(steps int) *Panel {
 	)
 
 	var (
+		steps = int(cs)
 		hp    = 13 + Hp(float64(steps)*stepDxHp)
 		fg    = svg.HslColor(hue, 10, .1)
 		bg    = svg.HslColor(hue, .1, .93)
 		right = float64(hp-2) * mmPerHp
 	)
 
-	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", steps), hp, fg, bg, "curve-sequencer")
+	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", cs), hp, fg, bg, "curve-sequencer")
 
 	const (
 		sequenceControlsTop    = top + 2.75*mmPerHp

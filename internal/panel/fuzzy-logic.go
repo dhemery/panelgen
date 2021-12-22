@@ -5,17 +5,15 @@ import (
 )
 
 func init() {
-	registerBuilder("fuzzy-logic-h", buildFuzzyLogic("FUZZY LOGIC H"))
-	registerBuilder("fuzzy-logic-z", buildFuzzyLogic("FUZZY LOGIC Z"))
+	h := fuzzyLogic("FUZZY LOGIC H")
+	z := fuzzyLogic("FUZZY LOGIC Z")
+	registerBuilder("fuzzy-logic-h", h.build)
+	registerBuilder("fuzzy-logic-z", z.build)
 }
 
-func buildFuzzyLogic(name string) buildFunc {
-	return func() *Panel {
-		return fuzzyLogic(name)
-	}
-}
+type fuzzyLogic string
 
-func fuzzyLogic(name string) *Panel {
+func (fl fuzzyLogic) build() *Panel {
 	const (
 		hue = 220.0
 		hp  = Hp(9)
@@ -24,7 +22,7 @@ func fuzzyLogic(name string) *Panel {
 		fg = svg.HslColor(hue, 1, .3)
 		bg = svg.HslColor(hue, 1, .97)
 	)
-	p := NewPanel(name, hp, fg, bg, "fuzzy-logic")
+	p := NewPanel(string(fl), hp, fg, bg, "fuzzy-logic")
 
 	const (
 		top               = 4.0 * mmPerHp

@@ -7,10 +7,10 @@ import (
 )
 
 func init() {
-	registerBuilder("cubic", Cubic)
+	registerBuilder("cubic", cubic)
 }
 
-func Cubic() *Panel {
+func cubic() *Panel {
 	const (
 		hue = 180
 		hp  = 5

@@ -28,6 +28,7 @@ const (
 	padding            = 1.0
 	strokeWidth        = 0.35
 	buttonPortDistance = control.PortRadius + control.ButtonRadius + padding
+	boxedPortYOffset    = 1.25
 )
 
 func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
