@@ -1,0 +1,125 @@
+package panel
+
+import (
+	"fmt"
+
+	"dhemery.com/panelgen/internal/control"
+	"dhemery.com/panelgen/internal/svg"
+)
+
+func init() {
+	for _, size := range []int{4, 8, 16} {
+		slug := fmt.Sprintf("curve-sequencer-%d", size)
+		registerBuilder(slug, buildCurveSequencer(size))
+	}
+}
+
+func buildCurveSequencer(size int) buildFunc {
+	return func() *Panel {
+		return CurveSequencer(size)
+	}
+}
+
+func CurveSequencer(steps int) *Panel {
+	const (
+		hue      = 30
+		stepDxHp = 2.25
+		left     = 2.0 * mmPerHp
+		top      = 4.0 * mmPerHp
+		bottom   = 23.0 * mmPerHp
+	)
+
+	var (
+		hp        = 13 + Hp(float64(steps)*stepDxHp)
+		fg        = svg.HslColor(hue, 10, .1)
+		bg        = svg.HslColor(hue, .1, .93)
+		smallKnob = control.SmallKnob(fg, bg)
+		port      = control.Port(fg, bg)
+		button    = control.Button(bg, fg)
+		right     = float64(hp-2) * mmPerHp
+	)
+
+	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", steps), hp, fg, bg)
+
+	const (
+		sequenceControlsTop    = top + 2.75*mmPerHp
+		sequenceControlsBottom = bottom - control.PortDiameter - 1.0
+		sequenceControlsDy     = (sequenceControlsBottom - sequenceControlsTop) / 4.0
+		runY                   = sequenceControlsTop + 0.0*sequenceControlsDy
+		loopY                  = sequenceControlsTop + 1.0*sequenceControlsDy
+		selectionY             = sequenceControlsTop + 2.0*sequenceControlsDy
+		gateY                  = sequenceControlsTop + 3.0*sequenceControlsDy
+		resetY                 = sequenceControlsTop + 4.0*sequenceControlsDy
+		selectionStartX        = left - 0.2*mmPerHp
+		selectionLengthX       = left + 1.63*mmPerHp
+	)
+	p.InButtonPort(left, runY, "RUN")
+	p.InButtonPort(left, gateY, "GATE")
+	p.SmallKnob(selectionStartX, selectionY, "START")
+	p.SmallKnob(selectionLengthX, selectionY, "LEN")
+	p.HLine(selectionStartX, selectionLengthX, selectionY)
+	p.InButtonPort(left, loopY, "LOOP")
+	p.InButtonPort(left, resetY, "RESET")
+
+	const (
+		stepDx              = stepDxHp * mmPerHp
+		stepBlockLeft       = 10.0*mmPerHp - stepDx/2.0
+		stepBlockLabelX     = stepBlockLeft - 0.1*stepDx
+		stepLabelY          = top - 0.5*mmPerHp
+		activeY             = top + control.LightRadius
+		channelSeparatorTop = top + 1.25*mmPerHp
+		generateModeY       = top + 1.61*mmPerHp
+		advanceModeY        = top + 3.25*mmPerHp
+		levelY              = top + 5.75*mmPerHp
+		shapeY              = top + 8.75*mmPerHp
+		curveY              = top + 11.0*mmPerHp
+		durationY           = top + 14.0*mmPerHp
+		enabledPortY        = bottom - control.PortRadius
+		enabledButtonY      = enabledPortY - control.PortRadius - control.ButtonRadius - 1.0
+	)
+	var (
+		advanceModes        = []string{"TIME", "RISE", "FALL", "EDGE", "HIGH", "LOW"}
+		advanceModeStepper  = control.Stepper("advance-mode", fg, bg, svg.SmallFont, 9.0, 1, advanceModes)
+		generateModes       = []string{"CURVE", "HOLD", "SUST", "INPUT", "CHASE", "LEVEL"}
+		generateModeStepper = control.Stepper("generate-mode", fg, bg, svg.SmallFont, 9.0, 1, generateModes)
+	)
+	p.Engrave(stepBlockLabelX, generateModeY, svg.TextLeft("GENERATE", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, advanceModeY, svg.TextLeft("ADVANCE", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, levelY, svg.TextLeft("LEVEL", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, shapeY, svg.TextLeft("SHAPE", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, curveY, svg.TextLeft("CURVE", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, durationY, svg.TextLeft("DURATION", svg.LargeFont, fg))
+	p.Engrave(stepBlockLabelX, (enabledButtonY+enabledPortY)/2.0, svg.TextLeft("ENABLED", svg.LargeFont, fg))
+
+	for step := 0; step < steps; step++ {
+		channelSeparatorX := stepBlockLeft + float64(step)*stepDx
+		p.VLine(channelSeparatorX, channelSeparatorTop, bottom)
+		x := channelSeparatorX + stepDx/2.0
+		p.Light(x, activeY)
+		p.Engrave(x, stepLabelY, svg.TextAbove(fmt.Sprint(step+1), svg.LargeFont, fg))
+		p.Install(x, generateModeY, generateModeStepper)
+		p.Install(x, advanceModeY, advanceModeStepper)
+		p.ShapeSwitch(x, shapeY, 1)
+		p.Install(x, curveY, smallKnob)
+		p.Install(x, levelY, smallKnob)
+		p.Install(x, durationY, smallKnob)
+		p.Install(x, enabledButtonY, button)
+		p.Install(x, enabledPortY, port)
+		p.VLine(x, enabledButtonY, enabledPortY)
+	}
+	stepBlockRight := stepBlockLeft + float64(steps)*stepDx
+	p.VLine(stepBlockRight, channelSeparatorTop, bottom)
+
+	const (
+		outY = bottom - control.PortRadius - 1.0
+		inY  = top + 2.75*mmPerHp
+	)
+	p.HLine(stepBlockRight, right, levelY)
+	p.HLine(stepBlockRight, right, durationY)
+	p.InPort(right, inY, "IN")
+	p.LevelRangeSwitch(right, levelY, 2)
+	p.DurationRangeSwitch(right, durationY, 2)
+	p.OutPort(right, outY, "OUT")
+
+	return p
+}

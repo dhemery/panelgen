@@ -39,6 +39,6 @@ func Port(fg, bg svg.Color) Control {
 }
 
 const (
-	portDiameter = 8.4
-	PortRadius   = portDiameter / 2
+	PortDiameter = 8.4
+	PortRadius   = PortDiameter / 2
 )

@@ -5,10 +5,13 @@ import (
 	"dhemery.com/panelgen/internal/svg"
 )
 
+const (
+	mmPerHp = 5.08
+)
+
 type Hp int
 
 func (hp Hp) toMM() float64 {
-	const mmPerHp = 5.08
 	return float64(hp) * mmPerHp
 }
 
@@ -176,11 +179,20 @@ func (p *Panel) ShapeSwitch(x, y float64, selection int) {
 }
 
 func (p *Panel) Stepper(x, y float64, name string, width float64, selection int, labels ...string) {
-	stepper := control.Stepper("ratio-mode", p.Fg, p.Bg, width, selection, labels)
+	stepper := control.Stepper("ratio-mode", p.Fg, p.Bg, svg.SmallFont, width, selection, labels)
 	label := labelAbove(name, stepper, svg.SmallFont, p.Fg)
 
 	p.Install(x, y, stepper)
 	p.Engrave(x, y, label)
+}
+
+func (p *Panel) Light(x, y float64) {
+	p.Engrave(x, y, svg.Circle{
+		R:           control.LightRadius,
+		Fill:        p.Fg,
+		Stroke:      svg.NoColor,
+		StrokeWidth: 0,
+	})
 }
 
 // Install installs the control at the specified position.

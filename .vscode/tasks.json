@@ -7,9 +7,6 @@
       "label": "images",
       "type": "shell",
       "command": "make",
-      "args": [
-        "images"
-      ],
       "problemMatcher": [
         "$go",
       ],

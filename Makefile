@@ -2,7 +2,7 @@ BUILD_DIR := _build
 FRAME_BUILD_DIR := $(BUILD_DIR)/frames
 IMAGE_BUILD_DIR := $(BUILD_DIR)/images
 
-BUILD_FILES := $(sort $(shell go run . -l))
+BUILD_FILES := $(sort $(shell go run . -g -l))
 FRAME_BUILD_FILES := $(filter $(FRAME_BUILD_DIR)/%, $(BUILD_FILES))
 IMAGE_BUILD_FILES := $(filter $(IMAGE_BUILD_DIR)/%, $(BUILD_FILES))
 
@@ -14,11 +14,12 @@ FACEPLATE_INSTALL_FILES := $(subst $(IMAGE_BUILD_DIR), $(ASSET_INSTALL_DIR), $(I
 FRAME_INSTALL_FILES := $(subst $(FRAME_BUILD_DIR), $(ASSET_INSTALL_DIR), $(FRAME_BUILD_FILES))
 IMAGE_INSTALL_FILES := $(subst $(IMAGE_BUILD_DIR), $(IMAGE_INSTALL_DIR), $(IMAGE_BUILD_FILES))
 
-build: $(BUILD_FILES)
+build:
+	go run . -g
+
 .PHONY: build
 
-$(BUILD_FILES) &:
-	go run . -g
+$(BUILD_FILES) &: build
 
 install: $(FACEPLATE_INSTALL_FILES) $(FRAME_INSTALL_FILES) $(IMAGE_INSTALL_FILES) 
 .PHONY: install

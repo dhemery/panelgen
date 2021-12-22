@@ -19,12 +19,16 @@ func TextAbove(content string, font Font, color Color) text {
 	return newText(content, alignTextAbove, font, color)
 }
 
-func TextRight(content string, font Font, color Color) text {
-	return newText(content, alignTextRight, font, color)
-}
-
 func TextBelow(content string, font Font, color Color) text {
 	return newText(content, alignTextBelow, font, color)
+}
+
+func TextLeft(content string, font Font, color Color) text {
+	return newText(content, alignTextLeft, font, color)
+}
+
+func TextRight(content string, font Font, color Color) text {
+	return newText(content, alignTextRight, font, color)
 }
 
 func TextCentered(content string, font Font, color Color) text {
