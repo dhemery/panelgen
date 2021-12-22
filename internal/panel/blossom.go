@@ -17,7 +17,7 @@ func Blossom() *Panel {
 		bg = svg.HslColor(hue, 0.66, 0.97)
 	)
 
-	p := NewPanel("BLOSSOM", hp, fg, bg)
+	p := NewPanel("BLOSSOM", hp, fg, bg, "blossom")
 
 	left := p.Width / 7.0
 	right := p.Width - left

@@ -23,7 +23,7 @@ func Buttons() *Panel {
 		port        = control.Port(fg, bg)
 	)
 
-	p := NewPanel("BUTTONS", hp, fg, bg)
+	p := NewPanel("BUTTONS", hp, fg, bg, "buttons")
 
 	top := 21.0
 	dy := 12.7

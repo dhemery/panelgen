@@ -16,6 +16,7 @@ func (hp Hp) toMM() float64 {
 }
 
 type Panel struct {
+	FrameDir        string
 	Engravings []svg.Bounded
 	Frames     []svg.Bounded
 	Controls   []control.Control
@@ -29,7 +30,7 @@ const (
 	buttonPortDistance = control.PortRadius + control.ButtonRadius + padding
 )
 
-func NewPanel(name string, hp Hp, fg, bg svg.Color) *Panel {
+func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
 	const (
 		nameLabelY       = 9.0
 		outlineThickness = 0.5
@@ -38,6 +39,7 @@ func NewPanel(name string, hp Hp, fg, bg svg.Color) *Panel {
 	)
 
 	p := &Panel{
+		FrameDir:   dir,
 		Fg:    fg,
 		Bg:    bg,
 		Width: hp.toMM(),

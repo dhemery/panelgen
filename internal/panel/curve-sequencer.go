@@ -36,7 +36,7 @@ func CurveSequencer(steps int) *Panel {
 		right = float64(hp-2) * mmPerHp
 	)
 
-	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", steps), hp, fg, bg)
+	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", steps), hp, fg, bg, "curve-sequencer")
 
 	const (
 		sequenceControlsTop    = top + 2.75*mmPerHp

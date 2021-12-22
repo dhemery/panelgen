@@ -19,7 +19,7 @@ func BoosterStage() *Panel {
 		fg = svg.HslColor(hue, 1.0, .3)
 	)
 
-	p := NewPanel("BOOSTER STAGE", hp, fg, bg)
+	p := NewPanel("BOOSTER STAGE", hp, fg, bg, "booster-stage")
 	left := p.Width/6.0 + 1.0/3.0
 	right := p.Width - left
 	center := p.Width / 2.0

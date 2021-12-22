@@ -17,6 +17,7 @@ const (
 	funcPortOffset = 1.25
 	funcRowCount   = 6
 	funcDy         = (funcBottom - funcTop) / float64(funcRowCount-1)
+	funcDir        = "func"
 )
 
 var (
@@ -33,7 +34,7 @@ func Func() *Panel {
 	const (
 		hp = 3
 	)
-	p := NewPanel("FUNC", hp, funcFg, funcBg)
+	p := NewPanel("FUNC", hp, funcFg, funcBg, funcDir)
 
 	x := p.Width / 2.0
 	y := funcTop
@@ -55,7 +56,7 @@ func Func6() *Panel {
 	const (
 		hp Hp = 12
 	)
-	p := NewPanel("FUNC 6", hp, funcFg, funcBg)
+	p := NewPanel("FUNC 6", hp, funcFg, funcBg, funcDir)
 
 	var (
 		center      = p.Width / 2.0

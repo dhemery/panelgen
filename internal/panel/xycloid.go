@@ -17,7 +17,7 @@ func Xycloid() *Panel {
 		bg = svg.HslColor(hue, 0.66, 0.97)
 	)
 
-	p := NewPanel("XYCLOID", hp, fg, bg)
+	p := NewPanel("XYCLOID", hp, fg, bg, "xycloid")
 
 	left := p.Width / 7.0
 	right := p.Width - left

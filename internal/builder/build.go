@@ -24,7 +24,7 @@ func Generate() error {
 		}
 		contents[imagePath] = imageBytes
 		for frameSlug, frameSvg := range p.FrameSvgs() {
-			framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
+			framePath := filepath.Join(frameDir, p.FrameDir, frameSlug+".svg")
 			frameBytes, err := encode(frameSvg)
 			if err != nil {
 				return err
@@ -46,12 +46,12 @@ func Generate() error {
 
 func List() {
 	pathSet := make(map[string]bool)
-	for moduleSlug, modulePanel := range buildPanels() {
+	for moduleSlug, p := range buildPanels() {
 		imagePath := filepath.Join(imageDir, moduleSlug+".svg")
 		pathSet[imagePath] = true
-		for _, c := range modulePanel.Controls {
+		for _, c := range p.Controls {
 			for frameSlug := range c.Frames {
-				framePath := filepath.Join(frameDir, moduleSlug, frameSlug+".svg")
+				framePath := filepath.Join(frameDir, p.FrameDir, frameSlug+".svg")
 				pathSet[framePath] = true
 			}
 		}

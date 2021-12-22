@@ -26,7 +26,7 @@ func Cubic() *Panel {
 		fg = svg.HslColor(hue, 1, .3)
 	)
 
-	p := NewPanel("CUBIC", hp, fg, bg)
+	p := NewPanel("CUBIC", hp, fg, bg, "cubic")
 	left := p.Width/4 + 1.0/3.0
 	right := p.Width - left
 
