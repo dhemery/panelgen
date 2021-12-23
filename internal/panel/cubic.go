@@ -15,20 +15,20 @@ func cubic() *Panel {
 		hue = 180
 		hp  = 5
 	)
-
-	const (
-		top    = 20
-		deltaY = 15
-	)
-
 	var (
 		bg = svg.HslColor(hue, 1, .97)
 		fg = svg.HslColor(hue, 1, .3)
 	)
 
 	p := NewPanel("CUBIC", hp, fg, bg, "cubic")
-	left := p.Width/4 + 1.0/3.0
-	right := p.Width - left
+
+	const (
+		top    = 20.0
+		deltaY = 15.0
+		width  = mmPerHp * hp
+		left   = width/4.0 + 1.0/3.0
+		right  = width - left
+	)
 
 	for row := 0; row < 4; row++ {
 		y := top + deltaY*float64(row)

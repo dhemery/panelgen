@@ -9,12 +9,6 @@ const (
 	mmPerHp = 5.08
 )
 
-type Hp int
-
-func (hp Hp) toMM() float64 {
-	return float64(hp) * mmPerHp
-}
-
 type Panel struct {
 	FrameDir   string
 	Engravings []svg.Bounded
@@ -28,35 +22,36 @@ const (
 	padding            = 1.0
 	strokeWidth        = 0.35
 	buttonPortDistance = control.PortRadius + control.ButtonRadius + padding
-	boxedPortYOffset    = 1.25
+	boxedPortYOffset   = 1.25
+	outlineThickness   = 0.5
 )
 
-func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
+func NewPanel(name string, hp int, fg, bg svg.Color, dir string) *Panel {
 	const (
-		nameLabelY       = 9.0
-		outlineThickness = 0.5
-		panelHeight      = 128.5
-		brandLabelY      = panelHeight - nameLabelY
+		nameLabelY  = 9.0
+		panelHeight = 128.5
+		brandLabelY = panelHeight - nameLabelY
 	)
 
 	p := &Panel{
 		FrameDir: dir,
 		Fg:       fg,
 		Bg:       bg,
-		Width:    hp.toMM(),
+		Width:    float64(hp) * mmPerHp,
 	}
 
+	width := float64(hp) * mmPerHp
 	faceplateRect := svg.Rect{
 		X:           outlineThickness / 2,
 		Y:           outlineThickness / 2,
-		W:           p.Width - outlineThickness,
+		W:           width - outlineThickness,
 		H:           panelHeight - outlineThickness,
 		Fill:        bg,
 		Stroke:      fg,
 		StrokeWidth: outlineThickness,
 	}
 	p.Engrave(0, 0, faceplateRect)
-	center := p.Width / 2
+	center := width / 2
 
 	p.Engrave(center, nameLabelY, svg.TextAbove(name, svg.TitleFont, p.Fg))
 	p.Engrave(center, brandLabelY, svg.TextBelow("DHE", svg.TitleFont, p.Fg))
@@ -87,6 +82,12 @@ func (p *Panel) Line(x1, y1, x2, y2 float64) {
 
 func (p *Panel) HLine(x1, x2, y float64) {
 	p.Line(x1, y, x2, y)
+}
+
+func (p *Panel) HSeparator(y float64) {
+	left := outlineThickness / 2.0
+	right := p.Width - left
+	p.HLine(left, right, y)
 }
 
 func (p *Panel) VLine(x, y1, y2 float64) {
@@ -144,6 +145,12 @@ func (p *Panel) OutButtonPort(x, y float64, name string) {
 
 func (p *Panel) SmallKnob(x, y float64, name string) {
 	knob := control.SmallKnob(p.Fg, p.Bg)
+	p.Install(x, y, knob)
+	p.Engrave(x, y, labelAbove(name, knob, svg.SmallFont, p.Fg))
+}
+
+func (p *Panel) MediumKnob(x, y float64, name string) {
+	knob := control.MediumKnob(p.Fg, p.Bg)
 	p.Install(x, y, knob)
 	p.Engrave(x, y, labelAbove(name, knob, svg.SmallFont, p.Fg))
 }

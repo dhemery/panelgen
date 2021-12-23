@@ -12,7 +12,7 @@ func init() {
 func gator() *Panel {
 	const (
 		hue = 220.0
-		hp  = Hp(9)
+		hp  = 9
 	)
 	var (
 		fg = svg.HslColor(hue, 1, .3)
@@ -21,16 +21,17 @@ func gator() *Panel {
 	p := NewPanel("GATOR", hp, fg, bg, "gator")
 
 	const (
-		top        = 3.5 * mmPerHp
-		dy         = 1.75 * mmPerHp
-		left       = 1.5 * mmPerHp
-		leftCenter = 3.25 * mmPerHp
+		top         = 3.5 * mmPerHp
+		dy          = 1.75 * mmPerHp
+		left        = 1.5 * mmPerHp
+		leftCenter  = 3.25 * mmPerHp
+		width       = float64(hp) * mmPerHp
+		rightCenter = width - leftCenter
+		right       = width - left
 	)
 	var (
-		rightCenter = p.Width - leftCenter
-		right       = p.Width - left
-		port        = control.Port(fg, bg)
-		button      = control.Button(bg, fg)
+		port   = control.Port(fg, bg)
+		button = control.Button(bg, fg)
 	)
 	for row := 0; row < 8; row++ {
 		y := top + float64(row)*dy

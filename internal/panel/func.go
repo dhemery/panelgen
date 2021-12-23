@@ -31,38 +31,40 @@ var (
 
 func Func() *Panel {
 	const (
-		hp = 3
+		hp     = 3
+		width  = mmPerHp * hp
+		center = width / 2.0
 	)
 	p := NewPanel("FUNC", hp, funcFg, funcBg, funcDir)
 
-	x := p.Width / 2.0
 	y := funcTop
-	p.InPort(x, y+boxedPortYOffset, "IN")
+	p.InPort(center, y+boxedPortYOffset, "IN")
 	y += funcDy
-	p.ThumbSwitch(x, y, 1, "ADD", "MULT")
+	p.ThumbSwitch(center, y, 1, "ADD", "MULT")
 	y += funcDy
-	p.Install(x, y, funcKnob)
+	p.Install(center, y, funcKnob)
 	y += funcDy
-	p.Install(x, y, funcOffsetRangeStepper)
+	p.Install(center, y, funcOffsetRangeStepper)
 	p.Add(funcMultiplierRangeStepper)
 	y += 2.0 * funcDy
-	p.OutPort(x, y+boxedPortYOffset, "OUT")
+	p.OutPort(center, y+boxedPortYOffset, "OUT")
 
 	return p
 }
 
 func Func6() *Panel {
 	const (
-		hp Hp = 12
+		hp = 12
 	)
 	p := NewPanel("FUNC 6", hp, funcFg, funcBg, funcDir)
 
 	var (
-		center      = p.Width / 2.0
-		left        = p.Width / 7.0
+		width       = mmPerHp * hp
+		center      = width / 2.0
+		left        = width / 7.0
 		leftCenter  = (left + center) / 2.0
-		right       = p.Width - left
-		rightCenter = p.Width - leftCenter
+		right       = width - left
+		rightCenter = width - leftCenter
 	)
 	for channel := 0; channel < funcRowCount; channel++ {
 		y := funcTop + float64(channel)*funcDy

@@ -30,7 +30,7 @@ func (cs curveSequencer) build() *Panel {
 
 	var (
 		steps = int(cs)
-		hp    = 13 + Hp(float64(steps)*stepDxHp)
+		hp    = 13 + int(float64(steps)*stepDxHp)
 		fg    = svg.HslColor(hue, 10, .1)
 		bg    = svg.HslColor(hue, .1, .93)
 		right = float64(hp-2) * mmPerHp
