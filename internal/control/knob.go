@@ -5,27 +5,27 @@ import (
 )
 
 func TinyKnob(knobColor, pointerColor svg.Color) Control {
-	return knob("knob-tiny", tinyKnobDiameter, knobColor, pointerColor)
+	return knob("knob-tiny", TinyKnobDiameter, knobColor, pointerColor)
 }
 
 func SmallKnob(knobColor, pointerColor svg.Color) Control {
-	return knob("knob-small", smallKnobDiameter, knobColor, pointerColor)
+	return knob("knob-small", SmallKnobDiameter, knobColor, pointerColor)
 }
 
 func MediumKnob(knobColor, pointerColor svg.Color) Control {
-	return knob("knob-medium", mediumKnobDiameter, knobColor, pointerColor)
+	return knob("knob-medium", MediumKnobDiameter, knobColor, pointerColor)
 }
 
 func LargeKnob(knobColor, pointerColor svg.Color) Control {
-	return knob("knob-large", largeKnobDiameter, knobColor, pointerColor)
+	return knob("knob-large", LargeKnobDiameter, knobColor, pointerColor)
 }
 
 const (
-	hugeKnobDiameter   = 19
-	largeKnobDiameter  = 12.7
-	mediumKnobDiameter = 10
-	smallKnobDiameter  = 8.4
-	tinyKnobDiameter   = 7
+	HugeKnobDiameter   = 19
+	LargeKnobDiameter  = 12.7
+	MediumKnobDiameter = 10
+	SmallKnobDiameter  = 8.4
+	TinyKnobDiameter   = 7
 )
 
 func knob(slug string, diameter float64, knobColor, pointerColor svg.Color) Control {

@@ -9,6 +9,12 @@ const (
 	mmPerHp = 5.08
 )
 
+type Hp int
+
+func (hp Hp) toMM() float64 {
+	return float64(hp) * mmPerHp
+}
+
 type Panel struct {
 	FrameDir   string
 	Engravings []svg.Bounded
@@ -26,7 +32,7 @@ const (
 	outlineThickness   = 0.5
 )
 
-func NewPanel(name string, hp int, fg, bg svg.Color, dir string) *Panel {
+func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
 	const (
 		nameLabelY  = 9.0
 		panelHeight = 128.5
@@ -37,7 +43,7 @@ func NewPanel(name string, hp int, fg, bg svg.Color, dir string) *Panel {
 		FrameDir: dir,
 		Fg:       fg,
 		Bg:       bg,
-		Width:    float64(hp) * mmPerHp,
+		Width:    hp.toMM(),
 	}
 
 	width := float64(hp) * mmPerHp

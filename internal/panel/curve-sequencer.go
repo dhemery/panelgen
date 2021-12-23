@@ -23,22 +23,20 @@ func (cs curveSequencer) build() *Panel {
 	const (
 		hue      = 30
 		stepDxHp = 2.25
-		left     = 2.0 * mmPerHp
-		top      = 4.0 * mmPerHp
-		bottom   = 23.0 * mmPerHp
+		baseHp   = 13
 	)
-
 	var (
-		steps = int(cs)
-		hp    = 13 + int(float64(steps)*stepDxHp)
-		fg    = svg.HslColor(hue, 10, .1)
-		bg    = svg.HslColor(hue, .1, .93)
-		right = float64(hp-2) * mmPerHp
+		steps    = int(cs)
+		hp    Hp = baseHp + Hp(float64(steps)*stepDxHp)
+		fg       = svg.HslColor(hue, 10, .1)
+		bg       = svg.HslColor(hue, .1, .93)
 	)
-
 	p := NewPanel(fmt.Sprintf("CURVE SEQUENCER %d", cs), hp, fg, bg, "curve-sequencer")
 
 	const (
+		left                   = 2.0 * mmPerHp
+		top                    = 4.0 * mmPerHp
+		bottom                 = 23.0 * mmPerHp
 		sequenceControlsTop    = top + 2.75*mmPerHp
 		sequenceControlsBottom = bottom - control.PortDiameter - 1.0
 		sequenceControlsDy     = (sequenceControlsBottom - sequenceControlsTop) / 4.0
@@ -115,7 +113,11 @@ func (cs curveSequencer) build() *Panel {
 		outY = bottom - control.PortRadius - 1.0
 		inY  = top + 2.75*mmPerHp
 	)
-	stepBlockRight := stepBlockLeft + float64(steps)*stepDx
+	var (
+		width          = float64(hp) * mmPerHp
+		right          = width - left
+		stepBlockRight = stepBlockLeft + float64(steps)*stepDx
+	)
 	p.VLine(stepBlockRight, channelSeparatorTop, bottom)
 	p.HLine(stepBlockRight, right, levelY)
 	p.LevelRangeSwitch(right, levelY, 2)
