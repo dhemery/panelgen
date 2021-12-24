@@ -31,13 +31,16 @@ func swave() *Panel {
 	)
 
 	y := shaperTop
-	p.LevelRangeSwitch(x, y, 1)
+	shapeX := width / 4.0
+	levelX := width - shapeX
+	p.ShapeSwitch(shapeX, y, 1)
+	p.LevelRangeSwitch(levelX, y, 1)
 	y += shaperDy
 	p.LargeKnob(x, y, "CURVE")
 	y += shaperDy
-	padding := (width - control.PortDiameter - control.TinyKnobDiameter) / 3.0
-	cvX := padding + control.PortRadius
-	avX := width - padding - control.TinyKnobRadius
+	cvAvPadding := (width - control.PortDiameter - control.TinyKnobDiameter) / 3.0
+	cvX := cvAvPadding + control.PortRadius
+	avX := width - cvAvPadding - control.TinyKnobRadius
 	p.CvPort(cvX, y)
 	p.Attenuverter(avX, y)
 

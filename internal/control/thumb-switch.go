@@ -6,20 +6,23 @@ import (
 	"dhemery.com/panelgen/internal/svg"
 )
 
-func thumbSwitchSpec(size int, width, knurlThickness float64) (yOffset, deltaY float64) {
+const (
+	ThumbSwitchWidth = 3.0
+)
+
+func thumbSwitchSpec(size int, knurlThickness float64) (yOffset, deltaY float64) {
 	if size == 2 {
-		offset := width/2 - knurlThickness
+		offset := ThumbSwitchWidth/2 - knurlThickness
 		return offset, 2 * offset
 	}
-	offset := width - knurlThickness
+	offset := ThumbSwitchWidth - knurlThickness
 	return offset, offset
 }
 
 func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {
 	const (
-		width            = 3.0
-		housingThickness = width / 8.0
-		housingWidth     = width - housingThickness
+		housingThickness = ThumbSwitchWidth / 8.0
+		housingWidth     = ThumbSwitchWidth - housingThickness
 		cornerRadius     = housingThickness / 2.0
 		knurlSpacing     = 0.5
 		knurlThickness   = knurlSpacing / 2.0
@@ -27,7 +30,7 @@ func ThumbSwitch(size, selection int, stroke, fill svg.Color) Control {
 	)
 	lever := thumbSwitchLever(knurlLength, knurlThickness, stroke, fill)
 	levers := []svg.Bounded{}
-	leverY, leverDeltaY := thumbSwitchSpec(size, width, knurlThickness)
+	leverY, leverDeltaY := thumbSwitchSpec(size, knurlThickness)
 	for i := 0; i < size; i++ {
 		levers = append(levers, lever.Translate(0, leverY))
 		leverY -= leverDeltaY

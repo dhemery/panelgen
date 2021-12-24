@@ -30,12 +30,12 @@ const (
 	buttonPortDistance = control.PortRadius + control.ButtonRadius + padding
 	boxedPortYOffset   = 1.25
 	outlineThickness   = 0.5
+	panelHeight        = 128.5
 )
 
 func NewPanel(name string, hp Hp, fg, bg svg.Color, dir string) *Panel {
 	const (
 		nameLabelY  = 9.0
-		panelHeight = 128.5
 		brandLabelY = panelHeight - nameLabelY
 	)
 
