@@ -27,6 +27,7 @@ const (
 	SmallKnobDiameter  = 8.4
 	SmallKnobRadius    = SmallKnobDiameter / 2.0
 	TinyKnobDiameter   = 7
+	TinyKnobRadius     = TinyKnobDiameter / 2.0
 )
 
 func knob(slug string, diameter float64, knobColor, pointerColor svg.Color) Control {
