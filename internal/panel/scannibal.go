@@ -156,6 +156,9 @@ func (s scannibal) build() *Panel {
 		p.Install(x, durationY, knob)
 		p.Install(x, durationCvY, port)
 	}
+	selectionMarkerOffset := (stepWidth-stepperWidth)/2.0 + control.LightRadius
+	p.Install(stepBlockLeft+selectionMarkerOffset, progressLightY, control.SelectionMarker(0, fg))
+	p.Install(stepBlockRight-selectionMarkerOffset, progressLightY, control.SelectionMarker(1, fg))
 
 	var (
 		globalOutputsLeft  = stepBlockRight + margin

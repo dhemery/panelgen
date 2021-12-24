@@ -178,6 +178,7 @@ func (s sequencizer) build() *Panel {
 		knob   = control.SmallKnob(fg, bg)
 
 		stepBlockLeft  = stepBlockLabelsX + padding
+		stepBlockRight = stepBlockLeft + stepBlockWidth
 		progressLightY = top - control.LightDiameter*1.5
 		stepLabelY     = progressLightY - control.LightDiameter*1.5
 	)
@@ -208,6 +209,9 @@ func (s sequencizer) build() *Panel {
 		p.Install(x, durationY, knob)
 		p.Install(x, enabledY, button)
 	}
+	selectionMarkerOffset := (stepWidth-stepperWidth)/2.0 + control.LightRadius
+	p.Install(stepBlockLeft+selectionMarkerOffset, progressLightY, control.SelectionMarker(0, fg))
+	p.Install(stepBlockRight-selectionMarkerOffset, progressLightY, control.SelectionMarker(1, fg))
 
 	return p
 }

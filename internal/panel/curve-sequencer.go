@@ -82,15 +82,18 @@ func (cs curveSequencer) build() *Panel {
 		stepLabelY          = top - 0.5*mmPerHp
 		activeY             = top + control.LightRadius
 		channelSeparatorTop = top + 1.25*mmPerHp
+		stepperWidth        = 9.0
 	)
 	var (
+		stepBlockRight = stepBlockLeft + float64(steps)*stepDx
+
 		smallKnob           = control.SmallKnob(fg, bg)
 		port                = control.Port(fg, bg)
 		button              = control.Button(bg, fg)
 		advanceModes        = []string{"TIME", "RISE", "FALL", "EDGE", "HIGH", "LOW"}
-		advanceModeStepper  = control.Stepper("advance-mode", fg, bg, svg.SmallFont, 9.0, 1, advanceModes)
+		advanceModeStepper  = control.Stepper("advance-mode", fg, bg, svg.SmallFont, stepperWidth, 1, advanceModes)
 		generateModes       = []string{"CURVE", "HOLD", "SUST", "INPUT", "CHASE", "LEVEL"}
-		generateModeStepper = control.Stepper("generate-mode", fg, bg, svg.SmallFont, 9.0, 1, generateModes)
+		generateModeStepper = control.Stepper("generate-mode", fg, bg, svg.SmallFont, stepperWidth, 1, generateModes)
 	)
 	for step := 0; step < steps; step++ {
 		channelSeparatorX := stepBlockLeft + float64(step)*stepDx
@@ -109,14 +112,17 @@ func (cs curveSequencer) build() *Panel {
 		p.VLine(x, enabledButtonY, enabledPortY)
 	}
 
+	selectionMarkerOffset := (stepDx-stepperWidth)/2.0 + control.LightRadius
+	p.Install(stepBlockLeft+selectionMarkerOffset, activeY, control.SelectionMarker(0, fg))
+	p.Install(stepBlockRight-selectionMarkerOffset, activeY, control.SelectionMarker(1, fg))
+
 	const (
 		outY = bottom - control.PortRadius - 1.0
 		inY  = top + 2.75*mmPerHp
 	)
 	var (
-		width          = float64(hp) * mmPerHp
-		right          = width - left
-		stepBlockRight = stepBlockLeft + float64(steps)*stepDx
+		width = float64(hp) * mmPerHp
+		right = width - left
 	)
 	p.VLine(stepBlockRight, channelSeparatorTop, bottom)
 	p.HLine(stepBlockRight, right, levelY)

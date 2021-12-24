@@ -206,8 +206,8 @@ func (p *Panel) Light(x, y float64) {
 	p.Engrave(x, y, svg.Circle{
 		R:           control.LightRadius,
 		Fill:        p.Fg,
-		Stroke:      svg.NoColor,
-		StrokeWidth: 0,
+		Stroke:      p.Fg,
+		StrokeWidth: strokeWidth,
 	})
 }
 
