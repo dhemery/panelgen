@@ -6,7 +6,8 @@ import (
 )
 
 const (
-	mmPerHp = 5.08
+	mmPerHp     = 5.08
+	strokeWidth = 0.35
 )
 
 type Hp int
@@ -26,7 +27,6 @@ type Panel struct {
 
 const (
 	padding            = 1.0
-	strokeWidth        = 0.35
 	buttonPortDistance = control.PortRadius + control.ButtonRadius + padding
 	boxedPortYOffset   = 1.25
 	outlineThickness   = 0.5
