@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	ButtonRadius = 3.0
+	ButtonDiameter = 6.0
+	ButtonRadius   = ButtonDiameter / 2.0
 )
 
 func Button(pressedColor, releasedColor svg.Color) Control {

@@ -39,19 +39,19 @@ var (
 	TitleFont = Font{
 		FontFamily:  "Proxima Nova",
 		FontWeight:  "bold",
-		FontSize:    titleFontSize,
+		FontSize:    TitleFontSize,
 		AscentRatio: proximaNovaAscentRatio,
 	}
 	LargeFont = Font{
 		FontFamily:  "Proxima Nova",
 		FontWeight:  "bold",
-		FontSize:    largeFontSize,
+		FontSize:    LargeFontSize,
 		AscentRatio: proximaNovaAscentRatio,
 	}
 	SmallFont = Font{
 		FontFamily:  "Proxima Nova",
 		FontWeight:  "bold",
-		FontSize:    smallFontSize,
+		FontSize:    SmallFontSize,
 		AscentRatio: proximaNovaAscentRatio,
 	}
 )
@@ -59,13 +59,13 @@ var (
 const (
 	mmPerInch = 25.4
 	pxPerInch = 75.0
-	pxPerMm   = pxPerInch / mmPerInch
+	mmPerPx   = mmPerInch / pxPerInch
 )
 
 const (
-	titleFontSize          = 12.0 / pxPerMm
-	largeFontSize          = 9.0 / pxPerMm
-	smallFontSize          = 7.0 / pxPerMm
+	TitleFontSize          = 12.0 * mmPerPx
+	LargeFontSize          = 9.0 * mmPerPx
+	SmallFontSize          = 7.0 * mmPerPx
 	proximaNovaAscentRatio = 2.0 / 3.0
 )
 

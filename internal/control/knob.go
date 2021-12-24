@@ -25,6 +25,7 @@ const (
 	LargeKnobDiameter  = 12.7
 	MediumKnobDiameter = 10
 	SmallKnobDiameter  = 8.4
+	SmallKnobRadius    = SmallKnobDiameter / 2.0
 	TinyKnobDiameter   = 7
 )
 
